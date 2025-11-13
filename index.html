@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كتب مدارس الأبرار</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-container img {
+            max-width: 250px;
+            width: 100%;
+            height: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 50%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 0.8s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 60px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 50px;
+            font-weight: 700;
+        }
+
+        .path-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .path-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 30px 40px;
+            font-size: 1.5em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            text-decoration: none;
+        }
+
+        .path-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .path-btn.egypt {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .path-btn.saudi {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+
+        .flag {
+            font-size: 2em;
+        }
+
+        footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #e2e8f0;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #764ba2;
+        }
+
+        @media (max-width: 600px) {
+            .logo-container img {
+                max-width: 180px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+
+            .container {
+                padding: 40px 20px;
+            }
+
+            .path-btn {
+                font-size: 1.2em;
+                padding: 25px 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logo-container">
+        <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار">
+    </div>
+
+    <div class="container">
+        <h1>كتب مدارس الأبرار</h1>
+        
+        <div class="path-buttons">
+            <a href="book_eg.html" class="path-btn egypt">
+                <span class="flag">🇪🇬</span>
+                <span>المسار المصري</span>
+            </a>
+            
+            <a href="books_sa.html" class="path-btn saudi">
+                <span class="flag">🇸🇦</span>
+                <span>المسار السعودي</span>
+            </a>
+        </div>
+
+        <footer>
+            <a href="rights.html">جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a>
+        </footer>
+    </div>
+</body>
+</html>

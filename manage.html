@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - كتب مدارس الأبرار</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        h1 {
+            color: #2d3748;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        h2 {
+            color: #667eea;
+            margin: 30px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"],
+        input[type="url"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .btn-small {
+            padding: 8px 16px;
+            font-size: 0.9em;
+        }
+
+        .books-list {
+            margin-top: 30px;
+        }
+
+        .book-item {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .book-item-info {
+            flex: 1;
+        }
+
+        .book-item-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 5px;
+        }
+
+        .book-item-details {
+            color: #718096;
+            font-size: 0.9em;
+        }
+
+        .book-item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .tab {
+            padding: 12px 24px;
+            background: none;
+            border: none;
+            color: #718096;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .logout-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: #e74c3c;
+        }
+
+        .success-message {
+            background: #27ae60;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .book-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginContainer" class="login-container">
+        <h1>تسجيل الدخول</h1>
+        <div class="form-group">
+            <label>كلمة المرور</label>
+            <input type="password" id="passwordInput" placeholder="أدخل كلمة المرور">
+        </div>
+        <button class="btn" onclick="login()">دخول</button>
+        <p id="loginError" style="color: red; margin-top: 15px; display: none;">كلمة مرور خاطئة</p>
+    </div>
+
+    <!-- لوحة التحكم -->
+    <div id="adminContainer" class="admin-container">
+        <button class="btn logout-btn" onclick="logout()">تسجيل الخروج</button>
+        
+        <h1>لوحة التحكم - كتب مدارس الأبرار</h1>
+
+        <div id="successMessage" class="success-message">تم الحفظ بنجاح!</div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('egypt')">المسار المصري</button>
+            <button class="tab" onclick="switchTab('saudi')">المسار السعودي</button>
+        </div>
+
+        <!-- المسار المصري -->
+        <div id="egyptTab" class="tab-content active">
+            <h2>إضافة كتاب جديد - المسار المصري</h2>
+            <form id="egyptForm">
+                <div class="form-group">
+                    <label>عنوان الكتاب *</label>
+                    <input type="text" id="egyptTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط Google Drive *</label>
+                    <input type="url" id="egyptDriveLink" required>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط صورة الغلاف *</label>
+                    <input type="url" id="egyptCoverImage" required>
+                </div>
+
+                <div class="form-group">
+                    <label>المادة *</label>
+                    <select id="egyptSubject" required>
+                        <option value="">اختر المادة</option>
+                        <option value="رياضيات">رياضيات</option>
+                        <option value="لغة عربية">لغة عربية</option>
+                        <option value="لغة إنجليزية">لغة إنجليزية</option>
+                        <option value="علوم">علوم</option>
+                        <option value="دراسات">دراسات اجتماعية</option>
+                        <option value="تربية دينية">تربية دينية</option>
+                        <option value="تاريخ">تاريخ</option>
+                        <option value="جغرافيا">جغرافيا</option>
+                        <option value="حاسب آلي">حاسب آلي</option>
+                        <option value="فيزياء">فيزياء</option>
+                        <option value="كيمياء">كيمياء</option>
+                        <option value="أحياء">أحياء</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>السنة الدراسية *</label>
+                    <input type="text" id="egyptYear" placeholder="مثال: 2024/2025" required>
+                </div>
+
+                <div class="form-group">
+                    <label>الترم *</label>
+                    <select id="egyptTerm" required>
+                        <option value="">اختر الترم</option>
+                        <option value="الأول">الأول</option>
+                        <option value="الثاني">الثاني</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>الصف *</label>
+                    <select id="egyptGrade" required>
+                        <option value="">اختر الصف</option>
+                        <option value="الأول الابتدائي">الأول الابتدائي</option>
+                        <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                        <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                        <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                        <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                        <option value="السادس الابتدائي">السادس الابتدائي</option>
+                        <option value="الأول الإعدادي">الأول الإعدادي</option>
+                        <option value="الثاني الإعدادي">الثاني الإعدادي</option>
+                        <option value="الثالث الإعدادي">الثالث الإعدادي</option>
+                        <option value="الأول الثانوي">الأول الثانوي</option>
+                        <option value="الثاني الثانوي">الثاني الثانوي</option>
+                        <option value="الثالث الثانوي">الثالث الثانوي</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>اللغة *</label>
+                    <select id="egyptLanguage" required>
+                        <option value="">اختر اللغة</option>
+                        <option value="عربي">عربي</option>
+                        <option value="إنجليزي">إنجليزي</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">إضافة الكتاب</button>
+            </form>
+
+            <div class="books-list">
+                <h2>الكتب المضافة</h2>
+                <div id="egyptBooksList"></div>
+            </div>
+        </div>
+
+        <!-- المسار السعودي -->
+        <div id="saudiTab" class="tab-content">
+            <h2>إضافة كتاب جديد - المسار السعودي</h2>
+            <form id="saudiForm">
+                <div class="form-group">
+                    <label>عنوان الكتاب *</label>
+                    <input type="text" id="saudiTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط Google Drive *</label>
+                    <input type="url" id="saudiDriveLink" required>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط صورة الغلاف *</label>
+                    <input type="url" id="saudiCoverImage" required>
+                </div>
+
+                <div class="form-group">
+                    <label>المادة *</label>
+                    <select id="saudiSubject" required>
+                        <option value="">اختر المادة</option>
+                        <option value="رياضيات">رياضيات</option>
+                        <option value="لغة عربية">لغة عربية</option>
+                        <option value="لغة إنجليزية">لغة إنجليزية</option>
+                        <option value="علوم">علوم</option>
+                        <option value="اجتماعيات">اجتماعيات</option>
+                        <option value="قرآن">قرآن كريم</option>
+                        <option value="حديث">حديث</option>
+                        <option value="فقه">فقه</option>
+                        <option value="توحيد">توحيد</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>السنة الدراسية *</label>
+                    <input type="text" id="saudiYear" placeholder="مثال: 1446" required>
+                </div>
+
+                <div class="form-group">
+                    <label>الفصل الدراسي *</label>
+                    <select id="saudiTerm" required>
+                        <option value="">اختر الفصل</option>
+                        <option value="الأول">الأول</option>
+                        <option value="الثاني">الثاني</option>
+                        <option value="الثالث">الثالث</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>الصف *</label>
+                    <select id="saudiGrade" required>
+                        <option value="">اختر الصف</option>
+                        <option value="الأول الابتدائي">الأول الابتدائي</option>
+                        <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                        <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                        <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                        <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                        <option value="السادس الابتدائي">السادس الابتدائي</option>
+                        <option value="الأول المتوسط">الأول المتوسط</option>
+                        <option value="الثاني المتوسط">الثاني المتوسط</option>
+                        <option value="الثالث المتوسط">الثالث المتوسط</option>
+                        <option value="الأول الثانوي">الأول الثانوي</option>
+                        <option value="الثاني الثانوي">الثاني الثانوي</option>
+                        <option value="الثالث الثانوي">الثالث الثانوي</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>اللغة *</label>
+                    <select id="saudiLanguage" required>
+                        <option value="">اختر اللغة</option>
+                        <option value="عربي">عربي</option>
+                        <option value="إنجليزي">إنجليزي</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn">إضافة الكتاب</button>
+            </form>
+
+            <div class="books-list">
+                <h2>الكتب المضافة</h2>
+                <div id="saudiBooksList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // كلمة المرور الافتراضية (يمكن تغييرها)
+        const ADMIN_PASSWORD = "admin123";
+
+        // التحقق من تسجيل الدخول
+        function login() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('adminContainer').style.display = 'block';
+                sessionStorage.setItem('adminLoggedIn', 'true');
+                loadBooks();
+            } else {
+                document.getElementById('loginError').style.display = 'block';
+            }
+        }
+
+        // تسجيل الخروج
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('adminContainer').style.display = 'none';
+            document.getElementById('passwordInput').value = '';
+        }
+
+        // التحقق عند تحميل الصفحة
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('adminContainer').style.display = 'block';
+            loadBooks();
+        }
+
+        // التبديل بين التابات
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tab + 'Tab').classList.add('active');
+        }
+
+        // إضافة كتاب مصري
+        document.getElementById('egyptForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const book = {
+                id: Date.now(),
+                title: document.getElementById('egyptTitle').value,
+                drive_link: document.getElementById('egyptDriveLink').value,
+                cover_image: document.getElementById('egyptCoverImage').value,
+                subject: document.getElementById('egyptSubject').value,
+                year: document.getElementById('egyptYear').value,
+                term: document.getElementById('egyptTerm').value,
+                grade: document.getElementById('egyptGrade').value,
+                language: document.getElementById('egyptLanguage').value
+            };
+
+            let books = JSON.parse(localStorage.getItem('egyptBooks') || '[]');
+            books.push(book);
+            localStorage.setItem('egyptBooks', JSON.stringify(books));
+
+            showSuccess();
+            this.reset();
+            loadBooks();
+        });
+
+        // إضافة كتاب سعودي
+        document.getElementById('saudiForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const book = {
+                id: Date.now(),
+                title: document.getElementById('saudiTitle').value,
+                drive_link: document.getElementById('saudiDriveLink').value,
+                cover_image: document.getElementById('saudiCoverImage').value,
+                subject: document.getElementById('saudiSubject').value,
+                year: document.getElementById('saudiYear').value,
+                term: document.getElementById('saudiTerm').value,
+                grade: document.getElementById('saudiGrade').value,
+                language: document.getElementById('saudiLanguage').value
+            };
+
+            let books = JSON.parse(localStorage.getItem('saudiBooks') || '[]');
+            books.push(book);
+            localStorage.setItem('saudiBooks', JSON.stringify(books));
+
+            showSuccess();
+            this.reset();
+            loadBooks();
+        });
+
+        // تحميل وعرض الكتب
+        function loadBooks() {
+            loadEgyptBooks();
+            loadSaudiBooks();
+        }
+
+        function loadEgyptBooks() {
+            const books = JSON.parse(localStorage.getItem('egyptBooks') || '[]');
+            const container = document.getElementById('egyptBooksList');
+            
+            if (books.length === 0) {
+                container.innerHTML = '<p style="color: #718096;">لا توجد كتب مضافة بعد</p>';
+                return;
+            }
+
+            container.innerHTML = books.map(book => `
+                <div class="book-item">
+                    <div class="book-item-info">
+                        <div class="book-item-title">${book.title}</div>
+                        <div class="book-item-details">
+                            ${book.subject} - ${book.grade} - الترم ${book.term} - ${book.year}
+                        </div>
+                    </div>
+                    <div class="book-item-actions">
+                        <button class="btn btn-small btn-danger" onclick="deleteBook('egypt', ${book.id})">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function loadSaudiBooks() {
+            const books = JSON.parse(localStorage.getItem('saudiBooks') || '[]');
+            const container = document.getElementById('saudiBooksList');
+            
+            if (books.length === 0) {
+                container.innerHTML = '<p style="color: #718096;">لا توجد كتب مضافة بعد</p>';
+                return;
+            }
+
+            container.innerHTML = books.map(book => `
+                <div class="book-item">
+                    <div class="book-item-info">
+                        <div class="book-item-title">${book.title}</div>
+                        <div class="book-item-details">
+                            ${book.subject} - ${book.grade} - الفصل ${book.term} - ${book.year}
+                        </div>
+                    </div>
+                    <div class="book-item-actions">
+                        <button class="btn btn-small btn-danger" onclick="deleteBook('saudi', ${book.id})">حذف</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // حذف كتاب
+        function deleteBook(path, id) {
+            if (confirm('هل أنت متأكد من حذف هذا الكتاب؟')) {
+                const key = path + 'Books';
+                let books = JSON.parse(localStorage.getItem(key) || '[]');
+                books = books.filter(book => book.id !== id);
+                localStorage.setItem(key, JSON.stringify(books));
+                loadBooks();
+                showSuccess();
+            }
+        }
+
+        // رسالة النجاح
+        function showSuccess() {
+            const msg = document.getElementById('successMessage');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+
+        // السماح بتسجيل الدخول بالضغط على Enter
+        document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                login();
+            }
+        });
+    </script>
+</body>
+</html>

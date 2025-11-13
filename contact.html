@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>التواصل - كتب مدارس الأبرار</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+
+      .navbar {
+        background: white;
+        padding: 15px 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .navbar-content {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .site-title {
+        font-size: 1.5em;
+        color: #2d3748;
+        font-weight: 700;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .nav-links a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        padding: 8px 16px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+      }
+
+      .nav-links a:hover {
+        background: #667eea;
+        color: white;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+
+      .logo-section {
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .logo-section img {
+        max-width: 200px;
+        height: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 50%;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .content-box {
+        background: white;
+        border-radius: 15px;
+        padding: 50px 40px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      h1 {
+        color: #2d3748;
+        font-size: 2.5em;
+        margin-bottom: 30px;
+      }
+
+      .contact-info {
+        margin-top: 40px;
+      }
+
+      .email-link {
+        display: inline-block;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px 40px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 1.3em;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+      }
+
+      .email-link:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+      }
+
+      p {
+        color: #4a5568;
+        font-size: 1.1em;
+        line-height: 1.8;
+        margin-bottom: 20px;
+      }
+
+      footer {
+        background: white;
+        padding: 20px;
+        text-align: center;
+        margin-top: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      }
+
+      footer a {
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      footer a:hover {
+        color: #764ba2;
+      }
+
+      @media (max-width: 768px) {
+        .navbar-content {
+          flex-direction: column;
+          gap: 15px;
+        }
+
+        .nav-links {
+          flex-wrap: wrap;
+          justify-content: center;
+        }
+
+        .container {
+          margin: 30px 20px;
+        }
+
+        .content-box {
+          padding: 40px 20px;
+        }
+
+        h1 {
+          font-size: 2em;
+        }
+
+        .email-link {
+          font-size: 1.1em;
+          padding: 15px 30px;
+        }
+
+        .logo-section img {
+          max-width: 150px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar-content">
+        <div class="site-title">كتب مدارس الأبرار</div>
+        <div class="nav-links">
+          <a href="index.html">المسار</a>
+          <a href="index.html">الكتب</a>
+          <a href="about.html">عن المشروع</a>
+          <a href="contact.html">التواصل</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container">
+      <div class="logo-section">
+        <img
+          src="مدارس الأبرار.webp"
+          alt="شعار مدارس الأبرار"
+        />
+      </div>
+
+      <div class="content-box">
+        <h1>تواصل معنا</h1>
+
+        <p>
+          نسعد بتواصلكم معنا لأي استفسارات، اقتراحات، أو ملاحظات حول المحتوى
+          التعليمي المقدم.
+        </p>
+
+        <div class="contact-info">
+          <p>للتواصل عبر البريد الإلكتروني:</p>
+          <a href="mailto:kotobel2abrar@gmail.com" class="email-link">
+            kotobel2abrar@gmail.com
+          </a>
+        </div>
+      </div>
+
+      <footer>
+        <a href="rights.html"
+          >جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a
+        >
+      </footer>
+    </div>
+  </body>
+</html>
