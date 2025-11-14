@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>الحقوق والشروط - كتب مدارس الأبرار</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
     <style>
       * {
         margin: 0;
@@ -13,9 +14,36 @@
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
         min-height: 100vh;
         padding: 40px 20px;
+      }
+
+      .lang-switcher {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .lang-switcher:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .lang-switcher button {
+        background: none;
+        border: none;
+        font-size: 1.2em;
+        cursor: pointer;
+        padding: 5px 10px;
+        font-weight: 600;
       }
 
       .logo-section {
@@ -49,7 +77,7 @@
       }
 
       h2 {
-        color: #667eea;
+        color: #3182ce;
         font-size: 1.5em;
         margin-top: 30px;
         margin-bottom: 15px;
@@ -64,14 +92,20 @@
 
       .back-btn {
         display: inline-block;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
         color: white;
         padding: 12px 30px;
         border-radius: 8px;
         text-decoration: none;
         margin-top: 30px;
+        margin-right: 10px;
         transition: transform 0.3s ease;
         font-weight: 600;
+      }
+
+      [dir="ltr"] .back-btn {
+        margin-right: 0;
+        margin-left: 10px;
       }
 
       .back-btn:hover {
@@ -79,7 +113,7 @@
       }
 
       .project-badge {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
         color: white;
         padding: 20px;
         border-radius: 12px;
@@ -108,71 +142,145 @@
         .logo-section img {
           max-width: 120px;
         }
+
+        .lang-switcher {
+          top: 10px;
+          right: 10px;
+        }
+
+        .back-btn {
+          display: block;
+          text-align: center;
+          margin: 10px 0;
+        }
       }
     </style>
   </head>
   <body>
+    <!-- زر تبديل اللغة -->
+    <div class="lang-switcher" onclick="toggleLanguage()">
+      <button id="langButton">🌐 EN</button>
+    </div>
+
     <div class="logo-section">
-      <img
-        src="مدارس الأبرار.webp"
-        alt="شعار مدارس الأبرار"
-      />
+      <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار" />
     </div>
 
     <div class="container">
-      <h1>الحقوق والشروط</h1>
+      <h1 data-en="Rights and Terms" data-ar="الحقوق والشروط">
+        الحقوق والشروط
+      </h1>
 
       <div class="project-badge">
-        <h3>🎓 مشروع طلابي</h3>
-        <p style="color: white; margin: 0">
+        <h3>
+          🎓
+          <span data-en="Student Project" data-ar="مشروع طلابي"
+            >مشروع طلابي</span
+          >
+        </h3>
+        <p
+          style="color: white; margin: 0"
+          data-en="Under the supervision of Abrar Private Schools Management - Madinah"
+          data-ar="تحت إشراف إدارة مدارس الأبرار الأهلية - المدينة المنورة"
+        >
           تحت إشراف إدارة مدارس الأبرار الأهلية - المدينة المنورة
         </p>
       </div>
 
-      <h2>حقوق الملكية الفكرية</h2>
-      <p>
+      <h2 data-en="Intellectual Property Rights" data-ar="حقوق الملكية الفكرية">
+        حقوق الملكية الفكرية
+      </h2>
+      <p
+        data-en="All rights reserved © 2025 Abrar Private Schools. The content provided on this site is for educational use only and is part of a student project aimed at serving the educational process."
+        data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية. المحتوى المقدم على هذا الموقع مخصص للاستخدام التعليمي فقط ويعد جزءاً من مشروع طلابي يهدف لخدمة العملية التعليمية."
+      >
         جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية. المحتوى المقدم على هذا
         الموقع مخصص للاستخدام التعليمي فقط ويعد جزءاً من مشروع طلابي يهدف لخدمة
         العملية التعليمية.
       </p>
 
-      <h2>شروط الاستخدام</h2>
-      <p>
+      <h2 data-en="Terms of Use" data-ar="شروط الاستخدام">شروط الاستخدام</h2>
+      <p
+        data-en="By using this site, you agree to comply with the following terms and conditions:"
+        data-ar="باستخدامك لهذا الموقع، فإنك توافق على الالتزام بالشروط والأحكام التالية:"
+      >
         باستخدامك لهذا الموقع، فإنك توافق على الالتزام بالشروط والأحكام التالية:
       </p>
-      <p>• الكتب المتاحة هي للأغراض التعليمية والدراسية فقط.</p>
-      <p>
+      <p
+        data-en="• Available books are for educational and academic purposes only."
+        data-ar="• الكتب المتاحة هي للأغراض التعليمية والدراسية فقط."
+      >
+        • الكتب المتاحة هي للأغراض التعليمية والدراسية فقط.
+      </p>
+      <p
+        data-en="• Commercial use of the content is strictly prohibited without prior written permission."
+        data-ar="• يُمنع منعاً باتاً استخدام المحتوى لأغراض تجارية دون إذن كتابي مسبق."
+      >
         • يُمنع منعاً باتاً استخدام المحتوى لأغراض تجارية دون إذن كتابي مسبق.
       </p>
-      <p>
+      <p
+        data-en="• The content provided is subject to the copyrights of the original publishers and educational institutions."
+        data-ar="• المحتوى المقدم يخضع لحقوق النشر الخاصة بالناشرين الأصليين والمؤسسات التعليمية."
+      >
         • المحتوى المقدم يخضع لحقوق النشر الخاصة بالناشرين الأصليين والمؤسسات
         التعليمية.
       </p>
-      <p>
+      <p
+        data-en="• This site represents a student effort under school management supervision aimed at facilitating access to educational materials."
+        data-ar="• هذا الموقع يمثل جهداً طلابياً تحت إشراف إدارة المدرسة بهدف تسهيل الوصول للمواد التعليمية."
+      >
         • هذا الموقع يمثل جهداً طلابياً تحت إشراف إدارة المدرسة بهدف تسهيل
         الوصول للمواد التعليمية.
       </p>
 
-      <h2>إخلاء المسؤولية</h2>
-      <p>
+      <h2 data-en="Disclaimer" data-ar="إخلاء المسؤولية">إخلاء المسؤولية</h2>
+      <p
+        data-en="The site provides links to educational resources, and we do our best to ensure content accuracy, but we assume no responsibility for any errors or omissions in the information. The content provided is for purely educational purposes."
+        data-ar="الموقع يقدم روابط لمصادر تعليمية، ونحن نبذل قصارى جهدنا للتأكد من دقة المحتوى، لكننا لا نتحمل أي مسؤولية عن أي أخطاء أو نقص في المعلومات. المحتوى المقدم هو لأغراض تعليمية بحتة."
+      >
         الموقع يقدم روابط لمصادر تعليمية، ونحن نبذل قصارى جهدنا للتأكد من دقة
         المحتوى، لكننا لا نتحمل أي مسؤولية عن أي أخطاء أو نقص في المعلومات.
         المحتوى المقدم هو لأغراض تعليمية بحتة.
       </p>
 
-      <h2>الخصوصية</h2>
-      <p>
+      <h2 data-en="Privacy" data-ar="الخصوصية">الخصوصية</h2>
+      <p
+        data-en="We respect your privacy and do not collect any personal data without your consent. Your use of the site means your agreement with our privacy policy."
+        data-ar="نحن نحترم خصوصيتك ولا نقوم بجمع أي بيانات شخصية دون موافقتك. استخدامك للموقع يعني موافقتك على سياسة الخصوصية الخاصة بنا."
+      >
         نحن نحترم خصوصيتك ولا نقوم بجمع أي بيانات شخصية دون موافقتك. استخدامك
         للموقع يعني موافقتك على سياسة الخصوصية الخاصة بنا.
       </p>
 
-      <h2>التواصل</h2>
-      <p>لأي استفسارات أو ملاحظات حول المشروع، يرجى التواصل معنا عبر:</p>
-      <p><strong>البريد الإلكتروني الخاص بالموقع فقط:</strong> kotobel2abrar@gmail.com</p>
-      <p><strong>الموقع:</strong> مدارس الأبرار الأهلية - المدينة المنورة</p>
-
-      <h2>عن المشروع</h2>
+      <h2 data-en="Contact" data-ar="التواصل">التواصل</h2>
+      <p
+        data-en="For any inquiries or comments about the project, please contact us via:"
+        data-ar="لأي استفسارات أو ملاحظات حول المشروع، يرجى التواصل معنا عبر:"
+      >
+        لأي استفسارات أو ملاحظات حول المشروع، يرجى التواصل معنا عبر:
+      </p>
       <p>
+        <strong
+          data-en="Site Email Only:"
+          data-ar="البريد الإلكتروني الخاص بالموقع فقط:"
+          >البريد الإلكتروني الخاص بالموقع فقط:</strong
+        >
+        kotobel2abrar@gmail.com
+      </p>
+      <p>
+        <strong data-en="Location:" data-ar="الموقع:">الموقع:</strong>
+        <span
+          data-en="Abrar Private Schools - Madinah"
+          data-ar="مدارس الأبرار الأهلية - المدينة المنورة"
+          >مدارس الأبرار الأهلية - المدينة المنورة</span
+        >
+      </p>
+
+      <h2 data-en="About the Project" data-ar="عن المشروع">عن المشروع</h2>
+      <p
+        data-en="This project is part of student activities at Abrar Private Schools, aiming to provide an easy electronic platform for accessing educational materials for both curricula (Egyptian and Saudi). It was implemented under management supervision with the participation of a group of distinguished students."
+        data-ar="هذا المشروع هو جزء من الأنشطة الطلابية في مدارس الأبرار الأهلية، ويهدف إلى توفير منصة إلكترونية سهلة للوصول إلى المواد التعليمية لكلا المسارين (المصري والسعودي). تم تنفيذه بإشراف الإدارة وبمشاركة مجموعة من الطلاب المتميزين."
+      >
         هذا المشروع هو جزء من الأنشطة الطلابية في مدارس الأبرار الأهلية، ويهدف
         إلى توفير منصة إلكترونية سهلة للوصول إلى المواد التعليمية لكلا المسارين
         (المصري والسعودي). تم تنفيذه بإشراف الإدارة وبمشاركة مجموعة من الطلاب
@@ -180,9 +288,49 @@
       </p>
 
       <div style="text-align: center">
-        <a href="index.html" class="back-btn">العودة للصفحة الرئيسية</a>
-        <a href="about.html" class="back-btn">عن المشروع</a>
+        <a
+          href="index.html"
+          class="back-btn"
+          data-en="Back to Home"
+          data-ar="العودة للصفحة الرئيسية"
+          >العودة للصفحة الرئيسية</a
+        >
+        <a
+          href="about.html"
+          class="back-btn"
+          data-en="About the Project"
+          data-ar="عن المشروع"
+          >عن المشروع</a
+        >
       </div>
     </div>
+
+    <script>
+      let currentLang = localStorage.getItem("siteLang") || "ar";
+
+      function initLanguage() {
+        if (currentLang === "en") applyLanguage("en");
+      }
+
+      function toggleLanguage() {
+        currentLang = currentLang === "ar" ? "en" : "ar";
+        localStorage.setItem("siteLang", currentLang);
+        applyLanguage(currentLang);
+      }
+
+      function applyLanguage(lang) {
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+        document.querySelectorAll("[data-ar][data-en]").forEach((el) => {
+          el.textContent = el.getAttribute("data-" + lang);
+        });
+
+        document.getElementById("langButton").textContent =
+          lang === "ar" ? "🌐 EN" : "🌐 AR";
+      }
+
+      initLanguage();
+    </script>
   </body>
 </html>

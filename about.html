@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>عن المشروع - كتب مدارس الأبرار</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+
     <style>
       * {
         margin: 0;
@@ -13,8 +15,35 @@
 
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: #f7fafc;
+        background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
         min-height: 100vh;
+      }
+
+      .lang-switcher {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 1000;
+        background: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .lang-switcher:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      }
+
+      .lang-switcher button {
+        background: none;
+        border: none;
+        font-size: 1.2em;
+        cursor: pointer;
+        padding: 5px 10px;
+        font-weight: 600;
       }
 
       .navbar {
@@ -46,7 +75,7 @@
       }
 
       .nav-links a {
-        color: #667eea;
+        color: #3182ce;
         text-decoration: none;
         font-weight: 600;
         padding: 8px 16px;
@@ -55,7 +84,7 @@
       }
 
       .nav-links a:hover {
-        background: #667eea;
+        background: #3182ce;
         color: white;
       }
 
@@ -97,7 +126,7 @@
       }
 
       h2 {
-        color: #667eea;
+        color: #3182ce;
         font-size: 1.8em;
         margin-top: 30px;
         margin-bottom: 15px;
@@ -113,7 +142,7 @@
       }
 
       .project-info {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
         color: white;
         padding: 30px;
         border-radius: 12px;
@@ -137,7 +166,7 @@
         display: flex;
         align-items: center;
         gap: 15px;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #3182ce 0%, #2c5282 100%);
         color: white;
         padding: 20px;
         border-radius: 12px;
@@ -148,7 +177,7 @@
 
       .social-link:hover {
         transform: translateY(-5px);
-        box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 10px 25px rgba(49, 130, 206, 0.3);
       }
 
       .social-link.facebook {
@@ -201,7 +230,12 @@
         margin-bottom: 10px;
         background: white;
         border-radius: 8px;
-        border-right: 4px solid #667eea;
+        border-right: 4px solid #3182ce;
+      }
+
+      [dir="ltr"] .students-list li {
+        border-right: none;
+        border-left: 4px solid #3182ce;
       }
 
       .map-container {
@@ -227,14 +261,14 @@
       }
 
       footer a {
-        color: #667eea;
+        color: #3182ce;
         text-decoration: none;
         font-weight: 600;
         transition: color 0.3s ease;
       }
 
       footer a:hover {
-        color: #764ba2;
+        color: #2c5282;
       }
 
       @media (max-width: 768px) {
@@ -267,18 +301,36 @@
         .logo-section img {
           max-width: 200px;
         }
+
+        .lang-switcher {
+          top: 10px;
+          right: 10px;
+        }
       }
     </style>
   </head>
   <body>
+    <!-- زر تبديل اللغة -->
+    <div class="lang-switcher" onclick="toggleLanguage()">
+      <button id="langButton">🌐 EN</button>
+    </div>
+
     <nav class="navbar">
       <div class="navbar-content">
-        <div class="site-title">كتب مدارس الأبرار</div>
+        <div
+          class="site-title"
+          data-en="Abrar Schools Books"
+          data-ar="كتب مدارس الأبرار"
+        >
+        مدارس الأبرار الأهلية الحديثة 
+        </div>
         <div class="nav-links">
-          <a href="index.html">المسار</a>
-          <a href="index.html">الكتب</a>
-          <a href="about.html">عن المشروع</a>
-          <a href="contact.html">التواصل</a>
+          <a href="index.html" data-en="Curriculums" data-ar="المسار">المسار</a>
+          <a href="index.html" data-en="Books" data-ar="الكتب">الكتب</a>
+          <a href="about.html" data-en="About" data-ar="عن المشروع"
+            >عن المشروع</a
+          >
+          <a href="contact.html" data-en="Contact" data-ar="التواصل">التواصل</a>
         </div>
       </div>
     </nav>
@@ -286,54 +338,126 @@
     <div class="container">
       <div class="logo-section">
         <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار" />
-        <h1>كتب مدارس الأبرار</h1>
+        <h1 data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">
+        مدارس الأبرار الأهلية الحديثة 
+        </h1>
       </div>
 
       <div class="content-section">
         <div class="project-info">
-          <h3>🎓 مشروع طلابي</h3>
-          <p style="color: white; font-size: 1.2em; margin: 0">
+          <h3>
+            🎓
+            <span data-en="Student Project" data-ar="مشروع طلابي"
+              >مشروع طلابي</span
+            >
+          </h3>
+          <p
+            style="color: white; font-size: 1.2em; margin: 0"
+            data-en="Under the supervision of Abrar Private Schools Management - Madinah"
+            data-ar="تحت إشراف إدارة مدارس الأبرار الأهلية - المدينة المنورة"
+          >
             تحت إشراف إدارة مدارس الأبرار الأهلية - المدينة المنورة
           </p>
         </div>
 
-        <h2>📖 عن المشروع</h2>
-        <p>
+        <h2>
+          📖
+          <span data-en="About the Project" data-ar="عن المشروع"
+            >عن المشروع</span
+          >
+        </h2>
+        <p
+          data-en="This project aims to provide a comprehensive and easy-to-use electronic platform for students of Abrar Private Schools, enabling them to quickly access textbooks for both educational curricula (Egyptian and Saudi)."
+          data-ar="يهدف هذا المشروع إلى توفير منصة إلكترونية شاملة وسهلة الاستخدام لطلاب وطالبات مدارس الأبرار الأهلية، تمكنهم من الوصول السريع إلى الكتب المدرسية لكلا المسارين التعليميين (المصري والسعودي)."
+        >
           يهدف هذا المشروع إلى توفير منصة إلكترونية شاملة وسهلة الاستخدام لطلاب
           وطالبات مدارس الأبرار الأهلية، تمكنهم من الوصول السريع إلى الكتب
           المدرسية لكلا المسارين التعليميين (المصري والسعودي).
         </p>
-        <p>
+        <p
+          data-en="The site has been carefully designed to ensure an excellent user experience, with advanced search and filtering capabilities to find the required book easily and conveniently."
+          data-ar="تم تصميم الموقع بعناية فائقة لضمان تجربة مستخدم مميزة، مع إمكانية البحث والفلترة المتقدمة للعثور على الكتاب المطلوب بسهولة ويسر."
+        >
           تم تصميم الموقع بعناية فائقة لضمان تجربة مستخدم مميزة، مع إمكانية
           البحث والفلترة المتقدمة للعثور على الكتاب المطلوب بسهولة ويسر.
         </p>
 
-        <h2>👥 الطلاب المشاركون في المشروع</h2>
+        <h2>
+          👥
+          <span
+            data-en="Participating Students"
+            data-ar="الطلاب المشاركون في المشروع"
+            >الطلاب المشاركون في المشروع</span
+          >
+        </h2>
         <div class="students-list">
           <ul>
-            <li>🎓 الطالب: مصعب عراقي</li>
-            <li>🎓 الطالب: محمد طارق</li>
-            <li>🎓 الطالب: محمد احمد عبد القادر</li>
-            <li>🎓 الطالب: ادم هيثم</li>
-            <li>🎓 الطالب: محمود ناجح</li>
-            <li>🎓 الطالب: عبد الرحمن مصطفى</li>
+            <li
+              data-en="🎓 Student: Musab Iraqi"
+              data-ar="🎓 الطالب: مصعب عراقي"
+            >
+              🎓 الطالب: مصعب عراقي
+            </li>
+            <li
+              data-en="🎓 Student: Mohammed Tariq"
+              data-ar="🎓 الطالب: محمد طارق"
+            >
+              🎓 الطالب: محمد طارق
+            </li>
+            <li
+              data-en="🎓 Student: Mohammed Ahmed Abdel Qader"
+              data-ar="🎓 الطالب: محمد احمد عبد القادر"
+            >
+              🎓 الطالب: محمد احمد عبد القادر
+            </li>
+            <li
+              data-en="🎓 Student: Adam Haitham"
+              data-ar="🎓 الطالب: ادم هيثم"
+            >
+              🎓 الطالب: ادم هيثم
+            </li>
+            <li
+              data-en="🎓 Student: Mahmoud Najeh"
+              data-ar="🎓 الطالب: محمود ناجح"
+            >
+              🎓 الطالب: محمود ناجح
+            </li>
+            <li
+              data-en="🎓 Student: Abdulrahman Mustafa"
+              data-ar="🎓 الطالب: عبد الرحمن مصطفى"
+            >
+              🎓 الطالب: عبد الرحمن مصطفى
+            </li>
           </ul>
         </div>
 
-        <h2>🏫 مدارس الأبرار الأهلية</h2>
-        <p>
+        <h2>
+          🏫
+          <span data-en="Abrar Private Schools" data-ar="مدارس الأبرار الأهلية"
+            >مدارس الأبرار الأهلية</span
+          >
+        </h2>
+        <p
+          data-en="Abrar Private Schools is a leading educational institution in Madinah, providing distinguished education that combines authenticity and modernity, always striving to develop students' skills and prepare them for a bright future."
+          data-ar="مدارس الأبرار الأهلية هي مؤسسة تعليمية رائدة في المدينة المنورة، تقدم تعليماً متميزاً يجمع بين الأصالة والمعاصرة، وتسعى دائماً لتطوير مهارات الطلاب وإعدادهم لمستقبل مشرق."
+        >
           مدارس الأبرار الأهلية هي مؤسسة تعليمية رائدة في المدينة المنورة، تقدم
           تعليماً متميزاً يجمع بين الأصالة والمعاصرة، وتسعى دائماً لتطوير مهارات
           الطلاب وإعدادهم لمستقبل مشرق.
         </p>
 
-        <h2>📍 موقعنا</h2>
+        <h2>📍 <span data-en="Our Location" data-ar="موقعنا">موقعنا</span></h2>
         <p>
-          <strong>العنوان:</strong> المدينة المنورة، المملكة العربية السعودية
+          <strong data-en="Address:" data-ar="العنوان:">العنوان:</strong>
+          <span
+            data-en="Madinah, Kingdom of Saudi Arabia"
+            data-ar="المدينة المنورة، المملكة العربية السعودية"
+            >المدينة المنورة، المملكة العربية السعودية</span
+          >
         </p>
         <div class="map-container">
           <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d28634.294037335937!2d39.61659!3d24.46861!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjTCsDI4JzA3LjAiTiAzOcKwMzYnNTkuNyJF!5e0!3m2!1sar!2ssa!4v1234567890"
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3624.4958247894756!2d39.61659004999999!3d24.468610599999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x15bdbfd1820f4b85%3A0x29b2a1b6e8fa0fe0!2z2YXYr9in2LHYsyDYp9mE2KPYqNix2KfYsSDYp9mE2KPZh9mE2YrYqQ!5e0!3m2!1sar!2ssa!4v1234567890"
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"
@@ -341,7 +465,14 @@
           </iframe>
         </div>
 
-        <h2>🌐 تابعونا على وسائل التواصل الاجتماعي</h2>
+        <h2>
+          🌐
+          <span
+            data-en="Follow Us on Social Media"
+            data-ar="تابعونا على وسائل التواصل الاجتماعي"
+            >تابعونا على وسائل التواصل الاجتماعي</span
+          >
+        </h2>
         <div class="social-links">
           <a
             href="https://www.facebook.com/AbrarSchools2030"
@@ -350,7 +481,7 @@
             class="social-link facebook"
           >
             <span class="social-icon">📘</span>
-            <span>فيسبوك</span>
+            <span data-en="Facebook" data-ar="فيسبوك">فيسبوك</span>
           </a>
 
           <a
@@ -360,7 +491,7 @@
             class="social-link instagram"
           >
             <span class="social-icon">📷</span>
-            <span>انستجرام</span>
+            <span data-en="Instagram" data-ar="انستجرام">انستجرام</span>
           </a>
 
           <a
@@ -370,7 +501,7 @@
             class="social-link youtube"
           >
             <span class="social-icon">▶️</span>
-            <span>يوتيوب</span>
+            <span data-en="YouTube" data-ar="يوتيوب">يوتيوب</span>
           </a>
 
           <a
@@ -380,26 +511,59 @@
             class="social-link linktree"
           >
             <span class="social-icon">🔗</span>
-            <span>المزيد من الروابط</span>
+            <span data-en="More Links" data-ar="المزيد من الروابط"
+              >المزيد من الروابط</span
+            >
           </a>
 
           <a
-            href="https://maps.app.goo.gl/hEW5tuYSFjnQ2Hb38"
+            href="https://maps.app.goo.gl/RYerYzY6MvpNjCWP8"
             target="_blank"
             rel="noopener noreferrer"
             class="social-link maps"
           >
             <span class="social-icon">🗺️</span>
-            <span>google maps</span>
+            <span>Google Maps</span>
           </a>
         </div>
       </div>
 
       <footer>
-        <a href="rights.html"
+        <a
+          href="rights.html"
+          data-en="All Rights Reserved © 2025 Abrar Private Schools"
+          data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية"
           >جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a
         >
       </footer>
     </div>
+
+    <script>
+      let currentLang = localStorage.getItem("siteLang") || "ar";
+
+      function initLanguage() {
+        if (currentLang === "en") applyLanguage("en");
+      }
+
+      function toggleLanguage() {
+        currentLang = currentLang === "ar" ? "en" : "ar";
+        localStorage.setItem("siteLang", currentLang);
+        applyLanguage(currentLang);
+      }
+
+      function applyLanguage(lang) {
+        document.documentElement.lang = lang;
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+        document.querySelectorAll("[data-ar][data-en]").forEach((el) => {
+          el.textContent = el.getAttribute("data-" + lang);
+        });
+
+        document.getElementById("langButton").textContent =
+          lang === "ar" ? "🌐 EN" : "🌐 AR";
+      }
+
+      initLanguage();
+    </script>
   </body>
 </html>

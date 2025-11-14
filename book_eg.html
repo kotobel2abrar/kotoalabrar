@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المسار المصري - كتب مدارس الأبرار</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
     <style>
         * {
             margin: 0;
@@ -13,8 +14,35 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f7fafc;
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
             min-height: 100vh;
+        }
+
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-switcher:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .lang-switcher button {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px 10px;
+            font-weight: 600;
         }
 
         .navbar {
@@ -46,7 +74,7 @@
         }
 
         .nav-links a {
-            color: #667eea;
+            color: #e74c3c;
             text-decoration: none;
             font-weight: 600;
             padding: 8px 16px;
@@ -55,7 +83,7 @@
         }
 
         .nav-links a:hover {
-            background: #667eea;
+            background: #e74c3c;
             color: white;
         }
 
@@ -68,6 +96,10 @@
         .page-header {
             text-align: center;
             margin-bottom: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .page-header img {
@@ -106,7 +138,7 @@
 
         .search-box:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #e74c3c;
         }
 
         .filters {
@@ -137,7 +169,7 @@
 
         .filter-group select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: #e74c3c;
         }
 
         .books-grid {
@@ -164,7 +196,7 @@
             width: 100%;
             height: 350px;
             object-fit: cover;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
         }
 
         .book-info {
@@ -211,9 +243,12 @@
 
         .no-results {
             text-align: center;
-            color: #718096;
+            color: white;
             font-size: 1.2em;
             margin-top: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
         }
 
         footer {
@@ -226,14 +261,14 @@
         }
 
         footer a {
-            color: #667eea;
+            color: #e74c3c;
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s ease;
         }
 
         footer a:hover {
-            color: #764ba2;
+            color: #c0392b;
         }
 
         @media (max-width: 768px) {
@@ -262,18 +297,28 @@
             .books-grid {
                 grid-template-columns: 1fr;
             }
+
+            .lang-switcher {
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- زر تبديل اللغة -->
+    <div class="lang-switcher" onclick="toggleLanguage()">
+        <button id="langButton">🌐 EN</button>
+    </div>
+
     <nav class="navbar">
         <div class="navbar-content">
-            <div class="site-title">كتب مدارس الأبرار</div>
+            <div class="site-title" data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">كتب مدارس الأبرار</div>
             <div class="nav-links">
-                <a href="index.html">المسار</a>
-                <a href="book_eg.html">الكتب</a>
-                <a href="about.html">عن المشروع</a>
-                <a href="contact.html">التواصل</a>
+                <a href="index.html" data-en="Curriculums" data-ar="المسار">المسار</a>
+                <a href="book_eg.html" data-en="Books" data-ar="الكتب">الكتب</a>
+                <a href="about.html" data-en="About" data-ar="عن المشروع">عن المشروع</a>
+                <a href="contact.html" data-en="Contact" data-ar="التواصل">التواصل</a>
             </div>
         </div>
     </nav>
@@ -282,36 +327,30 @@
         <div class="page-header">
             <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار">
             <div class="flag">🇪🇬</div>
-            <h1>المسار المصري</h1>
+            <h1 data-en="Egyptian Curriculum" data-ar="المسار المصري">المسار المصري</h1>
         </div>
 
         <div class="search-section">
-            <input type="text" id="searchBox" class="search-box" placeholder="ابحث عن كتاب بالعنوان أو المؤلف...">
+            <input type="text" id="searchBox" class="search-box" data-placeholder-en="Search by title or author..." data-placeholder-ar="ابحث عن كتاب بالعنوان أو المؤلف..." placeholder="ابحث عن كتاب بالعنوان أو المؤلف...">
             
             <div class="filters">
                 <div class="filter-group">
-                    <label>المادة</label>
+                    <label data-en="Subject" data-ar="المادة">المادة</label>
                     <select id="subjectFilter">
-                        <option value="">جميع المواد</option>
-                        <option value="رياضيات">رياضيات</option>
-                        <option value="لغة عربية">لغة عربية</option>
-                        <option value="لغة إنجليزية">لغة إنجليزية</option>
-                        <option value="علوم">علوم</option>
-                        <option value="دراسات">دراسات اجتماعية</option>
-                        <option value="تربية دينية">تربية دينية</option>
-                        <option value="تاريخ">تاريخ</option>
-                        <option value="جغرافيا">جغرافيا</option>
-                        <option value="حاسب آلي">حاسب آلي</option>
-                        <option value="فيزياء">فيزياء</option>
-                        <option value="كيمياء">كيمياء</option>
-                        <option value="أحياء">أحياء</option>
+                        <option value="" data-en="All Subjects" data-ar="جميع المواد">جميع المواد</option>
+                        <option value="رياضيات" data-en="Mathematics" data-ar="رياضيات">رياضيات</option>
+                        <option value="لغة عربية" data-en="Arabic Language" data-ar="لغة عربية">لغة عربية</option>
+                        <option value="لغة إنجليزية" data-en="English Language" data-ar="لغة إنجليزية">لغة إنجليزية</option>
+                        <option value="علوم" data-en="Science" data-ar="علوم">علوم</option>
+                        <option value="دراسات" data-en="Social Studies" data-ar="دراسات اجتماعية">دراسات اجتماعية</option>
+                        <option value="تربية دينية" data-en="Religious Education" data-ar="تربية دينية">تربية دينية</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
-                    <label>الصف</label>
+                    <label data-en="Grade" data-ar="الصف">الصف</label>
                     <select id="gradeFilter">
-                        <option value="">جميع الصفوف</option>
+                        <option value="" data-en="All Grades" data-ar="جميع الصفوف">جميع الصفوف</option>
                         <option value="الأول الابتدائي">الأول الابتدائي</option>
                         <option value="الثاني الابتدائي">الثاني الابتدائي</option>
                         <option value="الثالث الابتدائي">الثالث الابتدائي</option>
@@ -328,43 +367,70 @@
                 </div>
 
                 <div class="filter-group">
-                    <label>الترم</label>
+                    <label data-en="Term" data-ar="الترم">الترم</label>
                     <select id="termFilter">
-                        <option value="">جميع الأترام</option>
-                        <option value="الأول">الترم الأول</option>
-                        <option value="الثاني">الترم الثاني</option>
+                        <option value="" data-en="All Terms" data-ar="جميع الأترام">جميع الأترام</option>
+                        <option value="الأول" data-en="First Term" data-ar="الترم الأول">الترم الأول</option>
+                        <option value="الثاني" data-en="Second Term" data-ar="الترم الثاني">الترم الثاني</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
-                    <label>السنة الدراسية</label>
+                    <label data-en="Academic Year" data-ar="السنة الدراسية">السنة الدراسية</label>
                     <select id="yearFilter">
-                        <option value="">جميع السنوات</option>
+                        <option value="" data-en="All Years" data-ar="جميع السنوات">جميع السنوات</option>
                         <option value="2024/2025">2024/2025</option>
                         <option value="2023/2024">2023/2024</option>
                     </select>
                 </div>
 
                 <div class="filter-group">
-                    <label>اللغة</label>
+                    <label data-en="Language" data-ar="اللغة">اللغة</label>
                     <select id="languageFilter">
-                        <option value="">جميع اللغات</option>
-                        <option value="عربي">عربي</option>
-                        <option value="إنجليزي">إنجليزي</option>
+                        <option value="" data-en="All Languages" data-ar="جميع اللغات">جميع اللغات</option>
+                        <option value="عربي" data-en="Arabic" data-ar="عربي">عربي</option>
+                        <option value="إنجليزي" data-en="English" data-ar="إنجليزي">إنجليزي</option>
                     </select>
                 </div>
             </div>
         </div>
 
         <div id="booksGrid" class="books-grid"></div>
-        <div id="noResults" class="no-results" style="display: none;">لا توجد نتائج تطابق البحث</div>
+        <div id="noResults" class="no-results" style="display: none;" data-en="No results match your search" data-ar="لا توجد نتائج تطابق البحث">لا توجد نتائج تطابق البحث</div>
 
         <footer>
-            <a href="rights.html">جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a>
+            <a href="rights.html" data-en="All Rights Reserved © 2025 Abrar Private Schools" data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية">جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a>
         </footer>
     </div>
 
     <script>
+        let currentLang = localStorage.getItem('siteLang') || 'ar';
+        
+        function initLanguage() {
+            if (currentLang === 'en') applyLanguage('en');
+        }
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            localStorage.setItem('siteLang', currentLang);
+            applyLanguage(currentLang);
+        }
+        
+        function applyLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            
+            document.querySelectorAll('[data-placeholder-ar][data-placeholder-en]').forEach(el => {
+                el.placeholder = el.getAttribute('data-placeholder-' + lang);
+            });
+            
+            document.getElementById('langButton').textContent = lang === 'ar' ? '🌐 EN' : '🌐 AR';
+        }
+
         function getBooks() {
             const stored = localStorage.getItem('egyptBooks');
             if (stored) {
@@ -374,7 +440,7 @@
                 {
                     title: "الرياضيات - الصف الأول الثانوي",
                     drive_link: "https://drive.google.com/file/d/EXAMPLE1",
-                    cover_image: "https://via.placeholder.com/280x350/667eea/ffffff?text=رياضيات",
+                    cover_image: "https://via.placeholder.com/280x350/e74c3c/ffffff?text=رياضيات",
                     subject: "رياضيات",
                     year: "2024/2025",
                     term: "الأول",
@@ -384,7 +450,7 @@
                 {
                     title: "اللغة العربية - الصف الثاني الإعدادي",
                     drive_link: "https://drive.google.com/file/d/EXAMPLE2",
-                    cover_image: "https://via.placeholder.com/280x350/764ba2/ffffff?text=عربي",
+                    cover_image: "https://via.placeholder.com/280x350/c0392b/ffffff?text=عربي",
                     subject: "لغة عربية",
                     year: "2024/2025",
                     term: "الأول",
@@ -415,10 +481,10 @@
                         <div class="book-details">
                             <span>📚 ${book.subject}</span>
                             <span>🎓 ${book.grade}</span>
-                            <span>📅 ${book.term} - ${book.year}</span>
+                            <span>📅 ${currentLang === 'ar' ? 'الترم' : 'Term'} ${book.term} - ${book.year}</span>
                             <span>🌐 ${book.language}</span>
                         </div>
-                        <a href="${book.drive_link}" target="_blank" rel="noopener noreferrer" class="open-btn">افتح</a>
+                        <a href="${book.drive_link}" target="_blank" rel="noopener noreferrer" class="open-btn">${currentLang === 'ar' ? 'افتح' : 'Open'}</a>
                     </div>
                 </div>
             `).join('');
@@ -454,6 +520,7 @@
         document.getElementById('languageFilter').addEventListener('change', filterBooks);
 
         renderBooks(allBooks);
+        initLanguage();
     </script>
 </body>
 </html>

@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>كتب مدارس الأبرار</title>
+    <title data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">كتب مدارس الأبرار</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
     <style>
         * {
             margin: 0;
@@ -13,13 +14,39 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
+        }
+
+        .lang-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .lang-switcher:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .lang-switcher button {
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            padding: 5px 10px;
         }
 
         .logo-container {
@@ -86,7 +113,7 @@
         }
 
         .path-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
             color: white;
             border: none;
             border-radius: 15px;
@@ -104,7 +131,7 @@
 
         .path-btn:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 10px 30px rgba(44, 82, 130, 0.4);
         }
 
         .path-btn.egypt {
@@ -126,14 +153,14 @@
         }
 
         footer a {
-            color: #667eea;
+            color: #3182ce;
             text-decoration: none;
             font-weight: 500;
             transition: color 0.3s ease;
         }
 
         footer a:hover {
-            color: #764ba2;
+            color: #2c5282;
         }
 
         @media (max-width: 600px) {
@@ -153,32 +180,76 @@
                 font-size: 1.2em;
                 padding: 25px 30px;
             }
+
+            .lang-switcher {
+                top: 10px;
+                right: 10px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- زر تبديل اللغة -->
+    <div class="lang-switcher" onclick="toggleLanguage()">
+        <button id="langButton">🌐 EN</button>
+    </div>
+
     <div class="logo-container">
         <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار">
     </div>
 
     <div class="container">
-        <h1>كتب مدارس الأبرار</h1>
+        <h1 data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">مدارس الأبرار الأهلية الحديثة </h1>
         
         <div class="path-buttons">
             <a href="book_eg.html" class="path-btn egypt">
                 <span class="flag">🇪🇬</span>
-                <span>المسار المصري</span>
+                <span data-en="Egyptian Curriculum" data-ar="المسار المصري">المسار المصري</span>
             </a>
             
             <a href="books_sa.html" class="path-btn saudi">
                 <span class="flag">🇸🇦</span>
-                <span>المسار السعودي</span>
+                <span data-en="Saudi Curriculum" data-ar="المسار السعودي">المسار السعودي</span>
             </a>
         </div>
 
         <footer>
-            <a href="rights.html">جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a>
+            <a href="rights.html" data-en="All Rights Reserved © 2025 Abrar Private Schools" data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية">جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a>
         </footer>
     </div>
+
+    <script>
+        // نظام الترجمة العالمي
+        let currentLang = localStorage.getItem('siteLang') || 'ar';
+        
+        function initLanguage() {
+            if (currentLang === 'en') {
+                applyLanguage('en');
+            }
+        }
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'ar' ? 'en' : 'ar';
+            localStorage.setItem('siteLang', currentLang);
+            applyLanguage(currentLang);
+        }
+        
+        function applyLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            // تطبيق الترجمة على جميع العناصر
+            const elements = document.querySelectorAll('[data-ar][data-en]');
+            elements.forEach(el => {
+                el.textContent = el.getAttribute('data-' + lang);
+            });
+            
+            // تحديث زر اللغة
+            document.getElementById('langButton').textContent = lang === 'ar' ? '🌐 EN' : '🌐 AR';
+        }
+        
+        // تهيئة اللغة عند تحميل الصفحة
+        initLanguage();
+    </script>
 </body>
 </html>
