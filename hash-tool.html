@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حساب Hash</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Cairo', Arial, sans-serif;
+    }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .container {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      max-width: 600px;
+      width: 100%;
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 30px;
+      text-align: center;
+      font-size: 24px;
+    }
+    input {
+      width: 100%;
+      padding: 15px;
+      border: 2px solid #ddd;
+      border-radius: 10px;
+      font-size: 16px;
+      margin-bottom: 15px;
+      transition: border 0.3s;
+    }
+    input:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+    button {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: translateY(-2px);
+    }
+    button:active {
+      transform: translateY(0);
+    }
+    #result {
+      margin-top: 25px;
+      padding: 20px;
+      background: #f8f9fa;
+      border-radius: 10px;
+      border-right: 4px solid #667eea;
+      display: none;
+    }
+    #result.show {
+      display: block;
+    }
+    #result strong {
+      color: #667eea;
+      display: block;
+      margin-bottom: 8px;
+    }
+    #result div {
+      background: white;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 8px;
+      word-break: break-all;
+      font-family: monospace;
+      font-size: 14px;
+      color: #333;
+    }
+    .copy-btn {
+      margin-top: 15px;
+      padding: 10px;
+      background: #28a745;
+      font-size: 14px;
+    }
+    .copy-btn:hover {
+      background: #218838;
+    }
+    .note {
+      margin-top: 20px;
+      padding: 15px;
+      background: #fff3cd;
+      border-radius: 10px;
+      color: #856404;
+      font-size: 14px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>🔐 أداة حساب Hash لكلمة المرور</h2>
+    <input type="text" id="pass" placeholder="اكتب كلمة المرور هنا" autofocus>
+    <button onclick="calc()">احسب Hash</button>
+    
+    <div id="result">
+      <strong>كلمة المرور:</strong>
+      <div id="password-display"></div>
+      
+      <strong>Hash (SHA-256):</strong>
+      <div id="hash-display"></div>
+      
+      <button class="copy-btn" onclick="copyHash()">📋 نسخ Hash</button>
+    </div>
+    
+    <div class="note">
+      ⚠️ بعد الحصول على Hash، انسخه واستبدله في صفحة login.html
+    </div>
+  </div>
+  
+  <script>
+    let currentHash = '';
+    
+    async function calc(){
+      const password = document.getElementById('pass').value;
+      
+      if(!password){
+        alert('⚠️ الرجاء إدخال كلمة المرور');
+        return;
+      }
+      
+      const enc = new TextEncoder().encode(password);
+      const buf = await crypto.subtle.digest("SHA-256", enc);
+      const hash = Array.from(new Uint8Array(buf))
+        .map(b=>b.toString(16).padStart(2,"0"))
+        .join("");
+      
+      currentHash = hash;
+      
+      document.getElementById('password-display').textContent = password;
+      document.getElementById('hash-display').textContent = hash;
+      document.getElementById('result').classList.add('show');
+      
+      console.log("كلمة المرور:", password);
+      console.log("Hash:", hash);
+    }
+    
+    function copyHash(){
+      navigator.clipboard.writeText(currentHash).then(() => {
+        alert('✅ تم نسخ Hash بنجاح!');
+      });
+    }
+    
+    // السماح بالحساب عند الضغط على Enter
+    document.getElementById('pass').addEventListener('keypress', (e) => {
+      if(e.key === 'Enter'){
+        calc();
+      }
+    });
+  </script>
+</body>
+</html>

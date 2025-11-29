@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>تسجيل الدخول</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg1: #6a11cb;
+        --bg2: #2575fc;
+        --glass: rgba(255, 255, 255, 0.2);
+        --white: #ffffff;
+      }
+      * {
+        box-sizing: border-box;
+        font-family: "Cairo", sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--bg1), var(--bg2));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .card {
+        width: 380px;
+        max-width: 95vw;
+        background: var(--glass);
+        backdrop-filter: blur(10px);
+        border-radius: 18px;
+        padding: 30px 28px;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        color: var(--white);
+        text-align: center;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+      }
+      h1 {
+        font-size: 26px;
+        margin-bottom: 22px;
+        font-weight: 700;
+      }
+      .input-wrap {
+        background: rgba(255, 255, 255, 0.18);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        padding: 12px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 16px;
+      }
+      input {
+        width: 100%;
+        background: transparent;
+        border: 0;
+        outline: none;
+        color: white;
+        font-size: 15px;
+      }
+      input::placeholder {
+        color: #e7e7e7;
+      }
+      .btn {
+        width: 100%;
+        padding: 12px;
+        margin-top: 8px;
+        background: white;
+        color: #333;
+        border: 0;
+        border-radius: 12px;
+        font-weight: 700;
+        font-size: 16px;
+        cursor: pointer;
+        transition: transform 0.2s;
+      }
+      .btn:hover {
+        transform: scale(1.02);
+      }
+      .small {
+        font-size: 13px;
+        margin-top: 12px;
+        color: #f0f0f0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>تسجيل الدخول</h1>
+
+      <div class="input-wrap">
+        <input id="password" type="password" placeholder="ادخل كلمة المرور" />
+      </div>
+
+      <button class="btn" id="loginBtn">دخول</button>
+
+      <p class="small">هذا الموقع مخصص لطلاب مدارس الأبرار الأهلية الحديثة</p>
+      <p id="msg" class="small"></p>
+    </div>
+
+    <script>
+      // Hash كلمة المرور المشفرة مسبقاً (SHA-256)
+      // كلمة المرور: bookwebegsa2026_1!2@3#4$5%6^7&8*9(
+      const hashedPassword =
+        "f3f4163ae5543be7d4b66613becaccddb417f02e7d0d2006ee970978f5e53b85";
+
+      // دالة الـ Hash
+      async function hash(text) {
+        const enc = new TextEncoder().encode(text);
+        const buf = await crypto.subtle.digest("SHA-256", enc);
+        return Array.from(new Uint8Array(buf))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+      }
+
+      // ✅ إجبار المستخدم على البقاء في صفحة التسجيل
+      // التأكد من تسجيل الخروج عند تحميل صفحة التسجيل
+      sessionStorage.removeItem("isLoggedIn");
+      localStorage.removeItem("isLoggedIn");
+
+      // ننتظر تحميل الصفحة بالكامل
+      window.addEventListener("DOMContentLoaded", () => {
+        const inp = document.getElementById("password");
+        const btn = document.getElementById("loginBtn");
+        const msg = document.getElementById("msg");
+
+        // التركيز على حقل الإدخال
+        inp.focus();
+
+        // دالة التحقق من تسجيل الدخول
+        async function checkLogin() {
+          const userInput = inp.value.trim();
+
+          if (!userInput) {
+            msg.textContent = "⚠ الرجاء إدخال كلمة المرور";
+            msg.style.color = "#ffb3b3";
+            return;
+          }
+
+          const userHash = await hash(userInput);
+
+          if (userHash === hashedPassword) {
+            msg.textContent = "✓ تم تسجيل الدخول بنجاح";
+            msg.style.color = "#8aff9c";
+            // في login.html بعد السطر: sessionStorage.setItem("isLoggedIn", "true");
+            const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
+            stats.logins = (stats.logins || 0) + 1;
+            localStorage.setItem("siteStats", JSON.stringify(stats));
+
+            // حفظ حالة تسجيل الدخول
+            sessionStorage.setItem("isLoggedIn", "true");
+
+            // الانتقال للصفحة الرئيسية
+            setTimeout(() => {
+              window.location.href = "index.html";
+            }, 600);
+          } else {
+            msg.textContent = "✗ كلمة المرور غير صحيحة";
+            msg.style.color = "#ffb3b3";
+            inp.value = "";
+            inp.focus();
+          }
+        }
+
+        // عند الضغط على الزر
+        btn.addEventListener("click", checkLogin);
+
+        // عند الضغط على Enter
+        inp.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") {
+            checkLogin();
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

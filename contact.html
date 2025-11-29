@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>التواصل - كتب مدارس الأبرار</title>
-    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png" />
     <style>
       * {
         margin: 0;
@@ -205,6 +205,25 @@
         }
       }
     </style>
+    <script>
+  // ✅ حماية الصفحة - إجبار الرجوع لصفحة التسجيل
+  (function(){
+    // الحصول على اسم الصفحة الحالية
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    // قائمة الصفحات المسموحة بدون تسجيل دخول
+    const allowedPages = ['login.html', 'signin.html', 'تسجيل.html'];
+    
+    // إذا لم يكن في صفحة التسجيل
+    if(!allowedPages.some(page => currentPage.includes(page) || currentPage === '')){
+      // التحقق من تسجيل الدخول
+      if(!sessionStorage.getItem('isLoggedIn')){
+        // إعادة التوجيه فوراً لصفحة التسجيل
+        window.location.replace('login.html');
+      }
+    }
+  })();
+</script>
   </head>
   <body>
     <!-- زر تبديل اللغة -->
@@ -219,7 +238,7 @@
           data-en="Abrar Schools Books"
           data-ar="كتب مدارس الأبرار"
         >
-          كتب مدارس الأبرار
+        كتب الأبرار
         </div>
         <div class="nav-links">
           <a href="index.html" data-en="Curriculums" data-ar="المسار">المسار</a>

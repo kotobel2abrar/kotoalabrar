@@ -155,6 +155,25 @@
         }
       }
     </style>
+    <script>
+  // ✅ حماية الصفحة - إجبار الرجوع لصفحة التسجيل
+  (function(){
+    // الحصول على اسم الصفحة الحالية
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    // قائمة الصفحات المسموحة بدون تسجيل دخول
+    const allowedPages = ['login.html', 'signin.html', 'تسجيل.html'];
+    
+    // إذا لم يكن في صفحة التسجيل
+    if(!allowedPages.some(page => currentPage.includes(page) || currentPage === '')){
+      // التحقق من تسجيل الدخول
+      if(!sessionStorage.getItem('isLoggedIn')){
+        // إعادة التوجيه فوراً لصفحة التسجيل
+        window.location.replace('login.html');
+      }
+    }
+  })();
+</script>
   </head>
   <body>
     <!-- زر تبديل اللغة -->
@@ -211,19 +230,6 @@
         data-ar="• الكتب المتاحة هي للأغراض التعليمية والدراسية فقط."
       >
         • الكتب المتاحة هي للأغراض التعليمية والدراسية فقط.
-      </p>
-      <p
-        data-en="• Commercial use of the content is strictly prohibited without prior written permission."
-        data-ar="• يُمنع منعاً باتاً استخدام المحتوى لأغراض تجارية دون إذن كتابي مسبق."
-      >
-        • يُمنع منعاً باتاً استخدام المحتوى لأغراض تجارية دون إذن كتابي مسبق.
-      </p>
-      <p
-        data-en="• The content provided is subject to the copyrights of the original publishers and educational institutions."
-        data-ar="• المحتوى المقدم يخضع لحقوق النشر الخاصة بالناشرين الأصليين والمؤسسات التعليمية."
-      >
-        • المحتوى المقدم يخضع لحقوق النشر الخاصة بالناشرين الأصليين والمؤسسات
-        التعليمية.
       </p>
       <p
         data-en="• This site represents a student effort under school management supervision aimed at facilitating access to educational materials."

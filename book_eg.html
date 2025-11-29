@@ -5,7 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>المسار المصري - كتب مدارس الأبرار</title>
     <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+    
+    
     <style>
+
+        
+        
         * {
             margin: 0;
             padding: 0;
@@ -304,6 +309,25 @@
             }
         }
     </style>
+    <script>
+  // ✅ حماية الصفحة - إجبار الرجوع لصفحة التسجيل
+  (function(){
+    // الحصول على اسم الصفحة الحالية
+    const currentPage = window.location.pathname.split('/').pop();
+    
+    // قائمة الصفحات المسموحة بدون تسجيل دخول
+    const allowedPages = ['login.html', 'signin.html', 'تسجيل.html'];
+    
+    // إذا لم يكن في صفحة التسجيل
+    if(!allowedPages.some(page => currentPage.includes(page) || currentPage === '')){
+      // التحقق من تسجيل الدخول
+      if(!sessionStorage.getItem('isLoggedIn')){
+        // إعادة التوجيه فوراً لصفحة التسجيل
+        window.location.replace('login.html');
+      }
+    }
+  })();
+</script>
 </head>
 <body>
     <!-- زر تبديل اللغة -->
@@ -459,7 +483,6 @@
                 }
             ];
         }
-
         let allBooks = getBooks();
 
         function renderBooks(books) {
@@ -471,7 +494,6 @@
                 noResults.style.display = 'block';
                 return;
             }
-
             noResults.style.display = 'none';
             grid.innerHTML = books.map(book => `
                 <div class="book-card">
@@ -489,7 +511,6 @@
                 </div>
             `).join('');
         }
-
         function filterBooks() {
             const search = document.getElementById('searchBox').value.toLowerCase();
             const subject = document.getElementById('subjectFilter').value;
@@ -511,7 +532,6 @@
 
             renderBooks(filtered);
         }
-
         document.getElementById('searchBox').addEventListener('input', filterBooks);
         document.getElementById('subjectFilter').addEventListener('change', filterBooks);
         document.getElementById('gradeFilter').addEventListener('change', filterBooks);
@@ -522,5 +542,27 @@
         renderBooks(allBooks);
         initLanguage();
     </script>
+    <script>
+    // في صفحات الكتب
+document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('open-btn')) {
+        const bookTitle = e.target.closest('.book-card').querySelector('.book-title').textContent;
+        recordDownload(bookTitle);
+    }
+});
+function recordDownload(bookId) {
+    const stats = JSON.parse(localStorage.getItem('siteStats') || '{}');
+    if (!stats.downloads) stats.downloads = {};
+    if (!stats.downloads[bookId]) stats.downloads[bookId] = 0;
+    stats.downloads[bookId]++;
+    
+    const today = new Date().toDateString();
+    if (!stats.todayDownloads) stats.todayDownloads = {};
+    if (!stats.todayDownloads[today]) stats.todayDownloads[today] = 0;
+    stats.todayDownloads[today]++;
+    
+    localStorage.setItem('siteStats', JSON.stringify(stats));
+}
+</script>
 </body>
 </html>

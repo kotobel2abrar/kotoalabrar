@@ -3,9 +3,31 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>عن المشروع - كتب مدارس الأبرار</title>
-    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+    <title>كتب الأبرار-عن المشروع</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png" />
+    <script>
+      // ✅ حماية الصفحة - إجبار الرجوع لصفحة التسجيل
+      (function () {
+        // الحصول على اسم الصفحة الحالية
+        const currentPage = window.location.pathname.split("/").pop();
 
+        // قائمة الصفحات المسموحة بدون تسجيل دخول
+        const allowedPages = ["login.html", "signin.html", "تسجيل.html"];
+
+        // إذا لم يكن في صفحة التسجيل
+        if (
+          !allowedPages.some(
+            (page) => currentPage.includes(page) || currentPage === ""
+          )
+        ) {
+          // التحقق من تسجيل الدخول
+          if (!sessionStorage.getItem("isLoggedIn")) {
+            // إعادة التوجيه فوراً لصفحة التسجيل
+            window.location.replace("login.html");
+          }
+        }
+      })();
+    </script>
     <style>
       * {
         margin: 0;
@@ -322,7 +344,7 @@
           data-en="Abrar Schools Books"
           data-ar="كتب مدارس الأبرار"
         >
-        مدارس الأبرار الأهلية الحديثة 
+          مدارس الأبرار الأهلية الحديثة
         </div>
         <div class="nav-links">
           <a href="index.html" data-en="Curriculums" data-ar="المسار">المسار</a>
@@ -339,7 +361,7 @@
       <div class="logo-section">
         <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار" />
         <h1 data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">
-        مدارس الأبرار الأهلية الحديثة 
+          كتب الابرار
         </h1>
       </div>
 
@@ -393,7 +415,7 @@
         <div class="students-list">
           <ul>
             <li
-              data-en="🎓 Student: Musab Iraqi"
+              data-en="🎓 Student: Mosaab Eraqi"
               data-ar="🎓 الطالب: مصعب عراقي"
             >
               🎓 الطالب: مصعب عراقي
@@ -417,7 +439,7 @@
               🎓 الطالب: ادم هيثم
             </li>
             <li
-              data-en="🎓 Student: Mahmoud Najeh"
+              data-en="🎓 Student: Mahmoud Nageh"
               data-ar="🎓 الطالب: محمود ناجح"
             >
               🎓 الطالب: محمود ناجح
@@ -427,6 +449,24 @@
               data-ar="🎓 الطالب: عبد الرحمن مصطفى"
             >
               🎓 الطالب: عبد الرحمن مصطفى
+            </li>
+            <li data-en="🎓 Student: Sufyan " data-ar="🎓 الطالب: سفيان">
+              🎓 الطالب: سفيان
+            </li>
+            <li
+              data-en="🎓 Student: Abdulrahman Mohammed"
+              data-ar="🎓 الطالب: عبد الرحمن محمد"
+            >
+              🎓 الطالب: عبد الرحمن محمد
+            </li>
+            <li data-en="🎓 Student: Islam" data-ar="🎓 الطالب: إسلام">
+              🎓 الطالب: إسلام
+            </li>
+              <li
+              data-en="🎓 Student: Omar Ali"
+              data-ar="🎓 الطالب: عمر على"
+            >
+              🎓 الطالب: عمر على
             </li>
           </ul>
         </div>

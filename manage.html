@@ -3,8 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title data-en="Control Panel - Abrar Schools Books" data-ar="لوحة التحكم - كتب مدارس الأبرار">لوحة التحكم - كتب مدارس الأبرار</title>
-    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+    <title
+      data-en="Control Panel - Abrar Schools Books"
+      data-ar="لوحة التحكم - كتب مدارس الأبرار"
+    >
+      لوحة التحكم - كتب مدارس الأبرار
+    </title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png" />
     <style>
       * {
         margin: 0;
@@ -222,6 +227,29 @@
         display: none;
       }
 
+      .manage-section {
+        background: #f1f5f9;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+      }
+
+      .list-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .chip {
+        background: white;
+        padding: 8px 12px;
+        border-radius: 999px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+
       @media (max-width: 768px) {
         .book-item {
           flex-direction: column;
@@ -264,96 +292,194 @@
           placeholder="أدخل كلمة المرور"
         />
       </div>
-      <button class="btn" onclick="login()" data-en="Login" data-ar="دخول">دخول</button>
-      <p id="loginError" class="error-message" data-en="Incorrect password" data-ar="كلمة مرور خاطئة">
+      <button class="btn" onclick="login()" data-en="Login" data-ar="دخول">
+        دخول
+      </button>
+      <p
+        id="loginError"
+        class="error-message"
+        data-en="Incorrect password"
+        data-ar="كلمة مرور خاطئة"
+      >
         كلمة مرور خاطئة
       </p>
     </div>
 
     <!-- لوحة التحكم -->
     <div id="adminContainer" class="admin-container">
-      <button class="btn logout-btn" onclick="logout()" data-en="Logout" data-ar="تسجيل الخروج">تسجيل الخروج</button>
+      <button
+        class="btn logout-btn"
+        onclick="logout()"
+        data-en="Logout"
+        data-ar="تسجيل الخروج"
+      >
+        تسجيل الخروج
+      </button>
 
-      <h1 data-en="Control Panel - Abrar Schools Books" data-ar="لوحة التحكم - كتب مدارس الأبرار">لوحة التحكم - كتب مدارس الأبرار</h1>
+      <h1
+        data-en="Control Panel - Abrar Schools Books"
+        data-ar="لوحة التحكم - كتب مدارس الأبرار"
+      >
+        لوحة التحكم - كتب مدارس الأبرار
+      </h1>
 
-      <div id="successMessage" class="success-message" data-en="Saved successfully!" data-ar="تم الحفظ بنجاح!">تم الحفظ بنجاح!</div>
+      <div
+        id="successMessage"
+        class="success-message"
+        data-en="Saved successfully!"
+        data-ar="تم الحفظ بنجاح!"
+      >
+        تم الحفظ بنجاح!
+      </div>
 
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('egypt')" data-en="Egyptian Curriculum" data-ar="المسار المصري">
+        <button
+          class="tab active"
+          onclick="switchTab('egypt', event)"
+          data-en="Egyptian Curriculum"
+          data-ar="المسار المصري"
+        >
           المسار المصري
         </button>
-        <button class="tab" onclick="switchTab('saudi')" data-en="Saudi Curriculum" data-ar="المسار السعودي">المسار السعودي</button>
+        <button
+          class="tab"
+          onclick="switchTab('saudi', event)"
+          data-en="Saudi Curriculum"
+          data-ar="المسار السعودي"
+        >
+          المسار السعودي
+        </button>
       </div>
 
       <!-- المسار المصري -->
       <div id="egyptTab" class="tab-content active">
-        <h2 data-en="Add New Book - Egyptian Curriculum" data-ar="إضافة كتاب جديد - المسار المصري">إضافة كتاب جديد - المسار المصري</h2>
+        <h2
+          data-en="Add New Book - Egyptian Curriculum"
+          data-ar="إضافة كتاب جديد - المسار المصري"
+        >
+          إضافة كتاب جديد - المسار المصري
+        </h2>
+
+        <!-- إدارة المواد و السنوات و الترمات -->
+        <div class="manage-section">
+          <h3>إدارة المواد و السنوات و الترمات</h3>
+          <div class="form-group">
+            <label>المواد الحالية</label>
+            <div id="egyptSubjectsList" class="list-inline"></div>
+            <div style="display: flex; gap: 8px; margin-top: 8px">
+              <input
+                type="text"
+                id="newEgyptSubject"
+                placeholder="أضف مادة جديدة"
+              />
+              <button class="btn btn-small" onclick="addEgyptSubject()">
+                أضف
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>السنوات</label>
+            <div id="egyptYearsList" class="list-inline"></div>
+            <div style="display: flex; gap: 8px; margin-top: 8px">
+              <input
+                type="text"
+                id="newEgyptYear"
+                placeholder="أضف سنة مثلاً: 2025/2026"
+              />
+              <button class="btn btn-small" onclick="addEgyptYear()">
+                أضف
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>الترمات</label>
+            <div id="egyptTermsList" class="list-inline"></div>
+            <div style="display: flex; gap: 8px; margin-top: 8px">
+              <input
+                type="text"
+                id="newEgyptTerm"
+                placeholder="أضف ترم مثل: الأول"
+              />
+              <button class="btn btn-small" onclick="addEgyptTerm()">
+                أضف
+              </button>
+            </div>
+          </div>
+        </div>
+
         <form id="egyptForm">
           <div class="form-group">
-            <label data-en="Book Title *" data-ar="عنوان الكتاب *">عنوان الكتاب *</label>
+            <label data-en="Book Title *" data-ar="عنوان الكتاب *"
+              >عنوان الكتاب *</label
+            >
             <input type="text" id="egyptTitle" required />
           </div>
 
           <div class="form-group">
-            <label data-en="Google Drive Link *" data-ar="رابط Google Drive *">رابط Google Drive *</label>
+            <label data-en="Google Drive Link *" data-ar="رابط Google Drive *"
+              >رابط Google Drive *</label
+            >
             <input type="url" id="egyptDriveLink" required />
           </div>
 
           <div class="form-group">
-            <label data-en="Cover Image Link *" data-ar="رابط صورة الغلاف *">رابط صورة الغلاف *</label>
+            <label data-en="Cover Image Link *" data-ar="رابط صورة الغلاف *"
+              >رابط صورة الغلاف *</label
+            >
             <input type="url" id="egyptCoverImage" required />
           </div>
 
           <div class="form-group">
             <label data-en="Subject *" data-ar="المادة *">المادة *</label>
             <select id="egyptSubject" required>
-              <option value="" data-en="Select Subject" data-ar="اختر المادة">اختر المادة</option>
-              <option value="رياضيات" data-en="Mathematics" data-ar="رياضيات">رياضيات</option>
-              <option value="لغة عربية" data-en="Arabic Language" data-ar="لغة عربية">لغة عربية</option>
-              <option value="لغة إنجليزية" data-en="English Language" data-ar="لغة إنجليزية">لغة إنجليزية</option>
-              <option value="علوم" data-en="Science" data-ar="علوم">علوم</option>
-              <option value="دراسات" data-en="Social Studies" data-ar="دراسات اجتماعية">دراسات اجتماعية</option>
-              <option value="تربية دينية" data-en="Religious Education" data-ar="تربية دينية">تربية دينية</option>
+              <option value="" data-en="Select Subject" data-ar="اختر المادة">
+                اختر المادة
+              </option>
             </select>
           </div>
 
           <div class="form-group">
-            <label data-en="Academic Year *" data-ar="السنة الدراسية *">السنة الدراسية *</label>
-            <input type="text" id="egyptYear" data-placeholder-en="e.g. 2024/2025" data-placeholder-ar="مثال: 2024/2025" placeholder="مثال: 2024/2025" required />
+            <label data-en="Academic Year *" data-ar="السنة الدراسية *"
+              >السنة الدراسية *</label
+            >
+            <select id="egyptYear" required></select>
           </div>
 
           <div class="form-group">
             <label data-en="Term *" data-ar="الترم *">الترم *</label>
-            <select id="egyptTerm" required>
-              <option value="" data-en="Select Term" data-ar="اختر الترم">اختر الترم</option>
-              <option value="الأول" data-en="First" data-ar="الأول">الأول</option>
-              <option value="الثاني" data-en="Second" data-ar="الثاني">الثاني</option>
-            </select>
+            <select id="egyptTerm" required></select>
           </div>
 
           <div class="form-group">
             <label data-en="Grade *" data-ar="الصف *">الصف *</label>
             <select id="egyptGrade" required>
-              <option value="" data-en="Select Grade" data-ar="اختر الصف">اختر الصف</option>
-              <option value="الأول الابتدائي">الأول الابتدائي</option>
-              <option value="الثاني الابتدائي">الثاني الابتدائي</option>
-              <option value="الثالث الابتدائي">الثالث الابتدائي</option>
-              <option value="الرابع الابتدائي">الرابع الابتدائي</option>
-              <option value="الخامس الابتدائي">الخامس الابتدائي</option>
-              <option value="السادس الابتدائي">السادس الابتدائي</option>
+              <option value="">اختر الصف</option>
             </select>
           </div>
 
           <div class="form-group">
             <label data-en="Language *" data-ar="اللغة *">اللغة *</label>
             <select id="egyptLanguage" required>
-              <option value="" data-en="Select Language" data-ar="اختر اللغة">اختر اللغة</option>
+              <option value="" data-en="Select Language" data-ar="اختر اللغة">
+                اختر اللغة
+              </option>
               <option value="عربي" data-en="Arabic" data-ar="عربي">عربي</option>
-              <option value="إنجليزي" data-en="English" data-ar="إنجليزي">إنجليزي</option>
+              <option value="إنجليزي" data-en="English" data-ar="إنجليزي">
+                إنجليزي
+              </option>
             </select>
           </div>
 
-          <button type="submit" class="btn" data-en="Add Book" data-ar="إضافة الكتاب">إضافة الكتاب</button>
+          <button
+            type="submit"
+            class="btn"
+            data-en="Add Book"
+            data-ar="إضافة الكتاب"
+          >
+            إضافة الكتاب
+          </button>
         </form>
 
         <div class="books-list">
@@ -364,21 +490,80 @@
 
       <!-- المسار السعودي -->
       <div id="saudiTab" class="tab-content">
-        <h2 data-en="Add New Book - Saudi Curriculum" data-ar="إضافة كتاب جديد - المسار السعودي">إضافة كتاب جديد - المسار السعودي</h2>
-        <form id="saudiForm">
-          <!-- نفس الحقول مع معرفات مختلفة -->
+        <h2
+          data-en="Add New Book - Saudi Curriculum"
+          data-ar="إضافة كتاب جديد - المسار السعودي"
+        >
+          إضافة كتاب جديد - المسار السعودي
+        </h2>
+
+        <div class="manage-section">
+          <h3>إدارة المواد و السنوات و الفصول</h3>
           <div class="form-group">
-            <label data-en="Book Title *" data-ar="عنوان الكتاب *">عنوان الكتاب *</label>
+            <label>المواد الحالية</label>
+            <div id="saudiSubjectsList" class="list-inline"></div>
+            <div style="display: flex; gap: 8px; margin-top: 8px">
+              <input
+                type="text"
+                id="newSaudiSubject"
+                placeholder="أضف مادة جديدة"
+              />
+              <button class="btn btn-small" onclick="addSaudiSubject()">
+                أضف
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>السنوات</label>
+            <div id="saudiYearsList" class="list-inline"></div>
+            <div style="display: flex; gap: 8px; margin-top: 8px">
+              <input
+                type="text"
+                id="newSaudiYear"
+                placeholder="أضف سنة (مثال: 2025/2026)"
+              />
+              <button class="btn btn-small" onclick="addSaudiYear()">
+                أضف
+              </button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>الفصول</label>
+            <div id="saudiTermsList" class="list-inline"></div>
+            <div style="display: flex; gap: 8px; margin-top: 8px">
+              <input
+                type="text"
+                id="newSaudiTerm"
+                placeholder="أضف فصل مثل: الأول"
+              />
+              <button class="btn btn-small" onclick="addSaudiTerm()">
+                أضف
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <form id="saudiForm">
+          <div class="form-group">
+            <label data-en="Book Title *" data-ar="عنوان الكتاب *"
+              >عنوان الكتاب *</label
+            >
             <input type="text" id="saudiTitle" required />
           </div>
 
           <div class="form-group">
-            <label data-en="Google Drive Link *" data-ar="رابط Google Drive *">رابط Google Drive *</label>
+            <label data-en="Google Drive Link *" data-ar="رابط Google Drive *"
+              >رابط Google Drive *</label
+            >
             <input type="url" id="saudiDriveLink" required />
           </div>
 
           <div class="form-group">
-            <label data-en="Cover Image Link *" data-ar="رابط صورة الغلاف *">رابط صورة الغلاف *</label>
+            <label data-en="Cover Image Link *" data-ar="رابط صورة الغلاف *"
+              >رابط صورة الغلاف *</label
+            >
             <input type="url" id="saudiCoverImage" required />
           </div>
 
@@ -386,34 +571,27 @@
             <label data-en="Subject *" data-ar="المادة *">المادة *</label>
             <select id="saudiSubject" required>
               <option value="">اختر المادة</option>
-              <option value="رياضيات">رياضيات</option>
-              <option value="لغة عربية">لغة عربية</option>
-              <option value="لغة إنجليزية">لغة إنجليزية</option>
-              <option value="علوم">علوم</option>
-              <option value="قرآن">قرآن كريم</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label data-en="Academic Year *" data-ar="السنة الدراسية *">السنة الدراسية *</label>
-            <input type="text" id="saudiYear" placeholder="مثال: 1446" required />
+            <label data-en="Academic Year *" data-ar="السنة الدراسية *"
+              >السنة الدراسية *</label
+            >
+            <select id="saudiYear" required></select>
           </div>
 
           <div class="form-group">
-            <label data-en="Semester *" data-ar="الفصل الدراسي *">الفصل الدراسي *</label>
-            <select id="saudiTerm" required>
-              <option value="">اختر الفصل</option>
-              <option value="الأول">الأول</option>
-              <option value="الثاني">الثاني</option>
-            </select>
+            <label data-en="Semester *" data-ar="الفصل الدراسي *"
+              >الفصل الدراسي *</label
+            >
+            <select id="saudiTerm" required></select>
           </div>
 
           <div class="form-group">
             <label data-en="Grade *" data-ar="الصف *">الصف *</label>
             <select id="saudiGrade" required>
               <option value="">اختر الصف</option>
-              <option value="الأول الابتدائي">الأول الابتدائي</option>
-              <option value="الثاني الابتدائي">الثاني الابتدائي</option>
             </select>
           </div>
 
@@ -426,7 +604,14 @@
             </select>
           </div>
 
-          <button type="submit" class="btn" data-en="Add Book" data-ar="إضافة الكتاب">إضافة الكتاب</button>
+          <button
+            type="submit"
+            class="btn"
+            data-en="Add Book"
+            data-ar="إضافة الكتاب"
+          >
+            إضافة الكتاب
+          </button>
         </form>
 
         <div class="books-list">
@@ -439,49 +624,115 @@
     <script>
       // كلمة المرور المشفرة - يجب تغييرها
       const ADMIN_PASSWORD = "AbrarSchools@2025!SecurePass";
-      
-      // نظام الترجمة
-      let currentLang = localStorage.getItem('siteLang') || 'ar';
-      
+
+      // بيانات افتراضية قابلة للتعديل ومحفوظة في localStorage
+      const DEFAULT_DATA = {
+        egypt: {
+          subjects: [
+            "رياضيات",
+            "لغة عربية",
+            "لغة إنجليزية",
+            "علوم",
+            "دراسات",
+            "تربية دينية",
+            "حاسب آلي",
+            "تربية فنية",
+            "مهارات حياتية",
+            "تربية رياضية",
+            "لغات",
+          ],
+          years: ["2025/2026"],
+          terms: ["الأول", "الثاني"],
+          grades: [
+            "الأول الابتدائي",
+            "الثاني الابتدائي",
+            "الثالث الابتدائي",
+            "الرابع الابتدائي",
+            "الخامس الابتدائي",
+            "السادس الابتدائي",
+            "الأول الإعدادي",
+            "الثاني الإعدادي",
+            "الثالث الإعدادي",
+          ],
+          books: [],
+        },
+        saudi: {
+          subjects: [
+            "رياضيات",
+            "لغة عربية",
+            "لغة إنجليزية",
+            "علوم",
+            "قرآن",
+            "توحيد",
+            "فقه",
+            "تربية إسلامية",
+            "اجتماعيات",
+            "حاسب آلي",
+            "تربية فنية",
+            "تربية رياضية",
+          ],
+          years: ["2025/2026"],
+          terms: ["الأول", "الثاني"],
+          grades: [
+            "الأول الابتدائي",
+            "الثاني الابتدائي",
+            "الثالث الابتدائي",
+            "الرابع الابتدائي",
+            "الخامس الابتدائي",
+            "السادس الابتدائي",
+            "الأول المتوسط",
+            "الثاني المتوسط",
+            "الثالث المتوسط",
+          ],
+          books: [],
+        },
+      };
+
+      // ترجمة
+      let currentLang = localStorage.getItem("siteLang") || "ar";
+
       function initLanguage() {
-        if (currentLang === 'en') {
-          applyLanguage('en');
-        }
+        if (currentLang === "en") applyLanguage("en");
+        else applyLanguage("ar");
       }
-      
+
       function toggleLanguage() {
-        currentLang = currentLang === 'ar' ? 'en' : 'ar';
-        localStorage.setItem('siteLang', currentLang);
+        currentLang = currentLang === "ar" ? "en" : "ar";
+        localStorage.setItem("siteLang", currentLang);
         applyLanguage(currentLang);
       }
-      
+
       function applyLanguage(lang) {
         document.documentElement.lang = lang;
-        document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-        
-        const elements = document.querySelectorAll('[data-ar][data-en]');
-        elements.forEach(el => {
-          el.textContent = el.getAttribute('data-' + lang);
+        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+        const elements = document.querySelectorAll("[data-ar][data-en]");
+        elements.forEach((el) => {
+          el.textContent = el.getAttribute("data-" + lang);
         });
-        
-        const placeholders = document.querySelectorAll('[data-placeholder-ar][data-placeholder-en]');
-        placeholders.forEach(el => {
-          el.placeholder = el.getAttribute('data-placeholder-' + lang);
+
+        const placeholders = document.querySelectorAll(
+          "[data-placeholder-ar][data-placeholder-en]"
+        );
+        placeholders.forEach((el) => {
+          el.placeholder = el.getAttribute("data-placeholder-" + lang);
         });
-        
-        document.getElementById('langButton').textContent = lang === 'ar' ? '🌐 EN' : '🌐 AR';
+
+        document.getElementById("langButton").textContent =
+          lang === "ar" ? "🌐 EN" : "🌐 AR";
       }
-      
-      // التحقق من تسجيل الدخول
+
+      // إدارة الجلسة
       async function login() {
         const password = document.getElementById("passwordInput").value;
         if (password === ADMIN_PASSWORD) {
           document.getElementById("loginContainer").style.display = "none";
           document.getElementById("adminContainer").style.display = "block";
-          
-          const expiryTime = new Date().getTime() + (120 * 60 * 1000);
-          sessionStorage.setItem('adminSession', expiryTime.toString());
+
+          const expiryTime = new Date().getTime() + 120 * 60 * 1000;
+          sessionStorage.setItem("adminSession", expiryTime.toString());
           sessionStorage.setItem("adminLoggedIn", "true");
+          initData();
           loadBooks();
         } else {
           document.getElementById("loginError").style.display = "block";
@@ -500,11 +751,11 @@
       }
 
       function checkSession() {
-        const expiryTime = sessionStorage.getItem('adminSession');
-        const isLoggedIn = sessionStorage.getItem('adminLoggedIn');
-        
+        const expiryTime = sessionStorage.getItem("adminSession");
+        const isLoggedIn = sessionStorage.getItem("adminLoggedIn");
+
         if (!expiryTime || !isLoggedIn) return false;
-        
+
         const now = new Date().getTime();
         if (now > parseInt(expiryTime)) {
           logout();
@@ -516,57 +767,356 @@
       if (checkSession()) {
         document.getElementById("loginContainer").style.display = "none";
         document.getElementById("adminContainer").style.display = "block";
+        initData();
         loadBooks();
       }
 
-      function switchTab(tab) {
-        document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
-        document.querySelectorAll(".tab-content").forEach((c) => c.classList.remove("active"));
-        event.target.classList.add("active");
+      function switchTab(tab, ev) {
+        document
+          .querySelectorAll(".tab")
+          .forEach((t) => t.classList.remove("active"));
+        document
+          .querySelectorAll(".tab-content")
+          .forEach((c) => c.classList.remove("active"));
+        if (ev && ev.target) ev.target.classList.add("active");
         document.getElementById(tab + "Tab").classList.add("active");
       }
 
-      document.getElementById("egyptForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const book = {
-          id: Date.now(),
-          title: document.getElementById("egyptTitle").value,
-          drive_link: document.getElementById("egyptDriveLink").value,
-          cover_image: document.getElementById("egyptCoverImage").value,
-          subject: document.getElementById("egyptSubject").value,
-          year: document.getElementById("egyptYear").value,
-          term: document.getElementById("egyptTerm").value,
-          grade: document.getElementById("egyptGrade").value,
-          language: document.getElementById("egyptLanguage").value,
-        };
-        let books = JSON.parse(localStorage.getItem("egyptBooks") || "[]");
-        books.push(book);
-        localStorage.setItem("egyptBooks", JSON.stringify(books));
-        showSuccess();
-        this.reset();
-        loadBooks();
-      });
+      // تهيئة البيانات
+      function initData() {
+        // اذا ما فيش بيانات مخزنة => نحط الافتراضية
+        if (
+          !localStorage.getItem("egyptData") ||
+          !localStorage.getItem("saudiData")
+        ) {
+          localStorage.setItem("egyptData", JSON.stringify(DEFAULT_DATA.egypt));
+          localStorage.setItem("saudiData", JSON.stringify(DEFAULT_DATA.saudi));
+        } else {
+          // تأكد أن السنين أصبحت 2025/2026 فقط كما طلبت
+          const eg = JSON.parse(localStorage.getItem("egyptData"));
+          eg.years = ["2025/2026"];
+          localStorage.setItem("egyptData", JSON.stringify(eg));
 
-      document.getElementById("saudiForm").addEventListener("submit", function (e) {
-        e.preventDefault();
-        const book = {
-          id: Date.now(),
-          title: document.getElementById("saudiTitle").value,
-          drive_link: document.getElementById("saudiDriveLink").value,
-          cover_image: document.getElementById("saudiCoverImage").value,
-          subject: document.getElementById("saudiSubject").value,
-          year: document.getElementById("saudiYear").value,
-          term: document.getElementById("saudiTerm").value,
-          grade: document.getElementById("saudiGrade").value,
-          language: document.getElementById("saudiLanguage").value,
-        };
-        let books = JSON.parse(localStorage.getItem("saudiBooks") || "[]");
-        books.push(book);
-        localStorage.setItem("saudiBooks", JSON.stringify(books));
+          const sa = JSON.parse(localStorage.getItem("saudiData"));
+          sa.years = ["2025/2026"];
+          localStorage.setItem("saudiData", JSON.stringify(sa));
+        }
+
+        populateEgyptControls();
+        populateSaudiControls();
+      }
+
+      // ----- وظائف إدارة المواد و السنوات و الترمات - مصر -----
+      function getEgyptData() {
+        return JSON.parse(
+          localStorage.getItem("egyptData") ||
+            JSON.stringify(DEFAULT_DATA.egypt)
+        );
+      }
+      function saveEgyptData(data) {
+        localStorage.setItem("egyptData", JSON.stringify(data));
+        populateEgyptControls();
+        populateEgyptFormOptions();
         showSuccess();
-        this.reset();
-        loadBooks();
-      });
+      }
+
+      function populateEgyptControls() {
+        const data = getEgyptData();
+        const subjectsContainer = document.getElementById("egyptSubjectsList");
+        subjectsContainer.innerHTML = "";
+        data.subjects.forEach((s, i) => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.innerHTML = `<span>${s}</span><button class='btn-small' onclick='deleteEgyptSubject(${i})'>حذف</button>`;
+          subjectsContainer.appendChild(chip);
+        });
+
+        const yearsContainer = document.getElementById("egyptYearsList");
+        yearsContainer.innerHTML = "";
+        data.years.forEach((y, i) => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.innerHTML = `<span>${y}</span><button class='btn-small' onclick='deleteEgyptYear(${i})'>حذف</button>`;
+          yearsContainer.appendChild(chip);
+        });
+
+        const termsContainer = document.getElementById("egyptTermsList");
+        termsContainer.innerHTML = "";
+        data.terms.forEach((t, i) => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.innerHTML = `<span>${t}</span><button class='btn-small' onclick='deleteEgyptTerm(${i})'>حذف</button>`;
+          termsContainer.appendChild(chip);
+        });
+
+        // الصفوف
+        const gradeSelect = document.getElementById("egyptGrade");
+        gradeSelect.innerHTML = "<option value=''>اختر الصف</option>";
+        data.grades.forEach((g) => {
+          const opt = document.createElement("option");
+          opt.value = g;
+          opt.textContent = g;
+          gradeSelect.appendChild(opt);
+        });
+
+        populateEgyptFormOptions();
+      }
+
+      function populateEgyptFormOptions() {
+        const data = getEgyptData();
+        const subjectSelect = document.getElementById("egyptSubject");
+        subjectSelect.innerHTML = ` <option value="">اختر المادة</option>`;
+        data.subjects.forEach((s) => {
+          const opt = document.createElement("option");
+          opt.value = s;
+          opt.textContent = s;
+          subjectSelect.appendChild(opt);
+        });
+
+        const yearSelect = document.getElementById("egyptYear");
+        yearSelect.innerHTML = "";
+        data.years.forEach((y) => {
+          const opt = document.createElement("option");
+          opt.value = y;
+          opt.textContent = y;
+          yearSelect.appendChild(opt);
+        });
+
+        const termSelect = document.getElementById("egyptTerm");
+        termSelect.innerHTML = "";
+        data.terms.forEach((t) => {
+          const opt = document.createElement("option");
+          opt.value = t;
+          opt.textContent = t;
+          termSelect.appendChild(opt);
+        });
+      }
+
+      function addEgyptSubject() {
+        const val = document.getElementById("newEgyptSubject").value.trim();
+        if (!val) return alert("اكتب اسم المادة أولا");
+        const data = getEgyptData();
+        data.subjects.push(val);
+        saveEgyptData(data);
+        document.getElementById("newEgyptSubject").value = "";
+      }
+
+      function deleteEgyptSubject(index) {
+        if (!confirm("حذف هذه المادة؟")) return;
+        const data = getEgyptData();
+        data.subjects.splice(index, 1);
+        saveEgyptData(data);
+      }
+
+      function addEgyptYear() {
+        const val = document.getElementById("newEgyptYear").value.trim();
+        if (!val) return alert("اكتب السنة أولا");
+        const data = getEgyptData();
+        data.years = [val]; // طلبك: إلغاء كل الأعوام وإضافة هذا العام فقط
+        saveEgyptData(data);
+        document.getElementById("newEgyptYear").value = "";
+      }
+
+      function deleteEgyptYear(index) {
+        if (!confirm("حذف هذه السنة؟")) return;
+        const data = getEgyptData();
+        data.years.splice(index, 1);
+        saveEgyptData(data);
+      }
+
+      function addEgyptTerm() {
+        const val = document.getElementById("newEgyptTerm").value.trim();
+        if (!val) return alert("اكتب الترم أولا");
+        const data = getEgyptData();
+        if (!data.terms.includes(val)) data.terms.push(val);
+        saveEgyptData(data);
+        document.getElementById("newEgyptTerm").value = "";
+      }
+
+      function deleteEgyptTerm(index) {
+        if (!confirm("حذف هذا الترم؟")) return;
+        const data = getEgyptData();
+        data.terms.splice(index, 1);
+        saveEgyptData(data);
+      }
+
+      // ----- وظائف المملكة السعودية -----
+      function getSaudiData() {
+        return JSON.parse(
+          localStorage.getItem("saudiData") ||
+            JSON.stringify(DEFAULT_DATA.saudi)
+        );
+      }
+      function saveSaudiData(data) {
+        localStorage.setItem("saudiData", JSON.stringify(data));
+        populateSaudiControls();
+        populateSaudiFormOptions();
+        showSuccess();
+      }
+
+      function populateSaudiControls() {
+        const data = getSaudiData();
+        const subjectsContainer = document.getElementById("saudiSubjectsList");
+        subjectsContainer.innerHTML = "";
+        data.subjects.forEach((s, i) => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.innerHTML = `<span>${s}</span><button class='btn-small' onclick='deleteSaudiSubject(${i})'>حذف</button>`;
+          subjectsContainer.appendChild(chip);
+        });
+
+        const yearsContainer = document.getElementById("saudiYearsList");
+        yearsContainer.innerHTML = "";
+        data.years.forEach((y, i) => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.innerHTML = `<span>${y}</span><button class='btn-small' onclick='deleteSaudiYear(${i})'>حذف</button>`;
+          yearsContainer.appendChild(chip);
+        });
+
+        const termsContainer = document.getElementById("saudiTermsList");
+        termsContainer.innerHTML = "";
+        data.terms.forEach((t, i) => {
+          const chip = document.createElement("div");
+          chip.className = "chip";
+          chip.innerHTML = `<span>${t}</span><button class='btn-small' onclick='deleteSaudiTerm(${i})'>حذف</button>`;
+          termsContainer.appendChild(chip);
+        });
+
+        const gradeSelect = document.getElementById("saudiGrade");
+        gradeSelect.innerHTML = "<option value=''>اختر الصف</option>";
+        data.grades.forEach((g) => {
+          const opt = document.createElement("option");
+          opt.value = g;
+          opt.textContent = g;
+          gradeSelect.appendChild(opt);
+        });
+
+        populateSaudiFormOptions();
+      }
+
+      function populateSaudiFormOptions() {
+        const data = getSaudiData();
+        const subjectSelect = document.getElementById("saudiSubject");
+        subjectSelect.innerHTML = ` <option value="">اختر المادة</option>`;
+        data.subjects.forEach((s) => {
+          const opt = document.createElement("option");
+          opt.value = s;
+          opt.textContent = s;
+          subjectSelect.appendChild(opt);
+        });
+
+        const yearSelect = document.getElementById("saudiYear");
+        yearSelect.innerHTML = "";
+        data.years.forEach((y) => {
+          const opt = document.createElement("option");
+          opt.value = y;
+          opt.textContent = y;
+          yearSelect.appendChild(opt);
+        });
+
+        const termSelect = document.getElementById("saudiTerm");
+        termSelect.innerHTML = "";
+        data.terms.forEach((t) => {
+          const opt = document.createElement("option");
+          opt.value = t;
+          opt.textContent = t;
+          termSelect.appendChild(opt);
+        });
+      }
+
+      function addSaudiSubject() {
+        const val = document.getElementById("newSaudiSubject").value.trim();
+        if (!val) return alert("اكتب اسم المادة أولا");
+        const data = getSaudiData();
+        data.subjects.push(val);
+        saveSaudiData(data);
+        document.getElementById("newSaudiSubject").value = "";
+      }
+
+      function deleteSaudiSubject(index) {
+        if (!confirm("حذف هذه المادة؟")) return;
+        const data = getSaudiData();
+        data.subjects.splice(index, 1);
+        saveSaudiData(data);
+      }
+
+      function addSaudiYear() {
+        const val = document.getElementById("newSaudiYear").value.trim();
+        if (!val) return alert("اكتب السنة أولا");
+        const data = getSaudiData();
+        data.years = [val]; // جعل هذه السنة الوحيدة كما طلبت
+        saveSaudiData(data);
+        document.getElementById("newSaudiYear").value = "";
+      }
+
+      function deleteSaudiYear(index) {
+        if (!confirm("حذف هذه السنة؟")) return;
+        const data = getSaudiData();
+        data.years.splice(index, 1);
+        saveSaudiData(data);
+      }
+
+      function addSaudiTerm() {
+        const val = document.getElementById("newSaudiTerm").value.trim();
+        if (!val) return alert("اكتب الفصل أولا");
+        const data = getSaudiData();
+        if (!data.terms.includes(val)) data.terms.push(val);
+        saveSaudiData(data);
+        document.getElementById("newSaudiTerm").value = "";
+      }
+
+      function deleteSaudiTerm(index) {
+        if (!confirm("حذف هذا الفصل؟")) return;
+        const data = getSaudiData();
+        data.terms.splice(index, 1);
+        saveSaudiData(data);
+      }
+
+      // ----- إدارة الكتب (إضافة - حذف - تعديل بدون حذف كامل) -----
+      document
+        .getElementById("egyptForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const data = getEgyptData();
+          const book = {
+            id: Date.now(),
+            title: document.getElementById("egyptTitle").value,
+            drive_link: document.getElementById("egyptDriveLink").value,
+            cover_image: document.getElementById("egyptCoverImage").value,
+            subject: document.getElementById("egyptSubject").value,
+            year: document.getElementById("egyptYear").value,
+            term: document.getElementById("egyptTerm").value,
+            grade: document.getElementById("egyptGrade").value,
+            language: document.getElementById("egyptLanguage").value,
+          };
+          data.books.push(book);
+          saveEgyptData(data);
+          this.reset();
+          loadEgyptBooks();
+        });
+
+      document
+        .getElementById("saudiForm")
+        .addEventListener("submit", function (e) {
+          e.preventDefault();
+          const data = getSaudiData();
+          const book = {
+            id: Date.now(),
+            title: document.getElementById("saudiTitle").value,
+            drive_link: document.getElementById("saudiDriveLink").value,
+            cover_image: document.getElementById("saudiCoverImage").value,
+            subject: document.getElementById("saudiSubject").value,
+            year: document.getElementById("saudiYear").value,
+            term: document.getElementById("saudiTerm").value,
+            grade: document.getElementById("saudiGrade").value,
+            language: document.getElementById("saudiLanguage").value,
+          };
+          data.books.push(book);
+          saveSaudiData(data);
+          this.reset();
+          loadSaudiBooks();
+        });
 
       function loadBooks() {
         loadEgyptBooks();
@@ -574,54 +1124,100 @@
       }
 
       function loadEgyptBooks() {
-        const books = JSON.parse(localStorage.getItem("egyptBooks") || "[]");
+        const data = getEgyptData();
+        const books = data.books || [];
         const container = document.getElementById("egyptBooksList");
         if (books.length === 0) {
-          container.innerHTML = '<p style="color: #718096;">لا توجد كتب مضافة بعد</p>';
+          container.innerHTML =
+            '<p style="color: #718096;">لا توجد كتب مضافة بعد</p>';
           return;
         }
-        container.innerHTML = books.map(book => `
+        container.innerHTML = books
+          .map(
+            (book) => `
           <div class="book-item">
             <div class="book-item-info">
               <div class="book-item-title">${book.title}</div>
               <div class="book-item-details">${book.subject} - ${book.grade} - الترم ${book.term} - ${book.year}</div>
             </div>
             <div class="book-item-actions">
+              <button class="btn btn-small" onclick="editBook('egypt', ${book.id})">تعديل</button>
               <button class="btn btn-small btn-danger" onclick="deleteBook('egypt', ${book.id})">حذف</button>
+              <a class="btn btn-small" href="${book.drive_link}" target="_blank">فتح</a>
             </div>
           </div>
-        `).join("");
+        `
+          )
+          .join("");
       }
 
       function loadSaudiBooks() {
-        const books = JSON.parse(localStorage.getItem("saudiBooks") || "[]");
+        const data = getSaudiData();
+        const books = data.books || [];
         const container = document.getElementById("saudiBooksList");
         if (books.length === 0) {
-          container.innerHTML = '<p style="color: #718096;">لا توجد كتب مضافة بعد</p>';
+          container.innerHTML =
+            '<p style="color: #718096;">لا توجد كتب مضافة بعد</p>';
           return;
         }
-        container.innerHTML = books.map(book => `
+        container.innerHTML = books
+          .map(
+            (book) => `
           <div class="book-item">
             <div class="book-item-info">
               <div class="book-item-title">${book.title}</div>
               <div class="book-item-details">${book.subject} - ${book.grade} - الفصل ${book.term} - ${book.year}</div>
             </div>
             <div class="book-item-actions">
+              <button class="btn btn-small" onclick="editBook('saudi', ${book.id})">تعديل</button>
               <button class="btn btn-small btn-danger" onclick="deleteBook('saudi', ${book.id})">حذف</button>
+              <a class="btn btn-small" href="${book.drive_link}" target="_blank">فتح</a>
             </div>
           </div>
-        `).join("");
+        `
+          )
+          .join("");
       }
 
       function deleteBook(path, id) {
-        if (confirm("هل أنت متأكد من حذف هذا الكتاب؟")) {
-          const key = path + "Books";
-          let books = JSON.parse(localStorage.getItem(key) || "[]");
-          books = books.filter((book) => book.id !== id);
-          localStorage.setItem(key, JSON.stringify(books));
-          loadBooks();
-          showSuccess();
-        }
+        if (!confirm("هل أنت متأكد من حذف هذا الكتاب؟")) return;
+        const keyData = path === "egypt" ? getEgyptData() : getSaudiData();
+        const filtered = keyData.books.filter((b) => b.id !== id);
+        keyData.books = filtered;
+        if (path === "egypt") saveEgyptData(keyData);
+        else saveSaudiData(keyData);
+        loadBooks();
+      }
+
+      function editBook(path, id) {
+        const keyData = path === "egypt" ? getEgyptData() : getSaudiData();
+        const book = keyData.books.find((b) => b.id === id);
+        if (!book) return alert("الكتاب غير موجود");
+
+        // نطلب من المستخدم تعديل الحقول - أبسط واجهة سريعة
+        const newTitle = prompt("عنوان الكتاب:", book.title) || book.title;
+        const newDrive =
+          prompt("رابط Google Drive:", book.drive_link) || book.drive_link;
+        const newCover =
+          prompt("رابط صورة الغلاف:", book.cover_image) || book.cover_image;
+        const newSubject = prompt("المادة:", book.subject) || book.subject;
+        const newYear = prompt("السنة الدراسية:", book.year) || book.year;
+        const newTerm = prompt("الترم/الفصل:", book.term) || book.term;
+        const newGrade = prompt("الصف:", book.grade) || book.grade;
+        const newLang = prompt("اللغة:", book.language) || book.language;
+
+        book.title = newTitle;
+        book.drive_link = newDrive;
+        book.cover_image = newCover;
+        book.subject = newSubject;
+        book.year = newYear;
+        book.term = newTerm;
+        book.grade = newGrade;
+        book.language = newLang;
+
+        if (path === "egypt") saveEgyptData(keyData);
+        else saveSaudiData(keyData);
+        loadBooks();
       }
 
       function showSuccess() {
@@ -629,17 +1225,18 @@
         msg.style.display = "block";
         setTimeout(() => {
           msg.style.display = "none";
-        }, 3000);
+        }, 2000);
       }
-
-      document.getElementById("passwordInput").addEventListener("keypress", function (e) {
-        if (e.key === "Enter") {
-          login();
-        }
-      });
-      
-      // تهيئة اللغة عند تحميل الصفحة
+      document
+        .getElementById("passwordInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            login();
+          }
+        });
+      // تهيئة اللغة و البيانات عند التحميل
       initLanguage();
+      // لا ندعو initData إلا بعد تسجيل الدخول أو إذا كانت الجلسة موجودة
     </script>
   </body>
 </html>
