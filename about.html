@@ -29,6 +29,29 @@
       })();
     </script>
     <style>
+      .menu-box {
+        display: block;
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background: white;
+        border-radius: 10px;
+        padding: 10px;
+        width: 150px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+
+        opacity: 0;
+        transform: translateY(-10px);
+        pointer-events: none;
+        transition: 0.25s ease;
+      }
+
+      .menu-container.active .menu-box {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
       * {
         margin: 0;
         padding: 0;
@@ -39,33 +62,6 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
         min-height: 100vh;
-      }
-
-      .lang-switcher {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        background: white;
-        padding: 10px 20px;
-        border-radius: 25px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .lang-switcher:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-      }
-
-      .lang-switcher button {
-        background: none;
-        border: none;
-        font-size: 1.2em;
-        cursor: pointer;
-        padding: 5px 10px;
-        font-weight: 600;
       }
 
       .navbar {
@@ -323,20 +319,10 @@
         .logo-section img {
           max-width: 200px;
         }
-
-        .lang-switcher {
-          top: 10px;
-          right: 10px;
-        }
       }
     </style>
   </head>
   <body>
-    <!-- زر تبديل اللغة -->
-    <div class="lang-switcher" onclick="toggleLanguage()">
-      <button id="langButton">🌐 EN</button>
-    </div>
-
     <nav class="navbar">
       <div class="navbar-content">
         <div
@@ -462,10 +448,7 @@
             <li data-en="🎓 Student: Islam" data-ar="🎓 الطالب: إسلام">
               🎓 الطالب: إسلام
             </li>
-              <li
-              data-en="🎓 Student: Omar Ali"
-              data-ar="🎓 الطالب: عمر على"
-            >
+            <li data-en="🎓 Student: Omar Ali" data-ar="🎓 الطالب: عمر على">
               🎓 الطالب: عمر على
             </li>
           </ul>
@@ -605,5 +588,6 @@
 
       initLanguage();
     </script>
+    <script src="theme-menu.js"></script>
   </body>
 </html>

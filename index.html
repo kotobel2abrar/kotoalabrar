@@ -1,256 +1,505 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">كتب مدارس الأبرار</title>
-    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">
+      كتب مدارس الأبرار
+    </title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png" />
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        transition: background 0.3s ease;
+      }
 
-        .lang-switcher {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 1000;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
+      .logo-container {
+        text-align: center;
+        margin-bottom: 30px;
+      }
 
-        .lang-switcher:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-        }
+      .logo-container img {
+        max-width: 250px;
+        width: 100%;
+        height: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 50%;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        animation: fadeInDown 0.8s ease;
+      }
 
-        .lang-switcher button {
-            background: none;
-            border: none;
-            font-size: 1.2em;
-            cursor: pointer;
-            padding: 5px 10px;
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
         }
-
-        .logo-container {
-            text-align: center;
-            margin-bottom: 30px;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
-        .logo-container img {
-            max-width: 250px;
-            width: 100%;
-            height: auto;
-            background: white;
-            padding: 20px;
-            border-radius: 50%;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-            animation: fadeInDown 0.8s ease;
+      .container {
+        background: white;
+        border-radius: 20px;
+        padding: 60px 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        max-width: 600px;
+        width: 100%;
+        text-align: center;
+        animation: fadeInUp 0.8s ease;
+        transition: background 0.3s ease;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
         }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
+      }
 
+      h1 {
+        color: #2d3748;
+        font-size: 2.5em;
+        margin-bottom: 50px;
+        font-weight: 700;
+        transition: color 0.3s ease;
+      }
+
+      .path-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
+        margin-bottom: 40px;
+      }
+
+      .path-btn {
+        background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
+        color: white;
+        border: none;
+        border-radius: 15px;
+        padding: 30px 40px;
+        font-size: 1.5em;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        text-decoration: none;
+      }
+
+      .path-btn:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(44, 82, 130, 0.4);
+      }
+
+      .path-btn.egypt {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+      }
+
+      .path-btn.saudi {
+        background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+      }
+
+      .flag {
+        font-size: 2em;
+      }
+
+      footer {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 2px solid #e2e8f0;
+        transition: border-color 0.3s ease;
+      }
+
+      footer a {
+        color: #3182ce;
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.3s ease;
+      }
+
+      footer a:hover {
+        color: #2c5282;
+      }
+
+      @media (max-width: 768px) {
         .container {
-            background: white;
-            border-radius: 20px;
-            padding: 60px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            max-width: 600px;
-            width: 100%;
-            text-align: center;
-            animation: fadeInUp 0.8s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+          padding: 40px 20px;
         }
 
         h1 {
-            color: #2d3748;
-            font-size: 2.5em;
-            margin-bottom: 50px;
-            font-weight: 700;
-        }
-
-        .path-buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 25px;
-            margin-bottom: 40px;
+          font-size: 2em;
         }
 
         .path-btn {
-            background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
-            color: white;
-            border: none;
-            border-radius: 15px;
-            padding: 30px 40px;
-            font-size: 1.5em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 15px;
-            text-decoration: none;
+          font-size: 1.2em;
+          padding: 20px 30px;
         }
 
-        .path-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(44, 82, 130, 0.4);
+        .logo-container img {
+          max-width: 180px;
         }
-
-        .path-btn.egypt {
-            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-        }
-
-        .path-btn.saudi {
-            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-        }
-
-        .flag {
-            font-size: 2em;
-        }
-
-        footer {
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 2px solid #e2e8f0;
-        }
-
-        footer a {
-            color: #3182ce;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        footer a:hover {
-            color: #2c5282;
-        }
-
-        @media (max-width: 600px) {
-            .logo-container img {
-                max-width: 180px;
-            }
-
-            h1 {
-                font-size: 2em;
-            }
-
-            .container {
-                padding: 40px 20px;
-            }
-
-            .path-btn {
-                font-size: 1.2em;
-                padding: 25px 30px;
-            }
-
-            .lang-switcher {
-                top: 10px;
-                right: 10px;
-            }
-        }
+      }
     </style>
-</head>
-<body>
-  <script src="auth.js"></script>
-    <!-- زر تبديل اللغة -->
-    <div class="lang-switcher" onclick="toggleLanguage()">
-        <button id="langButton">🌐 EN</button>
-    </div>
+  </head>
+
+  <body>
+    <script src="auth.js"></script>
 
     <div class="logo-container">
-        <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار">
+      <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار" />
     </div>
 
     <div class="container">
-        <h1 data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">كتب الابرار</h1>
-        
-        <div class="path-buttons">
-            <a href="book_eg.html" class="path-btn egypt">
-                <span class="flag">🇪🇬</span>
-                <span data-en="Egyptian Curriculum" data-ar="المسار المصري">المسار المصري</span>
-            </a>
-            
-            <a href="books_sa.html" class="path-btn saudi">
-                <span class="flag">🇸🇦</span>
-                <span data-en="Saudi Curriculum" data-ar="المسار السعودي">المسار السعودي</span>
-            </a>
-        </div>
+      <h1 data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">
+        كتب الابرار
+      </h1>
 
-        <footer>
-            <a href="rights.html" data-en="All Rights Reserved © 2025 Abrar Private Schools" data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية">جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a>
-        </footer>
+      <div class="path-buttons">
+        <a href="book_eg.html" class="path-btn egypt">
+          <span class="flag">🇪🇬</span>
+          <span data-en="Egyptian Curriculum" data-ar="المسار المصري"
+            >المسار المصري</span
+          >
+        </a>
+
+        <a href="books_sa.html" class="path-btn saudi">
+          <span class="flag">🇸🇦</span>
+          <span data-en="Saudi Curriculum" data-ar="المسار السعودي"
+            >المسار السعودي</span
+          >
+        </a>
+      </div>
+
+      <footer>
+        <a
+          href="rights.html"
+          data-en="All Rights Reserved © 2025 Abrar Private Schools"
+          data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية"
+          >جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a
+        >
+      </footer>
     </div>
 
+    <!-- ✅ نظام القائمة والوضع الليلي الموحد -->
     <script>
-        // نظام الترجمة العالمي
-        let currentLang = localStorage.getItem('siteLang') || 'ar';
-        
-        function initLanguage() {
-            if (currentLang === 'en') {
-                applyLanguage('en');
+      (function() {
+        'use strict';
+
+        const styles = `
+          <style id="theme-menu-styles">
+            .menu-container {
+              position: fixed;
+              top: 15px;
+              left: 15px;
+              z-index: 999;
             }
+
+            [dir="rtl"] .menu-container {
+              left: auto;
+              right: 15px;
+            }
+
+            .menu-btn {
+              background: var(--menu-bg, #1a365d);
+              color: white;
+              border: none;
+              padding: 10px 14px;
+              font-size: 20px;
+              border-radius: 10px;
+              cursor: pointer;
+              transition: 0.2s;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            }
+
+            .menu-btn:hover {
+              background: var(--menu-hover, #2c5282);
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            }
+
+            .menu-box {
+              display: none;
+              position: absolute;
+              top: 50px;
+              right: 0;
+              background: var(--card-bg, white);
+              border-radius: 10px;
+              padding: 10px;
+              min-width: 200px;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+              opacity: 0;
+              transform: translateY(-10px);
+              pointer-events: none;
+              transition: 0.25s ease;
+            }
+
+            [dir="ltr"] .menu-box {
+              right: auto;
+              left: 0;
+            }
+
+            .menu-container.active .menu-box {
+              display: block;
+              opacity: 1;
+              transform: translateY(0);
+              pointer-events: auto;
+            }
+
+            .menu-box a, .menu-box button {
+              display: block;
+              padding: 10px;
+              text-decoration: none;
+              color: var(--text-color, #1a365d);
+              font-size: 16px;
+              border-radius: 6px;
+              transition: 0.2s;
+              border: none;
+              background: none;
+              width: 100%;
+              text-align: right;
+              cursor: pointer;
+              font-family: inherit;
+            }
+
+            [dir="ltr"] .menu-box a,
+            [dir="ltr"] .menu-box button {
+              text-align: left;
+            }
+
+            .menu-box a:hover, .menu-box button:hover {
+              background: var(--hover-bg, #e2e8f0);
+            }
+
+            .menu-box hr {
+              margin: 8px 0;
+              border: none;
+              border-top: 1px solid var(--border-color, #e2e8f0);
+            }
+
+            body.dark-mode {
+              --bg-gradient-start: #0f172a;
+              --bg-gradient-end: #1e293b;
+              --card-bg: #1e293b;
+              --text-color: #e2e8f0;
+              --heading-color: #f1f5f9;
+              --border-color: #334155;
+              --hover-bg: #334155;
+              --menu-bg: #334155;
+              --menu-hover: #475569;
+            }
+
+            body.dark-mode {
+              background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%) !important;
+              color: var(--text-color);
+            }
+
+            body.dark-mode .container,
+            body.dark-mode footer {
+              background: var(--card-bg) !important;
+              color: var(--text-color) !important;
+            }
+
+            body.dark-mode h1 {
+              color: var(--heading-color) !important;
+            }
+
+            body.dark-mode footer {
+              border-top-color: var(--border-color) !important;
+            }
+
+            body.dark-mode footer a {
+              color: #60a5fa !important;
+            }
+
+            body.dark-mode footer a:hover {
+              color: #93c5fd !important;
+            }
+
+            body.dark-mode .logo-container img {
+              box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+            }
+
+            .theme-icon {
+              font-size: 18px;
+              margin-left: 8px;
+            }
+
+            [dir="ltr"] .theme-icon {
+              margin-left: 0;
+              margin-right: 8px;
+            }
+
+            @media (max-width: 768px) {
+              .menu-container {
+                top: 10px;
+                left: 10px;
+              }
+
+              [dir="rtl"] .menu-container {
+                left: auto;
+                right: 10px;
+              }
+
+              .menu-box {
+                min-width: 170px;
+              }
+            }
+          </style>
+        `;
+
+        const menuHTML = `
+          <div class="menu-container" id="themeMenuContainer">
+            <button class="menu-btn" id="menuToggleBtn">☰</button>
+            <div class="menu-box" id="menuBox">
+              <button id="langToggleBtn">
+                <span class="theme-icon">🌐</span>
+                <span data-en="العربية" data-ar="English">English</span>
+              </button>
+              <hr>
+              <button id="themeToggleBtn">
+                <span class="theme-icon" id="themeIcon">🌙</span>
+                <span id="themeText" data-en="Dark Mode" data-ar="الوضع الليلي">الوضع الليلي</span>
+              </button>
+              <hr>
+              <a href="about.html">
+                <span class="theme-icon">ℹ️</span>
+                <span data-en="About" data-ar="عن المشروع">عن المشروع</span>
+              </a>
+              <a href="contact.html">
+                <span class="theme-icon">📧</span>
+                <span data-en="Contact" data-ar="التواصل">التواصل</span>
+              </a>
+            </div>
+          </div>
+        `;
+
+        function init() {
+          if (!document.getElementById('theme-menu-styles')) {
+            document.head.insertAdjacentHTML('beforeend', styles);
+          }
+
+          if (!document.getElementById('themeMenuContainer')) {
+            document.body.insertAdjacentHTML('afterbegin', menuHTML);
+          }
+
+          const savedTheme = localStorage.getItem('siteTheme') || 'light';
+          const savedLang = localStorage.getItem('siteLang') || 'ar';
+
+          if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            updateThemeIcon(true);
+          }
+
+          setupEventListeners();
+          applyLanguage(savedLang);
         }
-        
-        function toggleLanguage() {
-            currentLang = currentLang === 'ar' ? 'en' : 'ar';
-            localStorage.setItem('siteLang', currentLang);
-            applyLanguage(currentLang);
-        }
-        
-        function applyLanguage(lang) {
-            document.documentElement.lang = lang;
-            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
-            
-            // تطبيق الترجمة على جميع العناصر
-            const elements = document.querySelectorAll('[data-ar][data-en]');
-            elements.forEach(el => {
-                el.textContent = el.getAttribute('data-' + lang);
+
+        function setupEventListeners() {
+          const menuToggleBtn = document.getElementById('menuToggleBtn');
+          const menuContainer = document.getElementById('themeMenuContainer');
+          
+          if (menuToggleBtn) {
+            menuToggleBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              menuContainer.classList.toggle('active');
             });
-            
-            // تحديث زر اللغة
-            document.getElementById('langButton').textContent = lang === 'ar' ? '🌐 EN' : '🌐 AR';
+          }
+
+          document.addEventListener('click', (e) => {
+            if (!menuContainer.contains(e.target)) {
+              menuContainer.classList.remove('active');
+            }
+          });
+
+          const themeToggleBtn = document.getElementById('themeToggleBtn');
+          if (themeToggleBtn) {
+            themeToggleBtn.addEventListener('click', toggleTheme);
+          }
+
+          const langToggleBtn = document.getElementById('langToggleBtn');
+          if (langToggleBtn) {
+            langToggleBtn.addEventListener('click', toggleLanguage);
+          }
         }
-        
-        // تهيئة اللغة عند تحميل الصفحة
-        initLanguage();
+
+        function toggleTheme() {
+          const isDark = document.body.classList.toggle('dark-mode');
+          localStorage.setItem('siteTheme', isDark ? 'dark' : 'light');
+          updateThemeIcon(isDark);
+        }
+
+        function updateThemeIcon(isDark) {
+          const themeIcon = document.getElementById('themeIcon');
+          const themeText = document.getElementById('themeText');
+          
+          if (themeIcon) {
+            themeIcon.textContent = isDark ? '☀️' : '🌙';
+          }
+          
+          if (themeText) {
+            const currentLang = localStorage.getItem('siteLang') || 'ar';
+            if (isDark) {
+              themeText.textContent = currentLang === 'ar' ? 'الوضع النهاري' : 'Light Mode';
+              themeText.setAttribute('data-ar', 'الوضع النهاري');
+              themeText.setAttribute('data-en', 'Light Mode');
+            } else {
+              themeText.textContent = currentLang === 'ar' ? 'الوضع الليلي' : 'Dark Mode';
+              themeText.setAttribute('data-ar', 'الوضع الليلي');
+              themeText.setAttribute('data-en', 'Dark Mode');
+            }
+          }
+        }
+
+        function toggleLanguage() {
+          const currentLang = localStorage.getItem('siteLang') || 'ar';
+          const newLang = currentLang === 'ar' ? 'en' : 'ar';
+          localStorage.setItem('siteLang', newLang);
+          applyLanguage(newLang);
+        }
+
+        function applyLanguage(lang) {
+          document.documentElement.setAttribute('lang', lang);
+          document.documentElement.setAttribute('dir', lang === 'ar' ? 'rtl' : 'ltr');
+
+          document.querySelectorAll('[data-ar][data-en]').forEach(el => {
+            el.textContent = el.getAttribute('data-' + lang);
+          });
+
+          document.querySelectorAll('[data-placeholder-ar][data-placeholder-en]').forEach(el => {
+            el.placeholder = el.getAttribute('data-placeholder-' + lang);
+          });
+        }
+
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', init);
+        } else {
+          init();
+        }
+
+      })();
     </script>
-</body>
+  </body>
 </html>

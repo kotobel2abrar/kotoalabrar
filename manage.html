@@ -24,32 +24,6 @@
         padding: 20px;
       }
 
-      .lang-switcher {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 1000;
-        background: white;
-        padding: 10px 20px;
-        border-radius: 25px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-        cursor: pointer;
-        transition: all 0.3s ease;
-      }
-
-      .lang-switcher:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
-      }
-
-      .lang-switcher button {
-        background: none;
-        border: none;
-        font-size: 1.2em;
-        cursor: pointer;
-        padding: 5px 10px;
-      }
-
       .login-container {
         max-width: 400px;
         margin: 100px auto;
@@ -250,6 +224,85 @@
         align-items: center;
       }
 
+      /* أنماط رفع الملفات */
+      .file-upload-zone {
+        border: 2px dashed #cbd5e0;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        background: #f7fafc;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        margin-top: 10px;
+      }
+
+      .file-upload-zone:hover {
+        border-color: #3182ce;
+        background: #edf2f7;
+      }
+
+      .file-upload-zone.drag-over {
+        border-color: #3182ce;
+        background: #bee3f8;
+        transform: scale(1.02);
+      }
+
+      .file-upload-zone .upload-icon {
+        font-size: 3em;
+        margin-bottom: 10px;
+      }
+
+      .file-upload-zone .upload-text {
+        color: #4a5568;
+        font-weight: 600;
+        margin-bottom: 5px;
+      }
+
+      .file-upload-zone .upload-hint {
+        color: #718096;
+        font-size: 0.9em;
+      }
+
+      .file-preview {
+        margin-top: 15px;
+        padding: 15px;
+        background: white;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        display: none;
+      }
+
+      .file-preview img {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 8px;
+        display: block;
+        margin: 0 auto;
+      }
+
+      .file-preview .file-info {
+        color: #4a5568;
+        font-size: 0.9em;
+        margin-top: 10px;
+        text-align: center;
+      }
+
+      .remove-file {
+        background: #e74c3c;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 0.9em;
+        margin-top: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .remove-file:hover {
+        background: #c0392b;
+      }
+
       @media (max-width: 768px) {
         .book-item {
           flex-direction: column;
@@ -261,11 +314,6 @@
           flex-wrap: wrap;
         }
 
-        .lang-switcher {
-          right: 10px;
-          top: 10px;
-        }
-
         .logout-btn {
           left: 10px;
           top: 60px;
@@ -274,11 +322,6 @@
     </style>
   </head>
   <body>
-    <!-- زر تبديل اللغة -->
-    <div class="lang-switcher" onclick="toggleLanguage()">
-      <button id="langButton">🌐 EN</button>
-    </div>
-
     <!-- شاشة تسجيل الدخول -->
     <div id="loginContainer" class="login-container">
       <h1 data-en="Login" data-ar="تسجيل الدخول">تسجيل الدخول</h1>
@@ -418,17 +461,43 @@
           </div>
 
           <div class="form-group">
-            <label data-en="Google Drive Link *" data-ar="رابط Google Drive *"
-              >رابط Google Drive *</label
+            <label data-en="Cover Image *" data-ar="صورة الغلاف *"
+              >صورة الغلاف *</label
             >
-            <input type="url" id="egyptDriveLink" required />
+            <div class="file-upload-zone" id="egyptCoverUploadZone">
+              <div class="upload-icon">🖼️</div>
+              <div class="upload-text">اضغط أو اسحب الصورة هنا</div>
+              <div class="upload-hint">
+                يقبل جميع صيغ الصور (JPG, PNG, GIF, WEBP, إلخ)
+              </div>
+            </div>
+            <input
+              type="file"
+              id="egyptCoverFile"
+              accept="image/*"
+              style="display: none"
+            />
+            <div id="egyptCoverPreview" class="file-preview"></div>
+            <input type="hidden" id="egyptCoverImage" required />
           </div>
 
           <div class="form-group">
-            <label data-en="Cover Image Link *" data-ar="رابط صورة الغلاف *"
-              >رابط صورة الغلاف *</label
+            <label data-en="Book File (PDF) *" data-ar="ملف الكتاب (PDF) *"
+              >ملف الكتاب (PDF) *</label
             >
-            <input type="url" id="egyptCoverImage" required />
+            <div class="file-upload-zone" id="egyptPdfUploadZone">
+              <div class="upload-icon">📄</div>
+              <div class="upload-text">اضغط أو اسحب ملف PDF هنا</div>
+              <div class="upload-hint">يقبل ملفات PDF فقط</div>
+            </div>
+            <input
+              type="file"
+              id="egyptPdfFile"
+              accept=".pdf,application/pdf"
+              style="display: none"
+            />
+            <div id="egyptPdfPreview" class="file-preview"></div>
+            <input type="hidden" id="egyptDriveLink" required />
           </div>
 
           <div class="form-group">
@@ -554,17 +623,43 @@
           </div>
 
           <div class="form-group">
-            <label data-en="Google Drive Link *" data-ar="رابط Google Drive *"
-              >رابط Google Drive *</label
+            <label data-en="Cover Image *" data-ar="صورة الغلاف *"
+              >صورة الغلاف *</label
             >
-            <input type="url" id="saudiDriveLink" required />
+            <div class="file-upload-zone" id="saudiCoverUploadZone">
+              <div class="upload-icon">🖼️</div>
+              <div class="upload-text">اضغط أو اسحب الصورة هنا</div>
+              <div class="upload-hint">
+                يقبل جميع صيغ الصور (JPG, PNG, GIF, WEBP, إلخ)
+              </div>
+            </div>
+            <input
+              type="file"
+              id="saudiCoverFile"
+              accept="image/*"
+              style="display: none"
+            />
+            <div id="saudiCoverPreview" class="file-preview"></div>
+            <input type="hidden" id="saudiCoverImage" required />
           </div>
 
           <div class="form-group">
-            <label data-en="Cover Image Link *" data-ar="رابط صورة الغلاف *"
-              >رابط صورة الغلاف *</label
+            <label data-en="Book File (PDF) *" data-ar="ملف الكتاب (PDF) *"
+              >ملف الكتاب (PDF) *</label
             >
-            <input type="url" id="saudiCoverImage" required />
+            <div class="file-upload-zone" id="saudiPdfUploadZone">
+              <div class="upload-icon">📄</div>
+              <div class="upload-text">اضغط أو اسحب ملف PDF هنا</div>
+              <div class="upload-hint">يقبل ملفات PDF فقط</div>
+            </div>
+            <input
+              type="file"
+              id="saudiPdfFile"
+              accept=".pdf,application/pdf"
+              style="display: none"
+            />
+            <div id="saudiPdfPreview" class="file-preview"></div>
+            <input type="hidden" id="saudiDriveLink" required />
           </div>
 
           <div class="form-group">
@@ -696,12 +791,6 @@
         else applyLanguage("ar");
       }
 
-      function toggleLanguage() {
-        currentLang = currentLang === "ar" ? "en" : "ar";
-        localStorage.setItem("siteLang", currentLang);
-        applyLanguage(currentLang);
-      }
-
       function applyLanguage(lang) {
         document.documentElement.lang = lang;
         document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
@@ -717,9 +806,6 @@
         placeholders.forEach((el) => {
           el.placeholder = el.getAttribute("data-placeholder-" + lang);
         });
-
-        document.getElementById("langButton").textContent =
-          lang === "ar" ? "🌐 EN" : "🌐 AR";
       }
 
       // إدارة الجلسة
@@ -784,7 +870,6 @@
 
       // تهيئة البيانات
       function initData() {
-        // اذا ما فيش بيانات مخزنة => نحط الافتراضية
         if (
           !localStorage.getItem("egyptData") ||
           !localStorage.getItem("saudiData")
@@ -792,7 +877,6 @@
           localStorage.setItem("egyptData", JSON.stringify(DEFAULT_DATA.egypt));
           localStorage.setItem("saudiData", JSON.stringify(DEFAULT_DATA.saudi));
         } else {
-          // تأكد أن السنين أصبحت 2025/2026 فقط كما طلبت
           const eg = JSON.parse(localStorage.getItem("egyptData"));
           eg.years = ["2025/2026"];
           localStorage.setItem("egyptData", JSON.stringify(eg));
@@ -849,7 +933,6 @@
           termsContainer.appendChild(chip);
         });
 
-        // الصفوف
         const gradeSelect = document.getElementById("egyptGrade");
         gradeSelect.innerHTML = "<option value=''>اختر الصف</option>";
         data.grades.forEach((g) => {
@@ -912,7 +995,7 @@
         const val = document.getElementById("newEgyptYear").value.trim();
         if (!val) return alert("اكتب السنة أولا");
         const data = getEgyptData();
-        data.years = [val]; // طلبك: إلغاء كل الأعوام وإضافة هذا العام فقط
+        data.years = [val];
         saveEgyptData(data);
         document.getElementById("newEgyptYear").value = "";
       }
@@ -1045,7 +1128,7 @@
         const val = document.getElementById("newSaudiYear").value.trim();
         if (!val) return alert("اكتب السنة أولا");
         const data = getSaudiData();
-        data.years = [val]; // جعل هذه السنة الوحيدة كما طلبت
+        data.years = [val];
         saveSaudiData(data);
         document.getElementById("newSaudiYear").value = "";
       }
@@ -1073,7 +1156,146 @@
         saveSaudiData(data);
       }
 
-      // ----- إدارة الكتب (إضافة - حذف - تعديل بدون حذف كامل) -----
+      // ===== وظائف رفع الملفات =====
+
+      function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function setupFileUpload(inputId, zoneId, previewId, hiddenId, type) {
+        const fileInput = document.getElementById(inputId);
+        const uploadZone = document.getElementById(zoneId);
+        const preview = document.getElementById(previewId);
+        const hiddenInput = document.getElementById(hiddenId);
+
+        uploadZone.addEventListener("click", function () {
+          fileInput.click();
+        });
+
+        fileInput.addEventListener("change", async function (e) {
+          const file = e.target.files[0];
+          if (file) {
+            await handleFileUpload(file, preview, hiddenInput, type);
+          }
+        });
+
+        uploadZone.addEventListener("dragover", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          uploadZone.classList.add("drag-over");
+        });
+
+        uploadZone.addEventListener("dragleave", function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          uploadZone.classList.remove("drag-over");
+        });
+
+        uploadZone.addEventListener("drop", async function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          uploadZone.classList.remove("drag-over");
+
+          const file = e.dataTransfer.files[0];
+          if (file) {
+            if (type === "image" && !file.type.startsWith("image/")) {
+              alert("يرجى اختيار ملف صورة فقط");
+              return;
+            }
+            if (type === "pdf" && file.type !== "application/pdf") {
+              alert("يرجى اختيار ملف PDF فقط");
+              return;
+            }
+
+            fileInput.files = e.dataTransfer.files;
+            await handleFileUpload(file, preview, hiddenInput, type);
+          }
+        });
+      }
+
+      async function handleFileUpload(file, preview, hiddenInput, type) {
+        try {
+          const base64 = await fileToBase64(file);
+          hiddenInput.value = base64;
+
+          preview.style.display = "block";
+          if (type === "image") {
+            preview.innerHTML = `
+              <img src="${base64}" alt="معاينة الصورة" />
+              <div class="file-info">
+                <strong>${file.name}</strong> (${(file.size / 1024).toFixed(
+              2
+            )} KB)
+              </div>
+              <button type="button" class="remove-file" onclick="removeFile('${
+                hiddenInput.id
+              }', '${preview.id}')">إزالة الصورة</button>
+            `;
+          } else if (type === "pdf") {
+            preview.innerHTML = `
+              <div style="text-align: center;">
+                <div style="font-size: 3em;">📕</div>
+                <div class="file-info">
+                  <strong>${file.name}</strong> (${(
+              file.size /
+              1024 /
+              1024
+            ).toFixed(2)} MB)
+                </div>
+                <button type="button" class="remove-file" onclick="removeFile('${
+                  hiddenInput.id
+                }', '${preview.id}')">إزالة الملف</button>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.error("خطأ في رفع الملف:", error);
+          alert("حدث خطأ أثناء رفع الملف. يرجى المحاولة مرة أخرى.");
+        }
+      }
+
+      function removeFile(hiddenId, previewId) {
+        document.getElementById(hiddenId).value = "";
+        document.getElementById(previewId).style.display = "none";
+        document.getElementById(previewId).innerHTML = "";
+      }
+
+      // تهيئة مناطق رفع الملفات
+      setupFileUpload(
+        "egyptCoverFile",
+        "egyptCoverUploadZone",
+        "egyptCoverPreview",
+        "egyptCoverImage",
+        "image"
+      );
+      setupFileUpload(
+        "egyptPdfFile",
+        "egyptPdfUploadZone",
+        "egyptPdfPreview",
+        "egyptDriveLink",
+        "pdf"
+      );
+      setupFileUpload(
+        "saudiCoverFile",
+        "saudiCoverUploadZone",
+        "saudiCoverPreview",
+        "saudiCoverImage",
+        "image"
+      );
+      setupFileUpload(
+        "saudiPdfFile",
+        "saudiPdfUploadZone",
+        "saudiPdfPreview",
+        "saudiDriveLink",
+        "pdf"
+      );
+
+      // ----- إدارة الكتب (إضافة - حذف - تعديل) -----
       document
         .getElementById("egyptForm")
         .addEventListener("submit", function (e) {
@@ -1093,6 +1315,8 @@
           data.books.push(book);
           saveEgyptData(data);
           this.reset();
+          document.getElementById("egyptCoverPreview").style.display = "none";
+          document.getElementById("egyptPdfPreview").style.display = "none";
           loadEgyptBooks();
         });
 
@@ -1115,6 +1339,8 @@
           data.books.push(book);
           saveSaudiData(data);
           this.reset();
+          document.getElementById("saudiCoverPreview").style.display = "none";
+          document.getElementById("saudiPdfPreview").style.display = "none";
           loadSaudiBooks();
         });
 
@@ -1194,7 +1420,6 @@
         const book = keyData.books.find((b) => b.id === id);
         if (!book) return alert("الكتاب غير موجود");
 
-        // نطلب من المستخدم تعديل الحقول - أبسط واجهة سريعة
         const newTitle = prompt("عنوان الكتاب:", book.title) || book.title;
         const newDrive =
           prompt("رابط Google Drive:", book.drive_link) || book.drive_link;
@@ -1227,6 +1452,7 @@
           msg.style.display = "none";
         }, 2000);
       }
+
       document
         .getElementById("passwordInput")
         .addEventListener("keypress", function (e) {
@@ -1234,9 +1460,9 @@
             login();
           }
         });
-      // تهيئة اللغة و البيانات عند التحميل
+
       initLanguage();
-      // لا ندعو initData إلا بعد تسجيل الدخول أو إذا كانت الجلسة موجودة
     </script>
+    <script src="theme-menu.js"></script>
   </body>
 </html>
