@@ -688,7 +688,111 @@
 
         localStorage.setItem("siteStats", JSON.stringify(stats));
       }
+      // 📂 في books_sa.html - تعديل وظيفة getBooks()
+async function getBooks() {
+    try {
+        // محاولة جلب البيانات من Supabase
+        const response = await fetch('https://hotggrxbxnffyaplabzl.supabase.co/rest/v1/saudi_books?select=*', {
+            headers: {
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvdGdncnhieG5mZnlhcGxhYnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MzMzOTYsImV4cCI6MjA4MDQwOTM5Nn0.kWL2o6lbViPfGNdpyj4NfUlK0AxdIH9NOcl6ruvrXAg',
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            const books = await response.json();
+            return books;
+        }
+    } catch (error) {
+        console.log('استخدام البيانات المحلية كنسخة احتياطية');
+    }
+    
+    // النسخة الاحتياطية من localStorage
+    const saudiData = JSON.parse(localStorage.getItem("saudiData"));
+    if (saudiData && saudiData.books && saudiData.books.length > 0) {
+        return saudiData.books.map(book => ({
+            title: book.title,
+            drive_link: book.drive_link,
+            cover_image: book.cover_image,
+            subject: book.subject,
+            year: book.year,
+            term: book.term,
+            grade: book.grade,
+            language: book.language
+        }));
+    }
+    
+    // البيانات الافتراضية
+    return [
+        {
+            title: "الرياضيات - الصف الأول المتوسط",
+            drive_link: "https://drive.google.com/file/d/EXAMPLE1",
+            cover_image: "https://via.placeholder.com/280x350/27ae60/ffffff?text=رياضيات",
+            subject: "رياضيات",
+            year: "1446",
+            term: "الأول",
+            grade: "الأول المتوسط",
+            language: "عربي",
+        }
+    ];
+}
+
+// تعديل populateSubjectFilter
+async function populateSubjectFilter() {
+    try {
+        // جلب التصنيفات من Supabase
+        const response = await fetch('https://hotggrxbxnffyaplabzl.supabase.co/rest/v1/categories?curriculum=eq.saudi&type=eq.subject&select=name', {
+            headers: {
+                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvdGdncnhieG5mZnlhcGxhYnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MzMzOTYsImV4cCI6MjA4MDQwOTM5Nn0.kWL2o6lbViPfGNdpyj4NfUlK0AxdIH9NOcl6ruvrXAg'
+            }
+        });
+        
+        if (response.ok) {
+            const subjects = await response.json();
+            const subjectFilter = document.getElementById("subjectFilter");
+            
+            // مسح الخيارات الحالية (باستثناء الخيار الأول)
+            while (subjectFilter.options.length > 1) {
+                subjectFilter.remove(1);
+            }
+            
+            // إضافة المواد
+            subjects.forEach(subject => {
+                const option = document.createElement("option");
+                option.value = subject.name;
+                option.textContent = subject.name;
+                subjectFilter.appendChild(option);
+            });
+            return;
+        }
+    } catch (error) {
+        console.log('استخدام المواد المحلية');
+    }
+    
+    // النسخة الاحتياطية
+    const subjectFilter = document.getElementById("subjectFilter");
+    const defaultSubjects = [
+        "رياضيات", "لغة عربية", "لغة إنجليزية", "علوم", 
+        "قرآن", "توحيد", "فقه", "تربية إسلامية", "اجتماعيات"
+    ];
+    
+    defaultSubjects.forEach(subject => {
+        const option = document.createElement("option");
+        option.value = subject;
+        option.textContent = subject;
+        subjectFilter.appendChild(option);
+    });
+}
+
+// تحديث تحميل الصفحة
+document.addEventListener('DOMContentLoaded', async function() {
+    allBooks = await getBooks(); // ⬅️ الآن async
+    renderBooks(allBooks);
+    await populateSubjectFilter(); // ⬅️ الآن async
+    initLanguage();
+});
     </script>
+    
     <script src="theme-menu.js"></script>
   </body>
 </html>

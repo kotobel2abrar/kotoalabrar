@@ -1493,7 +1493,304 @@
         // التحقق من الجلسة
         checkSession();
       });
-      
+      // 📂 في نهاية script في manage.html
+
+// استيراد مكتبة Supabase
+const supabaseScript = document.createElement('script');
+supabaseScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+document.head.appendChild(supabaseScript);
+
+// بعد تحميل Supabase، ننشئ العميل
+let supabaseClient = null;
+
+supabaseScript.onload = async () => {
+    const { createClient } = window.supabaseJs;
+    
+    supabaseClient = createClient(
+        'https://hotggrxbxnffyaplabzl.supabase.co',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvdGdncnhieG5mZnlhcGxhYnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MzMzOTYsImV4cCI6MjA4MDQwOTM5Nn0.kWL2o6lbViPfGNdpyj4NfUlK0AxdIH9NOcl6ruvrXAg'
+    );
+    
+    // تحميل البيانات من Supabase
+    await loadAllData();
+};
+
+// 📊 وظائف لتحميل وحفظ البيانات في Supabase
+async function loadAllData() {
+    try {
+        // جلب التصنيفات من Supabase
+        const { data: categoriesData, error: categoriesError } = await supabaseClient
+            .from('categories')
+            .select('*');
+        
+        if (categoriesError) throw categoriesError;
+        
+        // تنظيم التصنيفات
+        const organized = { egypt: {}, saudi: {} };
+        categoriesData?.forEach(item => {
+            if (!organized[item.curriculum]) organized[item.curriculum] = {};
+            if (!organized[item.curriculum][item.type]) organized[item.curriculum][item.type] = [];
+            organized[item.curriculum][item.type].push(item.name);
+        });
+        
+        // تحديث القوائم
+        updateEgyptControls(organized.egypt);
+        updateSaudiControls(organized.saudi);
+        
+        // جلب الكتب المصرية
+        const { data: egyptBooks, error: egyptError } = await supabaseClient
+            .from('egypt_books')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (!egyptError && egyptBooks) {
+            loadEgyptBooksFromDB(egyptBooks);
+        }
+        
+        // جلب الكتب السعودية
+        const { data: saudiBooks, error: saudiError } = await supabaseClient
+            .from('saudi_books')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (!saudiError && saudiBooks) {
+            loadSaudiBooksFromDB(saudiBooks);
+        }
+        
+    } catch (error) {
+        console.error('خطأ في تحميل البيانات:', error);
+        // استخدام البيانات المحلية كنسخة احتياطية
+        initData();
+    }
+}
+
+// تحديث عناصر التحكم المصرية
+function updateEgyptControls(data) {
+    const egyptData = {
+        subjects: data.subject || DEFAULT_DATA.egypt.subjects,
+        years: data.year || DEFAULT_DATA.egypt.years,
+        terms: data.term || DEFAULT_DATA.egypt.terms,
+        books: []
+    };
+    
+    localStorage.setItem("egyptData", JSON.stringify(egyptData));
+    populateEgyptControls();
+}
+
+// تحديث عناصر التحكم السعودية
+function updateSaudiControls(data) {
+    const saudiData = {
+        subjects: data.subject || DEFAULT_DATA.saudi.subjects,
+        years: data.year || DEFAULT_DATA.saudi.years,
+        terms: data.term || DEFAULT_DATA.saudi.terms,
+        books: []
+    };
+    
+    localStorage.setItem("saudiData", JSON.stringify(saudiData));
+    populateSaudiControls();
+}
+
+// 📝 تعديل وظائف إضافة التصنيفات
+async function addEgyptSubject() {
+    const val = document.getElementById("newEgyptSubject").value.trim();
+    if (!val) return alert("اكتب اسم المادة أولا");
+    
+    if (supabaseClient) {
+        const { error } = await supabaseClient
+            .from('categories')
+            .insert([{ curriculum: 'egypt', type: 'subject', name: val }]);
+        
+        if (error) {
+            console.error('خطأ في إضافة المادة:', error);
+            alert('حدث خطأ في إضافة المادة');
+            return;
+        }
+    }
+    
+    // تحديث محلي
+    const data = getEgyptData();
+    data.subjects.push(val);
+    saveEgyptData(data);
+    document.getElementById("newEgyptSubject").value = "";
+}
+
+// 📝 تعديل وظيفة إضافة الكتاب المصري
+document.getElementById("egyptForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    
+    // التحقق من الحقول المطلوبة
+    const title = document.getElementById("egyptTitle").value.trim();
+    const coverImage = document.getElementById("egyptCoverImage").value.trim();
+    const driveLink = document.getElementById("egyptDriveLink").value.trim();
+    const subject = document.getElementById("egyptSubject").value;
+    const year = document.getElementById("egyptYear").value;
+    const term = document.getElementById("egyptTerm").value;
+    const grade = document.getElementById("egyptGrade").value;
+    const language = document.getElementById("egyptLanguage").value;
+    
+    if (!title || !coverImage || !driveLink || !subject || !year || !term || !grade || !language) {
+        alert("يرجى ملء جميع الحقول المطلوبة");
+        return;
+    }
+    
+    const bookData = {
+        title,
+        drive_link: driveLink,
+        cover_image: coverImage,
+        subject,
+        year,
+        term,
+        grade,
+        language
+    };
+    
+    // حفظ في Supabase
+    if (supabaseClient) {
+        const { data, error } = await supabaseClient
+            .from('egypt_books')
+            .insert([bookData])
+            .select();
+        
+        if (error) {
+            console.error('خطأ في إضافة الكتاب:', error);
+            alert('حدث خطأ في إضافة الكتاب');
+            return;
+        }
+        
+        // إعادة تعيين النموذج
+        this.reset();
+        removeEgyptCover({ stopPropagation: () => {} });
+        removeEgyptPdf({ stopPropagation: () => {} });
+        
+        // تحميل الكتب المحدثة
+        const { data: books } = await supabaseClient
+            .from('egypt_books')
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        loadEgyptBooksFromDB(books);
+        
+        alert("تم إضافة الكتاب المصري بنجاح!");
+        return;
+    }
+    
+    // إذا لم يكن Supabase متاحًا، استخدم التخزين المحلي
+    const data = getEgyptData();
+    const book = {
+        id: Date.now(),
+        ...bookData
+    };
+    
+    data.books.push(book);
+    saveEgyptData(data);
+    
+    this.reset();
+    removeEgyptCover({ stopPropagation: () => {} });
+    removeEgyptPdf({ stopPropagation: () => {} });
+    
+    loadEgyptBooks();
+    alert("تم إضافة الكتاب المصري بنجاح!");
+});
+
+// وظيفة لتحميل الكتب من قاعدة البيانات
+function loadEgyptBooksFromDB(books) {
+    const container = document.getElementById("egyptBooksList");
+    
+    if (!books || books.length === 0) {
+        container.innerHTML = '<p style="color: #718096; text-align: center; padding: 20px;">لا توجد كتب مضافة بعد</p>';
+        return;
+    }
+    
+    container.innerHTML = books.map((book) => `
+        <div class="book-item">
+            <div class="book-item-info">
+                <div class="book-item-title">${book.title}</div>
+                <div class="book-item-details">${book.subject} - ${book.grade} - الترم ${book.term} - ${book.year} - ${book.language}</div>
+            </div>
+            <div class="book-item-actions">
+                <button class="btn btn-small" onclick="editBookDB('egypt', ${book.id})">تعديل</button>
+                <button class="btn btn-small btn-danger" onclick="deleteBookDB('egypt', ${book.id})">حذف</button>
+                <a class="btn btn-small" href="${book.drive_link}" target="_blank">فتح</a>
+            </div>
+        </div>
+    `).join("");
+}
+
+// وظائف مشابهة للسعودية
+// ... (أضف نفس التعديلات للمسار السعودي)
+
+// حذف كتاب من قاعدة البيانات
+async function deleteBookDB(path, id) {
+    if (!confirm("هل أنت متأكد من حذف هذا الكتاب؟")) return;
+    
+    if (supabaseClient) {
+        const table = path === 'egypt' ? 'egypt_books' : 'saudi_books';
+        const { error } = await supabaseClient
+            .from(table)
+            .delete()
+            .eq('id', id);
+        
+        if (error) {
+            console.error('خطأ في حذف الكتاب:', error);
+            alert('حدث خطأ في حذف الكتاب');
+            return;
+        }
+        
+        // إعادة تحميل الكتب
+        const { data: books } = await supabaseClient
+            .from(table)
+            .select('*')
+            .order('created_at', { ascending: false });
+        
+        if (path === 'egypt') {
+            loadEgyptBooksFromDB(books);
+        } else {
+            loadSaudiBooksFromDB(books);
+        }
+        
+        alert("تم حذف الكتاب بنجاح!");
+        return;
+    }
+    
+    // النسخة المحلية
+    deleteBook(path, id);
+}
+
+// استبدال initData للاستخدام المشترك
+function initData() {
+    // التحميل المحلي كنسخة احتياطية
+    let egyptData = JSON.parse(localStorage.getItem("egyptData"));
+    if (!egyptData) {
+        egyptData = DEFAULT_DATA.egypt;
+        localStorage.setItem("egyptData", JSON.stringify(egyptData));
+    }
+    
+    let saudiData = JSON.parse(localStorage.getItem("saudiData"));
+    if (!saudiData) {
+        saudiData = DEFAULT_DATA.saudi;
+        localStorage.setItem("saudiData", JSON.stringify(saudiData));
+    }
+    
+    populateEgyptControls();
+    populateSaudiControls();
+}
+
+// تحديث تحميل الصفحة
+document.addEventListener('DOMContentLoaded', function() {
+    console.log("صفحة الإدارة جاهزة");
+    
+    // إذا كان Supabase غير متاح بعد، استخدم البيانات المحلية
+    setTimeout(() => {
+        if (!supabaseClient) {
+            console.log("استخدام البيانات المحلية");
+            if (checkSession()) {
+                initData();
+                loadBooks();
+                setupUploadAreas();
+            }
+        }
+    }, 2000);
+});
     </script>
   </body>
 </html>
