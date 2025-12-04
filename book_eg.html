@@ -319,7 +319,7 @@
 
     <div class="container">
       <div class="page-header">
-        <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار" />
+        <img src="لوجو محسن 1.png" alt="شعار مدارس الأبرار" />
         <div class="flag">🇪🇬</div>
         <h1 data-en="Egyptian Curriculum" data-ar="المسار المصري">
           المسار المصري
@@ -342,40 +342,6 @@
             <select id="subjectFilter">
               <option value="" data-en="All Subjects" data-ar="جميع المواد">
                 جميع المواد
-              </option>
-              <option value="رياضيات" data-en="Mathematics" data-ar="رياضيات">
-                رياضيات
-              </option>
-              <option
-                value="لغة عربية"
-                data-en="Arabic Language"
-                data-ar="لغة عربية"
-              >
-                لغة عربية
-              </option>
-              <option
-                value="لغة إنجليزية"
-                data-en="English Language"
-                data-ar="لغة إنجليزية"
-              >
-                لغة إنجليزية
-              </option>
-              <option value="علوم" data-en="Science" data-ar="علوم">
-                علوم
-              </option>
-              <option
-                value="دراسات"
-                data-en="Social Studies"
-                data-ar="دراسات اجتماعية"
-              >
-                دراسات اجتماعية
-              </option>
-              <option
-                value="تربية دينية"
-                data-en="Religious Education"
-                data-ar="تربية دينية"
-              >
-                تربية دينية
               </option>
             </select>
           </div>
@@ -501,10 +467,24 @@
       }
 
       function getBooks() {
-        const stored = localStorage.getItem("egyptBooks");
-        if (stored) {
-          return JSON.parse(stored);
+        // جلب البيانات من localStorage بنفس المفتاح المستخدم في صفحة الإدارة
+        const egyptData = JSON.parse(localStorage.getItem("egyptData"));
+        
+        if (egyptData && egyptData.books && egyptData.books.length > 0) {
+          // تحويل البيانات إلى الصيغة المتوقعة في صفحة الكتب
+          return egyptData.books.map(book => ({
+            title: book.title,
+            drive_link: book.drive_link,
+            cover_image: book.cover_image,
+            subject: book.subject,
+            year: book.year,
+            term: book.term,
+            grade: book.grade,
+            language: book.language
+          }));
         }
+        
+        // البيانات الافتراضية في حالة عدم وجود بيانات
         return [
           {
             title: "الرياضيات - الصف الأول الثانوي",
@@ -530,6 +510,40 @@
           },
         ];
       }
+
+      function populateSubjectFilter() {
+        const egyptData = JSON.parse(localStorage.getItem("egyptData"));
+        const subjectFilter = document.getElementById("subjectFilter");
+        
+        if (egyptData && egyptData.subjects && egyptData.subjects.length > 0) {
+          // مسح الخيارات الحالية (باستثناء الخيار الأول)
+          while (subjectFilter.options.length > 1) {
+            subjectFilter.remove(1);
+          }
+          
+          // إضافة المواد المخزنة
+          egyptData.subjects.forEach(subject => {
+            const option = document.createElement("option");
+            option.value = subject;
+            option.textContent = subject;
+            subjectFilter.appendChild(option);
+          });
+        } else {
+          // إضافة المواد الافتراضية
+          const defaultSubjects = [
+            "رياضيات", "لغة عربية", "لغة إنجليزية", "علوم", 
+            "دراسات", "تربية دينية"
+          ];
+          
+          defaultSubjects.forEach(subject => {
+            const option = document.createElement("option");
+            option.value = subject;
+            option.textContent = subject;
+            subjectFilter.appendChild(option);
+          });
+        }
+      }
+
       let allBooks = getBooks();
 
       function renderBooks(books) {
@@ -617,8 +631,19 @@
         .getElementById("languageFilter")
         .addEventListener("change", filterBooks);
 
-      renderBooks(allBooks);
-      initLanguage();
+      // تحميل البيانات عند بدء الصفحة
+      document.addEventListener('DOMContentLoaded', function() {
+        allBooks = getBooks();
+        renderBooks(allBooks);
+        populateSubjectFilter();
+        initLanguage();
+      });
+
+      // تحديث الكتب عند تغيير لغة الصفحة
+      document.getElementById('langButton')?.addEventListener('click', function() {
+        toggleLanguage();
+        renderBooks(allBooks);
+      });
     </script>
     <script>
       // في صفحات الكتب

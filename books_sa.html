@@ -320,7 +320,7 @@
 
     <div class="container">
       <div class="page-header">
-        <img src="مدارس الأبرار.webp" alt="شعار مدارس الأبرار" />
+        <img src="لوجو محسن 1.png" alt="شعار مدارس الأبرار" />
         <div class="flag">🇸🇦</div>
         <h1 data-en="Saudi Curriculum" data-ar="المسار السعودي">
           المسار السعودي
@@ -343,41 +343,6 @@
             <select id="subjectFilter">
               <option value="" data-en="All Subjects" data-ar="جميع المواد">
                 جميع المواد
-              </option>
-              <option value="رياضيات" data-en="Mathematics" data-ar="رياضيات">
-                رياضيات
-              </option>
-              <option
-                value="لغة عربية"
-                data-en="Arabic Language"
-                data-ar="لغة عربية"
-              >
-                لغة عربية
-              </option>
-              <option
-                value="لغة إنجليزية"
-                data-en="English Language"
-                data-ar="لغة إنجليزية"
-              >
-                لغة إنجليزية
-              </option>
-              <option value="علوم" data-en="Science" data-ar="علوم">
-                علوم
-              </option>
-              <option
-                value="اجتماعيات"
-                data-en="Social Studies"
-                data-ar="اجتماعيات"
-              >
-                اجتماعيات
-              </option>
-              <option value="قرآن" data-en="Quran" data-ar="قرآن كريم">
-                قرآن كريم
-              </option>
-              <option value="حديث" data-en="Hadith" data-ar="حديث">حديث</option>
-              <option value="فقه" data-en="Fiqh" data-ar="فقه">فقه</option>
-              <option value="توحيد" data-en="Tawheed" data-ar="توحيد">
-                توحيد
               </option>
             </select>
           </div>
@@ -513,16 +478,27 @@
 
         document.getElementById("langButton").textContent =
           lang === "ar" ? "🌐 EN" : "🌐 AR";
-
-        // تحديث عرض الكتب
-        renderBooks(filterCurrentBooks());
       }
 
       function getBooks() {
-        const stored = localStorage.getItem("saudiBooks");
-        if (stored) {
-          return JSON.parse(stored);
+        // جلب البيانات من localStorage بنفس المفتاح المستخدم في صفحة الإدارة
+        const saudiData = JSON.parse(localStorage.getItem("saudiData"));
+        
+        if (saudiData && saudiData.books && saudiData.books.length > 0) {
+          // تحويل البيانات إلى الصيغة المتوقعة في صفحة الكتب
+          return saudiData.books.map(book => ({
+            title: book.title,
+            drive_link: book.drive_link,
+            cover_image: book.cover_image,
+            subject: book.subject,
+            year: book.year,
+            term: book.term,
+            grade: book.grade,
+            language: book.language
+          }));
         }
+        
+        // البيانات الافتراضية في حالة عدم وجود بيانات
         return [
           {
             title: "الرياضيات - الصف الأول المتوسط",
@@ -547,6 +523,39 @@
             language: "عربي",
           },
         ];
+      }
+
+      function populateSubjectFilter() {
+        const saudiData = JSON.parse(localStorage.getItem("saudiData"));
+        const subjectFilter = document.getElementById("subjectFilter");
+        
+        if (saudiData && saudiData.subjects && saudiData.subjects.length > 0) {
+          // مسح الخيارات الحالية (باستثناء الخيار الأول)
+          while (subjectFilter.options.length > 1) {
+            subjectFilter.remove(1);
+          }
+          
+          // إضافة المواد المخزنة
+          saudiData.subjects.forEach(subject => {
+            const option = document.createElement("option");
+            option.value = subject;
+            option.textContent = subject;
+            subjectFilter.appendChild(option);
+          });
+        } else {
+          // إضافة المواد الافتراضية
+          const defaultSubjects = [
+            "رياضيات", "لغة عربية", "لغة إنجليزية", "علوم", 
+            "قرآن", "توحيد", "فقه", "تربية إسلامية", "اجتماعيات"
+          ];
+          
+          defaultSubjects.forEach(subject => {
+            const option = document.createElement("option");
+            option.value = subject;
+            option.textContent = subject;
+            subjectFilter.appendChild(option);
+          });
+        }
       }
 
       let allBooks = getBooks();
@@ -641,8 +650,19 @@
         .getElementById("languageFilter")
         .addEventListener("change", filterBooks);
 
-      renderBooks(allBooks);
-      initLanguage();
+      // تحميل البيانات عند بدء الصفحة
+      document.addEventListener('DOMContentLoaded', function() {
+        allBooks = getBooks();
+        renderBooks(allBooks);
+        populateSubjectFilter();
+        initLanguage();
+      });
+
+      // تحديث الكتب عند تغيير لغة الصفحة
+      document.getElementById('langButton')?.addEventListener('click', function() {
+        toggleLanguage();
+        renderBooks(allBooks);
+      });
     </script>
     <script>
       // في صفحات الكتب

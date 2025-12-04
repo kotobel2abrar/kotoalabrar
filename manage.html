@@ -3,13 +3,64 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title
-      data-en="Control Panel - Abrar Schools Books"
-      data-ar="لوحة التحكم - كتب مدارس الأبرار"
-    >
-      لوحة التحكم - كتب مدارس الأبرار
-    </title>
+    <title>لوحة التحكم - كتب مدارس الأبرار</title>
     <link rel="icon" href="مدارس الأبرار.webp" type="image/png" />
+    <style>
+      /* أضفت الأنماط التالية فقط */
+      .upload-area {
+        border: 2px dashed #cbd5e0;
+        border-radius: 8px;
+        padding: 30px;
+        text-align: center;
+        background: #f8fafc;
+        cursor: pointer;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+      }
+      
+      .upload-area:hover {
+        border-color: #3182ce;
+        background: #edf2f7;
+      }
+      
+      .upload-area.dragover {
+        border-color: #3182ce;
+        background: #e6fffa;
+      }
+      
+      .upload-icon {
+        font-size: 2em;
+        color: #718096;
+        margin-bottom: 10px;
+      }
+      
+      .upload-text {
+        color: #4a5568;
+        margin-bottom: 5px;
+      }
+      
+      .upload-subtext {
+        color: #a0aec0;
+        font-size: 0.9em;
+      }
+      
+      .upload-preview {
+        margin-top: 15px;
+        max-width: 200px;
+        border-radius: 5px;
+      }
+      
+      .uploaded-file {
+        background: #e6fffa;
+        padding: 10px;
+        border-radius: 5px;
+        margin-top: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    </style>
+    <!-- الأنماط الأصلية تبقى كما هي -->
     <style>
       * {
         margin: 0;
@@ -69,7 +120,6 @@
 
       input[type="text"],
       input[type="password"],
-      input[type="url"],
       select {
         width: 100%;
         padding: 12px;
@@ -95,6 +145,7 @@
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
+        width: 100%;
       }
 
       .btn:hover {
@@ -179,7 +230,7 @@
       .logout-btn {
         position: absolute;
         top: 20px;
-        left: 80px;
+        left: 20px;
         background: #e74c3c;
       }
 
@@ -224,85 +275,6 @@
         align-items: center;
       }
 
-      /* أنماط رفع الملفات */
-      .file-upload-zone {
-        border: 2px dashed #cbd5e0;
-        border-radius: 8px;
-        padding: 30px;
-        text-align: center;
-        background: #f7fafc;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        margin-top: 10px;
-      }
-
-      .file-upload-zone:hover {
-        border-color: #3182ce;
-        background: #edf2f7;
-      }
-
-      .file-upload-zone.drag-over {
-        border-color: #3182ce;
-        background: #bee3f8;
-        transform: scale(1.02);
-      }
-
-      .file-upload-zone .upload-icon {
-        font-size: 3em;
-        margin-bottom: 10px;
-      }
-
-      .file-upload-zone .upload-text {
-        color: #4a5568;
-        font-weight: 600;
-        margin-bottom: 5px;
-      }
-
-      .file-upload-zone .upload-hint {
-        color: #718096;
-        font-size: 0.9em;
-      }
-
-      .file-preview {
-        margin-top: 15px;
-        padding: 15px;
-        background: white;
-        border-radius: 8px;
-        border: 1px solid #e2e8f0;
-        display: none;
-      }
-
-      .file-preview img {
-        max-width: 200px;
-        max-height: 200px;
-        border-radius: 8px;
-        display: block;
-        margin: 0 auto;
-      }
-
-      .file-preview .file-info {
-        color: #4a5568;
-        font-size: 0.9em;
-        margin-top: 10px;
-        text-align: center;
-      }
-
-      .remove-file {
-        background: #e74c3c;
-        color: white;
-        border: none;
-        padding: 8px 16px;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 0.9em;
-        margin-top: 10px;
-        transition: all 0.3s ease;
-      }
-
-      .remove-file:hover {
-        background: #c0392b;
-      }
-
       @media (max-width: 768px) {
         .book-item {
           flex-direction: column;
@@ -315,8 +287,10 @@
         }
 
         .logout-btn {
-          left: 10px;
-          top: 60px;
+          position: relative;
+          top: 0;
+          left: 0;
+          margin-bottom: 20px;
         }
       }
     </style>
@@ -324,84 +298,46 @@
   <body>
     <!-- شاشة تسجيل الدخول -->
     <div id="loginContainer" class="login-container">
-      <h1 data-en="Login" data-ar="تسجيل الدخول">تسجيل الدخول</h1>
+      <h1>تسجيل الدخول - لوحة التحكم</h1>
       <div class="form-group">
-        <label data-en="Password" data-ar="كلمة المرور">كلمة المرور</label>
+        <label for="passwordInput">كلمة المرور</label>
         <input
           type="password"
           id="passwordInput"
-          data-placeholder-en="Enter password"
-          data-placeholder-ar="أدخل كلمة المرور"
           placeholder="أدخل كلمة المرور"
         />
       </div>
-      <button class="btn" onclick="login()" data-en="Login" data-ar="دخول">
-        دخول
-      </button>
-      <p
-        id="loginError"
-        class="error-message"
-        data-en="Incorrect password"
-        data-ar="كلمة مرور خاطئة"
-      >
+      <button class="btn" onclick="login()">دخول</button>
+      <p id="loginError" class="error-message" style="display: none">
         كلمة مرور خاطئة
       </p>
+      <!-- تم إخفاء كلمة المرور الافتراضية -->
     </div>
 
     <!-- لوحة التحكم -->
     <div id="adminContainer" class="admin-container">
-      <button
-        class="btn logout-btn"
-        onclick="logout()"
-        data-en="Logout"
-        data-ar="تسجيل الخروج"
-      >
+      <button class="btn logout-btn btn-danger" onclick="logout()">
         تسجيل الخروج
       </button>
 
-      <h1
-        data-en="Control Panel - Abrar Schools Books"
-        data-ar="لوحة التحكم - كتب مدارس الأبرار"
-      >
-        لوحة التحكم - كتب مدارس الأبرار
-      </h1>
+      <h1>لوحة التحكم - كتب مدارس الأبرار</h1>
 
-      <div
-        id="successMessage"
-        class="success-message"
-        data-en="Saved successfully!"
-        data-ar="تم الحفظ بنجاح!"
-      >
+      <div id="successMessage" class="success-message" style="display: none">
         تم الحفظ بنجاح!
       </div>
 
       <div class="tabs">
-        <button
-          class="tab active"
-          onclick="switchTab('egypt', event)"
-          data-en="Egyptian Curriculum"
-          data-ar="المسار المصري"
-        >
+        <button class="tab active" onclick="switchTab('egypt', event)">
           المسار المصري
         </button>
-        <button
-          class="tab"
-          onclick="switchTab('saudi', event)"
-          data-en="Saudi Curriculum"
-          data-ar="المسار السعودي"
-        >
+        <button class="tab" onclick="switchTab('saudi', event)">
           المسار السعودي
         </button>
       </div>
 
       <!-- المسار المصري -->
       <div id="egyptTab" class="tab-content active">
-        <h2
-          data-en="Add New Book - Egyptian Curriculum"
-          data-ar="إضافة كتاب جديد - المسار المصري"
-        >
-          إضافة كتاب جديد - المسار المصري
-        </h2>
+        <h2>إضافة كتاب جديد - المسار المصري</h2>
 
         <!-- إدارة المواد و السنوات و الترمات -->
         <div class="manage-section">
@@ -454,117 +390,108 @@
 
         <form id="egyptForm">
           <div class="form-group">
-            <label data-en="Book Title *" data-ar="عنوان الكتاب *"
-              >عنوان الكتاب *</label
-            >
+            <label>عنوان الكتاب *</label>
             <input type="text" id="egyptTitle" required />
           </div>
 
           <div class="form-group">
-            <label data-en="Cover Image *" data-ar="صورة الغلاف *"
-              >صورة الغلاف *</label
-            >
-            <div class="file-upload-zone" id="egyptCoverUploadZone">
-              <div class="upload-icon">🖼️</div>
-              <div class="upload-text">اضغط أو اسحب الصورة هنا</div>
-              <div class="upload-hint">
-                يقبل جميع صيغ الصور (JPG, PNG, GIF, WEBP, إلخ)
+            <label>صورة الغلاف *</label>
+            <!-- منطقة رفع الصورة بالضغط والسحب والإفلات -->
+            <div class="upload-area" id="egyptCoverUploadArea" onclick="document.getElementById('egyptCoverFileInput').click()">
+              <div class="upload-icon">📁</div>
+              <div class="upload-text">اضغط أو اسحب وأفلت الصورة هنا</div>
+              <div class="upload-subtext">يدعم الصور (JPG, PNG, GIF)</div>
+              <div id="egyptCoverPreview" class="upload-preview" style="display: none;"></div>
+              <div id="egyptCoverFileInfo" class="uploaded-file" style="display: none;">
+                <span>ملف مرفوع</span>
+                <button type="button" class="btn-small" onclick="removeEgyptCover(event)">إزالة</button>
               </div>
             </div>
-            <input
-              type="file"
-              id="egyptCoverFile"
-              accept="image/*"
-              style="display: none"
-            />
-            <div id="egyptCoverPreview" class="file-preview"></div>
-            <input type="hidden" id="egyptCoverImage" required />
+            <input type="file" id="egyptCoverFileInput" accept="image/*" style="display: none;" />
+            <input type="text" id="egyptCoverImage" placeholder="أو أدخل رابط الصورة مباشرة" style="margin-top: 10px;" />
           </div>
 
           <div class="form-group">
-            <label data-en="Book File (PDF) *" data-ar="ملف الكتاب (PDF) *"
-              >ملف الكتاب (PDF) *</label
-            >
-            <div class="file-upload-zone" id="egyptPdfUploadZone">
+            <label>ملف الكتاب (PDF) *</label>
+            <!-- منطقة رفع ملف PDF بالضغط والسحب والإفلات -->
+            <div class="upload-area" id="egyptPdfUploadArea" onclick="document.getElementById('egyptPdfFileInput').click()">
               <div class="upload-icon">📄</div>
-              <div class="upload-text">اضغط أو اسحب ملف PDF هنا</div>
-              <div class="upload-hint">يقبل ملفات PDF فقط</div>
+              <div class="upload-text">اضغط أو اسحب وأفلت ملف PDF هنا</div>
+              <div class="upload-subtext">يدعم ملفات PDF فقط</div>
+              <div id="egyptPdfFileInfo" class="uploaded-file" style="display: none;">
+                <span>ملف مرفوع</span>
+                <button type="button" class="btn-small" onclick="removeEgyptPdf(event)">إزالة</button>
+              </div>
             </div>
-            <input
-              type="file"
-              id="egyptPdfFile"
-              accept=".pdf,application/pdf"
-              style="display: none"
-            />
-            <div id="egyptPdfPreview" class="file-preview"></div>
-            <input type="hidden" id="egyptDriveLink" required />
+            <input type="file" id="egyptPdfFileInput" accept=".pdf" style="display: none;" />
+            <input type="text" id="egyptDriveLink" placeholder="أو أدخل رابط ملف الكتاب مباشرة" style="margin-top: 10px;" />
           </div>
 
           <div class="form-group">
-            <label data-en="Subject *" data-ar="المادة *">المادة *</label>
+            <label>المادة *</label>
             <select id="egyptSubject" required>
-              <option value="" data-en="Select Subject" data-ar="اختر المادة">
-                اختر المادة
-              </option>
+              <option value="">اختر المادة</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label data-en="Academic Year *" data-ar="السنة الدراسية *"
-              >السنة الدراسية *</label
-            >
-            <select id="egyptYear" required></select>
+            <label>السنة الدراسية *</label>
+            <select id="egyptYear" required>
+              <option value="">اختر السنة</option>
+            </select>
           </div>
 
           <div class="form-group">
-            <label data-en="Term *" data-ar="الترم *">الترم *</label>
-            <select id="egyptTerm" required></select>
+            <label>الترم *</label>
+            <select id="egyptTerm" required>
+              <option value="">اختر الترم</option>
+            </select>
           </div>
 
           <div class="form-group">
-            <label data-en="Grade *" data-ar="الصف *">الصف *</label>
+            <label>الصف *</label>
             <select id="egyptGrade" required>
               <option value="">اختر الصف</option>
+              <option value="الأول الابتدائي">أول ابتدائي</option>
+              <option value="الثاني الابتدائي">ثاني ابتدائي</option>
+              <option value="الثالث الابتدائي">ثالث ابتدائي</option>
+              <option value="الرابع الابتدائي">رابع ابتدائي</option>
+              <option value="الخامس الابتدائي">خامس ابتدائي</option>
+              <option value="السادس الابتدائي">سادس ابتدائي</option>
+              <option value="الأول الإعدادي">أول إعدادي</option>
+              <option value="الثاني الإعدادي">ثاني إعدادي</option>
+              <option value="الثالث الإعدادي">ثالث إعدادي</option>
+              <option value="الأول الثانوي">أول ثانوي</option>
+              <option value="الثاني الثانوي">ثاني ثانوي</option>
+              <option value="الثالث الثانوي">ثالث ثانوي</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label data-en="Language *" data-ar="اللغة *">اللغة *</label>
+            <label>اللغة *</label>
             <select id="egyptLanguage" required>
-              <option value="" data-en="Select Language" data-ar="اختر اللغة">
-                اختر اللغة
-              </option>
-              <option value="عربي" data-en="Arabic" data-ar="عربي">عربي</option>
-              <option value="إنجليزي" data-en="English" data-ar="إنجليزي">
-                إنجليزي
-              </option>
+              <option value="">اختر اللغة</option>
+              <option value="عربي">عربي</option>
+              <option value="إنجليزي">إنجليزي</option>
             </select>
           </div>
 
-          <button
-            type="submit"
-            class="btn"
-            data-en="Add Book"
-            data-ar="إضافة الكتاب"
-          >
-            إضافة الكتاب
-          </button>
+          <button type="submit" class="btn">إضافة الكتاب</button>
         </form>
 
         <div class="books-list">
-          <h2 data-en="Added Books" data-ar="الكتب المضافة">الكتب المضافة</h2>
-          <div id="egyptBooksList"></div>
+          <h2>الكتب المضافة</h2>
+          <div id="egyptBooksList">
+            <p style="color: #718096; text-align: center; padding: 20px;">
+              لا توجد كتب مضافة بعد
+            </p>
+          </div>
         </div>
       </div>
 
       <!-- المسار السعودي -->
       <div id="saudiTab" class="tab-content">
-        <h2
-          data-en="Add New Book - Saudi Curriculum"
-          data-ar="إضافة كتاب جديد - المسار السعودي"
-        >
-          إضافة كتاب جديد - المسار السعودي
-        </h2>
+        <h2>إضافة كتاب جديد - المسار السعودي</h2>
 
         <div class="manage-section">
           <h3>إدارة المواد و السنوات و الفصول</h3>
@@ -616,82 +543,85 @@
 
         <form id="saudiForm">
           <div class="form-group">
-            <label data-en="Book Title *" data-ar="عنوان الكتاب *"
-              >عنوان الكتاب *</label
-            >
+            <label>عنوان الكتاب *</label>
             <input type="text" id="saudiTitle" required />
           </div>
 
           <div class="form-group">
-            <label data-en="Cover Image *" data-ar="صورة الغلاف *"
-              >صورة الغلاف *</label
-            >
-            <div class="file-upload-zone" id="saudiCoverUploadZone">
-              <div class="upload-icon">🖼️</div>
-              <div class="upload-text">اضغط أو اسحب الصورة هنا</div>
-              <div class="upload-hint">
-                يقبل جميع صيغ الصور (JPG, PNG, GIF, WEBP, إلخ)
+            <label>صورة الغلاف *</label>
+            <!-- منطقة رفع الصورة بالضغط والسحب والإفلات -->
+            <div class="upload-area" id="saudiCoverUploadArea" onclick="document.getElementById('saudiCoverFileInput').click()">
+              <div class="upload-icon">📁</div>
+              <div class="upload-text">اضغط أو اسحب وأفلت الصورة هنا</div>
+              <div class="upload-subtext">يدعم الصور (JPG, PNG, GIF)</div>
+              <div id="saudiCoverPreview" class="upload-preview" style="display: none;"></div>
+              <div id="saudiCoverFileInfo" class="uploaded-file" style="display: none;">
+                <span>ملف مرفوع</span>
+                <button type="button" class="btn-small" onclick="removeSaudiCover(event)">إزالة</button>
               </div>
             </div>
-            <input
-              type="file"
-              id="saudiCoverFile"
-              accept="image/*"
-              style="display: none"
-            />
-            <div id="saudiCoverPreview" class="file-preview"></div>
-            <input type="hidden" id="saudiCoverImage" required />
+            <input type="file" id="saudiCoverFileInput" accept="image/*" style="display: none;" />
+            <input type="text" id="saudiCoverImage" placeholder="أو أدخل رابط الصورة مباشرة" style="margin-top: 10px;" />
           </div>
 
           <div class="form-group">
-            <label data-en="Book File (PDF) *" data-ar="ملف الكتاب (PDF) *"
-              >ملف الكتاب (PDF) *</label
-            >
-            <div class="file-upload-zone" id="saudiPdfUploadZone">
+            <label>ملف الكتاب (PDF) *</label>
+            <!-- منطقة رفع ملف PDF بالضغط والسحب والإفلات -->
+            <div class="upload-area" id="saudiPdfUploadArea" onclick="document.getElementById('saudiPdfFileInput').click()">
               <div class="upload-icon">📄</div>
-              <div class="upload-text">اضغط أو اسحب ملف PDF هنا</div>
-              <div class="upload-hint">يقبل ملفات PDF فقط</div>
+              <div class="upload-text">اضغط أو اسحب وأفلت ملف PDF هنا</div>
+              <div class="upload-subtext">يدعم ملفات PDF فقط</div>
+              <div id="saudiPdfFileInfo" class="uploaded-file" style="display: none;">
+                <span>ملف مرفوع</span>
+                <button type="button" class="btn-small" onclick="removeSaudiPdf(event)">إزالة</button>
+              </div>
             </div>
-            <input
-              type="file"
-              id="saudiPdfFile"
-              accept=".pdf,application/pdf"
-              style="display: none"
-            />
-            <div id="saudiPdfPreview" class="file-preview"></div>
-            <input type="hidden" id="saudiDriveLink" required />
+            <input type="file" id="saudiPdfFileInput" accept=".pdf" style="display: none;" />
+            <input type="text" id="saudiDriveLink" placeholder="أو أدخل رابط ملف الكتاب مباشرة" style="margin-top: 10px;" />
           </div>
 
           <div class="form-group">
-            <label data-en="Subject *" data-ar="المادة *">المادة *</label>
+            <label>المادة *</label>
             <select id="saudiSubject" required>
               <option value="">اختر المادة</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label data-en="Academic Year *" data-ar="السنة الدراسية *"
-              >السنة الدراسية *</label
-            >
-            <select id="saudiYear" required></select>
-          </div>
-
-          <div class="form-group">
-            <label data-en="Semester *" data-ar="الفصل الدراسي *"
-              >الفصل الدراسي *</label
-            >
-            <select id="saudiTerm" required></select>
-          </div>
-
-          <div class="form-group">
-            <label data-en="Grade *" data-ar="الصف *">الصف *</label>
-            <select id="saudiGrade" required>
-              <option value="">اختر الصف</option>
+            <label>السنة الدراسية *</label>
+            <select id="saudiYear" required>
+              <option value="">اختر السنة</option>
             </select>
           </div>
 
           <div class="form-group">
-            <label data-en="Language *" data-ar="اللغة *">اللغة *</label>
+            <label>الفصل الدراسي *</label>
+            <select id="saudiTerm" required>
+              <option value="">اختر الفصل</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>الصف *</label>
+            <select id="saudiGrade" required>
+              <option value="">اختر الصف</option>
+              <option value="الأول الابتدائي">أول ابتدائي</option>
+              <option value="الثاني الابتدائي">ثاني ابتدائي</option>
+              <option value="الثالث الابتدائي">ثالث ابتدائي</option>
+              <option value="الرابع الابتدائي">رابع ابتدائي</option>
+              <option value="الخامس الابتدائي">خامس ابتدائي</option>
+              <option value="السادس الابتدائي">سادس ابتدائي</option>
+              <option value="الأول المتوسط">أول متوسط</option>
+              <option value="الثاني المتوسط">ثاني متوسط</option>
+              <option value="الثالث المتوسط">ثالث متوسط</option>
+              <option value="الأول الثانوي">أول ثانوي</option>
+              <option value="الثاني الثانوي">ثاني ثانوي</option>
+              <option value="الثالث الثانوي">ثالث ثانوي</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>اللغة *</label>
             <select id="saudiLanguage" required>
               <option value="">اختر اللغة</option>
               <option value="عربي">عربي</option>
@@ -699,28 +629,25 @@
             </select>
           </div>
 
-          <button
-            type="submit"
-            class="btn"
-            data-en="Add Book"
-            data-ar="إضافة الكتاب"
-          >
-            إضافة الكتاب
-          </button>
+          <button type="submit" class="btn">إضافة الكتاب</button>
         </form>
 
         <div class="books-list">
-          <h2 data-en="Added Books" data-ar="الكتب المضافة">الكتب المضافة</h2>
-          <div id="saudiBooksList"></div>
+          <h2>الكتب المضافة</h2>
+          <div id="saudiBooksList">
+            <p style="color: #718096; text-align: center; padding: 20px;">
+              لا توجد كتب مضافة بعد
+            </p>
+          </div>
         </div>
       </div>
     </div>
 
     <script>
-      // كلمة المرور المشفرة - يجب تغييرها
+      // كلمة المرور الجديدة
       const ADMIN_PASSWORD = "AbrarSchools@2025!SecurePass";
 
-      // بيانات افتراضية قابلة للتعديل ومحفوظة في localStorage
+      // بيانات افتراضية
       const DEFAULT_DATA = {
         egypt: {
           subjects: [
@@ -734,9 +661,8 @@
             "تربية فنية",
             "مهارات حياتية",
             "تربية رياضية",
-            "لغات",
           ],
-          years: ["2025/2026"],
+          years: ["2024/2025", "2025/2026"],
           terms: ["الأول", "الثاني"],
           grades: [
             "الأول الابتدائي",
@@ -748,6 +674,9 @@
             "الأول الإعدادي",
             "الثاني الإعدادي",
             "الثالث الإعدادي",
+            "الأول الثانوي",
+            "الثاني الثانوي",
+            "الثالث الثانوي"
           ],
           books: [],
         },
@@ -763,10 +692,8 @@
             "تربية إسلامية",
             "اجتماعيات",
             "حاسب آلي",
-            "تربية فنية",
-            "تربية رياضية",
           ],
-          years: ["2025/2026"],
+          years: ["2024/2025", "2025/2026"],
           terms: ["الأول", "الثاني"],
           grades: [
             "الأول الابتدائي",
@@ -778,48 +705,30 @@
             "الأول المتوسط",
             "الثاني المتوسط",
             "الثالث المتوسط",
+            "الأول الثانوي",
+            "الثاني الثانوي",
+            "الثالث الثانوي"
           ],
           books: [],
         },
       };
 
-      // ترجمة
-      let currentLang = localStorage.getItem("siteLang") || "ar";
-
-      function initLanguage() {
-        if (currentLang === "en") applyLanguage("en");
-        else applyLanguage("ar");
-      }
-
-      function applyLanguage(lang) {
-        document.documentElement.lang = lang;
-        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-
-        const elements = document.querySelectorAll("[data-ar][data-en]");
-        elements.forEach((el) => {
-          el.textContent = el.getAttribute("data-" + lang);
-        });
-
-        const placeholders = document.querySelectorAll(
-          "[data-placeholder-ar][data-placeholder-en]"
-        );
-        placeholders.forEach((el) => {
-          el.placeholder = el.getAttribute("data-placeholder-" + lang);
-        });
-      }
+      // متغيرات لملفات الرفع
+      let egyptCoverFile = null;
+      let egyptPdfFile = null;
+      let saudiCoverFile = null;
+      let saudiPdfFile = null;
 
       // إدارة الجلسة
-      async function login() {
+      function login() {
         const password = document.getElementById("passwordInput").value;
         if (password === ADMIN_PASSWORD) {
           document.getElementById("loginContainer").style.display = "none";
           document.getElementById("adminContainer").style.display = "block";
-
-          const expiryTime = new Date().getTime() + 120 * 60 * 1000;
-          sessionStorage.setItem("adminSession", expiryTime.toString());
           sessionStorage.setItem("adminLoggedIn", "true");
           initData();
           loadBooks();
+          setupUploadAreas();
         } else {
           document.getElementById("loginError").style.display = "block";
           setTimeout(() => {
@@ -830,73 +739,280 @@
 
       function logout() {
         sessionStorage.removeItem("adminLoggedIn");
-        sessionStorage.removeItem("adminSession");
         document.getElementById("loginContainer").style.display = "block";
         document.getElementById("adminContainer").style.display = "none";
         document.getElementById("passwordInput").value = "";
       }
 
       function checkSession() {
-        const expiryTime = sessionStorage.getItem("adminSession");
-        const isLoggedIn = sessionStorage.getItem("adminLoggedIn");
-
-        if (!expiryTime || !isLoggedIn) return false;
-
-        const now = new Date().getTime();
-        if (now > parseInt(expiryTime)) {
-          logout();
-          return false;
+        if (sessionStorage.getItem("adminLoggedIn")) {
+          document.getElementById("loginContainer").style.display = "none";
+          document.getElementById("adminContainer").style.display = "block";
+          initData();
+          loadBooks();
+          setupUploadAreas();
+          return true;
         }
-        return true;
+        return false;
       }
 
+      // التحقق من الجلسة عند تحميل الصفحة
       if (checkSession()) {
-        document.getElementById("loginContainer").style.display = "none";
-        document.getElementById("adminContainer").style.display = "block";
-        initData();
-        loadBooks();
+        console.log("تم تسجيل الدخول مسبقاً");
       }
 
       function switchTab(tab, ev) {
-        document
-          .querySelectorAll(".tab")
-          .forEach((t) => t.classList.remove("active"));
-        document
-          .querySelectorAll(".tab-content")
-          .forEach((c) => c.classList.remove("active"));
+        document.querySelectorAll(".tab").forEach((t) => t.classList.remove("active"));
+        document.querySelectorAll(".tab-content").forEach((c) => c.classList.remove("active"));
         if (ev && ev.target) ev.target.classList.add("active");
         document.getElementById(tab + "Tab").classList.add("active");
       }
 
       // تهيئة البيانات
       function initData() {
-        if (
-          !localStorage.getItem("egyptData") ||
-          !localStorage.getItem("saudiData")
-        ) {
-          localStorage.setItem("egyptData", JSON.stringify(DEFAULT_DATA.egypt));
-          localStorage.setItem("saudiData", JSON.stringify(DEFAULT_DATA.saudi));
-        } else {
-          const eg = JSON.parse(localStorage.getItem("egyptData"));
-          eg.years = ["2025/2026"];
-          localStorage.setItem("egyptData", JSON.stringify(eg));
-
-          const sa = JSON.parse(localStorage.getItem("saudiData"));
-          sa.years = ["2025/2026"];
-          localStorage.setItem("saudiData", JSON.stringify(sa));
+        // تهيئة البيانات المصرية
+        let egyptData = JSON.parse(localStorage.getItem("egyptData"));
+        if (!egyptData) {
+          egyptData = DEFAULT_DATA.egypt;
+          localStorage.setItem("egyptData", JSON.stringify(egyptData));
         }
-
+        
+        // تهيئة البيانات السعودية
+        let saudiData = JSON.parse(localStorage.getItem("saudiData"));
+        if (!saudiData) {
+          saudiData = DEFAULT_DATA.saudi;
+          localStorage.setItem("saudiData", JSON.stringify(saudiData));
+        }
+        
         populateEgyptControls();
         populateSaudiControls();
       }
 
+      // إعداد مناطق الرفع
+      function setupUploadAreas() {
+        // مصر - صورة الغلاف
+        const egyptCoverArea = document.getElementById('egyptCoverUploadArea');
+        const egyptCoverInput = document.getElementById('egyptCoverFileInput');
+        const egyptCoverPreview = document.getElementById('egyptCoverPreview');
+        
+        egyptCoverArea.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          egyptCoverArea.classList.add('dragover');
+        });
+        
+        egyptCoverArea.addEventListener('dragleave', () => {
+          egyptCoverArea.classList.remove('dragover');
+        });
+        
+        egyptCoverArea.addEventListener('drop', (e) => {
+          e.preventDefault();
+          egyptCoverArea.classList.remove('dragover');
+          const files = e.dataTransfer.files;
+          if (files.length > 0) {
+            handleEgyptCoverFile(files[0]);
+          }
+        });
+        
+        egyptCoverInput.addEventListener('change', (e) => {
+          if (e.target.files.length > 0) {
+            handleEgyptCoverFile(e.target.files[0]);
+          }
+        });
+        
+        // مصر - ملف PDF
+        const egyptPdfArea = document.getElementById('egyptPdfUploadArea');
+        const egyptPdfInput = document.getElementById('egyptPdfFileInput');
+        
+        egyptPdfArea.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          egyptPdfArea.classList.add('dragover');
+        });
+        
+        egyptPdfArea.addEventListener('dragleave', () => {
+          egyptPdfArea.classList.remove('dragover');
+        });
+        
+        egyptPdfArea.addEventListener('drop', (e) => {
+          e.preventDefault();
+          egyptPdfArea.classList.remove('dragover');
+          const files = e.dataTransfer.files;
+          if (files.length > 0) {
+            handleEgyptPdfFile(files[0]);
+          }
+        });
+        
+        egyptPdfInput.addEventListener('change', (e) => {
+          if (e.target.files.length > 0) {
+            handleEgyptPdfFile(e.target.files[0]);
+          }
+        });
+        
+        // السعودية - صورة الغلاف
+        const saudiCoverArea = document.getElementById('saudiCoverUploadArea');
+        const saudiCoverInput = document.getElementById('saudiCoverFileInput');
+        const saudiCoverPreview = document.getElementById('saudiCoverPreview');
+        
+        saudiCoverArea.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          saudiCoverArea.classList.add('dragover');
+        });
+        
+        saudiCoverArea.addEventListener('dragleave', () => {
+          saudiCoverArea.classList.remove('dragover');
+        });
+        
+        saudiCoverArea.addEventListener('drop', (e) => {
+          e.preventDefault();
+          saudiCoverArea.classList.remove('dragover');
+          const files = e.dataTransfer.files;
+          if (files.length > 0) {
+            handleSaudiCoverFile(files[0]);
+          }
+        });
+        
+        saudiCoverInput.addEventListener('change', (e) => {
+          if (e.target.files.length > 0) {
+            handleSaudiCoverFile(e.target.files[0]);
+          }
+        });
+        
+        // السعودية - ملف PDF
+        const saudiPdfArea = document.getElementById('saudiPdfUploadArea');
+        const saudiPdfInput = document.getElementById('saudiPdfFileInput');
+        
+        saudiPdfArea.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          saudiPdfArea.classList.add('dragover');
+        });
+        
+        saudiPdfArea.addEventListener('dragleave', () => {
+          saudiPdfArea.classList.remove('dragover');
+        });
+        
+        saudiPdfArea.addEventListener('drop', (e) => {
+          e.preventDefault();
+          saudiPdfArea.classList.remove('dragover');
+          const files = e.dataTransfer.files;
+          if (files.length > 0) {
+            handleSaudiPdfFile(files[0]);
+          }
+        });
+        
+        saudiPdfInput.addEventListener('change', (e) => {
+          if (e.target.files.length > 0) {
+            handleSaudiPdfFile(e.target.files[0]);
+          }
+        });
+      }
+      
+      // معالجة ملفات مصر
+      function handleEgyptCoverFile(file) {
+        if (!file.type.match('image.*')) {
+          alert('الرجاء اختيار صورة فقط');
+          return;
+        }
+        
+        egyptCoverFile = file;
+        document.getElementById('egyptCoverFileInfo').style.display = 'flex';
+        document.getElementById('egyptCoverImage').value = file.name;
+        
+        // عرض معاينة الصورة
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('egyptCoverPreview');
+          preview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; border-radius: 5px;">`;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+      
+      function removeEgyptCover(e) {
+        e.stopPropagation();
+        egyptCoverFile = null;
+        document.getElementById('egyptCoverFileInfo').style.display = 'none';
+        document.getElementById('egyptCoverPreview').style.display = 'none';
+        document.getElementById('egyptCoverImage').value = '';
+        document.getElementById('egyptCoverFileInput').value = '';
+      }
+      
+      function handleEgyptPdfFile(file) {
+        if (!file.name.toLowerCase().endsWith('.pdf')) {
+          alert('الرجاء اختيار ملف PDF فقط');
+          return;
+        }
+        
+        egyptPdfFile = file;
+        document.getElementById('egyptPdfFileInfo').style.display = 'flex';
+        document.getElementById('egyptDriveLink').value = file.name;
+      }
+      
+      function removeEgyptPdf(e) {
+        e.stopPropagation();
+        egyptPdfFile = null;
+        document.getElementById('egyptPdfFileInfo').style.display = 'none';
+        document.getElementById('egyptDriveLink').value = '';
+        document.getElementById('egyptPdfFileInput').value = '';
+      }
+      
+      // معالجة ملفات السعودية
+      function handleSaudiCoverFile(file) {
+        if (!file.type.match('image.*')) {
+          alert('الرجاء اختيار صورة فقط');
+          return;
+        }
+        
+        saudiCoverFile = file;
+        document.getElementById('saudiCoverFileInfo').style.display = 'flex';
+        document.getElementById('saudiCoverImage').value = file.name;
+        
+        // عرض معاينة الصورة
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const preview = document.getElementById('saudiCoverPreview');
+          preview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; border-radius: 5px;">`;
+          preview.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+      
+      function removeSaudiCover(e) {
+        e.stopPropagation();
+        saudiCoverFile = null;
+        document.getElementById('saudiCoverFileInfo').style.display = 'none';
+        document.getElementById('saudiCoverPreview').style.display = 'none';
+        document.getElementById('saudiCoverImage').value = '';
+        document.getElementById('saudiCoverFileInput').value = '';
+      }
+      
+      function handleSaudiPdfFile(file) {
+        if (!file.name.toLowerCase().endsWith('.pdf')) {
+          alert('الرجاء اختيار ملف PDF فقط');
+          return;
+        }
+        
+        saudiPdfFile = file;
+        document.getElementById('saudiPdfFileInfo').style.display = 'flex';
+        document.getElementById('saudiDriveLink').value = file.name;
+      }
+      
+      function removeSaudiPdf(e) {
+        e.stopPropagation();
+        saudiPdfFile = null;
+        document.getElementById('saudiPdfFileInfo').style.display = 'none';
+        document.getElementById('saudiDriveLink').value = '';
+        document.getElementById('saudiPdfFileInput').value = '';
+      }
+
       // ----- وظائف إدارة المواد و السنوات و الترمات - مصر -----
       function getEgyptData() {
-        return JSON.parse(
-          localStorage.getItem("egyptData") ||
-            JSON.stringify(DEFAULT_DATA.egypt)
-        );
+        const data = JSON.parse(localStorage.getItem("egyptData") || JSON.stringify(DEFAULT_DATA.egypt));
+        if (!data.books) data.books = [];
+        if (!data.subjects) data.subjects = DEFAULT_DATA.egypt.subjects;
+        if (!data.years) data.years = DEFAULT_DATA.egypt.years;
+        if (!data.terms) data.terms = DEFAULT_DATA.egypt.terms;
+        return data;
       }
+      
       function saveEgyptData(data) {
         localStorage.setItem("egyptData", JSON.stringify(data));
         populateEgyptControls();
@@ -906,6 +1022,8 @@
 
       function populateEgyptControls() {
         const data = getEgyptData();
+        
+        // المواد
         const subjectsContainer = document.getElementById("egyptSubjectsList");
         subjectsContainer.innerHTML = "";
         data.subjects.forEach((s, i) => {
@@ -915,6 +1033,7 @@
           subjectsContainer.appendChild(chip);
         });
 
+        // السنوات
         const yearsContainer = document.getElementById("egyptYearsList");
         yearsContainer.innerHTML = "";
         data.years.forEach((y, i) => {
@@ -924,6 +1043,7 @@
           yearsContainer.appendChild(chip);
         });
 
+        // الترمات
         const termsContainer = document.getElementById("egyptTermsList");
         termsContainer.innerHTML = "";
         data.terms.forEach((t, i) => {
@@ -933,22 +1053,13 @@
           termsContainer.appendChild(chip);
         });
 
-        const gradeSelect = document.getElementById("egyptGrade");
-        gradeSelect.innerHTML = "<option value=''>اختر الصف</option>";
-        data.grades.forEach((g) => {
-          const opt = document.createElement("option");
-          opt.value = g;
-          opt.textContent = g;
-          gradeSelect.appendChild(opt);
-        });
-
         populateEgyptFormOptions();
       }
 
       function populateEgyptFormOptions() {
         const data = getEgyptData();
         const subjectSelect = document.getElementById("egyptSubject");
-        subjectSelect.innerHTML = ` <option value="">اختر المادة</option>`;
+        subjectSelect.innerHTML = `<option value="">اختر المادة</option>`;
         data.subjects.forEach((s) => {
           const opt = document.createElement("option");
           opt.value = s;
@@ -957,7 +1068,7 @@
         });
 
         const yearSelect = document.getElementById("egyptYear");
-        yearSelect.innerHTML = "";
+        yearSelect.innerHTML = `<option value="">اختر السنة</option>`;
         data.years.forEach((y) => {
           const opt = document.createElement("option");
           opt.value = y;
@@ -966,7 +1077,7 @@
         });
 
         const termSelect = document.getElementById("egyptTerm");
-        termSelect.innerHTML = "";
+        termSelect.innerHTML = `<option value="">اختر الترم</option>`;
         data.terms.forEach((t) => {
           const opt = document.createElement("option");
           opt.value = t;
@@ -995,7 +1106,7 @@
         const val = document.getElementById("newEgyptYear").value.trim();
         if (!val) return alert("اكتب السنة أولا");
         const data = getEgyptData();
-        data.years = [val];
+        data.years.push(val);
         saveEgyptData(data);
         document.getElementById("newEgyptYear").value = "";
       }
@@ -1011,7 +1122,7 @@
         const val = document.getElementById("newEgyptTerm").value.trim();
         if (!val) return alert("اكتب الترم أولا");
         const data = getEgyptData();
-        if (!data.terms.includes(val)) data.terms.push(val);
+        data.terms.push(val);
         saveEgyptData(data);
         document.getElementById("newEgyptTerm").value = "";
       }
@@ -1025,11 +1136,14 @@
 
       // ----- وظائف المملكة السعودية -----
       function getSaudiData() {
-        return JSON.parse(
-          localStorage.getItem("saudiData") ||
-            JSON.stringify(DEFAULT_DATA.saudi)
-        );
+        const data = JSON.parse(localStorage.getItem("saudiData") || JSON.stringify(DEFAULT_DATA.saudi));
+        if (!data.books) data.books = [];
+        if (!data.subjects) data.subjects = DEFAULT_DATA.saudi.subjects;
+        if (!data.years) data.years = DEFAULT_DATA.saudi.years;
+        if (!data.terms) data.terms = DEFAULT_DATA.saudi.terms;
+        return data;
       }
+      
       function saveSaudiData(data) {
         localStorage.setItem("saudiData", JSON.stringify(data));
         populateSaudiControls();
@@ -1039,6 +1153,8 @@
 
       function populateSaudiControls() {
         const data = getSaudiData();
+        
+        // المواد
         const subjectsContainer = document.getElementById("saudiSubjectsList");
         subjectsContainer.innerHTML = "";
         data.subjects.forEach((s, i) => {
@@ -1048,6 +1164,7 @@
           subjectsContainer.appendChild(chip);
         });
 
+        // السنوات
         const yearsContainer = document.getElementById("saudiYearsList");
         yearsContainer.innerHTML = "";
         data.years.forEach((y, i) => {
@@ -1057,6 +1174,7 @@
           yearsContainer.appendChild(chip);
         });
 
+        // الفصول
         const termsContainer = document.getElementById("saudiTermsList");
         termsContainer.innerHTML = "";
         data.terms.forEach((t, i) => {
@@ -1066,22 +1184,13 @@
           termsContainer.appendChild(chip);
         });
 
-        const gradeSelect = document.getElementById("saudiGrade");
-        gradeSelect.innerHTML = "<option value=''>اختر الصف</option>";
-        data.grades.forEach((g) => {
-          const opt = document.createElement("option");
-          opt.value = g;
-          opt.textContent = g;
-          gradeSelect.appendChild(opt);
-        });
-
         populateSaudiFormOptions();
       }
 
       function populateSaudiFormOptions() {
         const data = getSaudiData();
         const subjectSelect = document.getElementById("saudiSubject");
-        subjectSelect.innerHTML = ` <option value="">اختر المادة</option>`;
+        subjectSelect.innerHTML = `<option value="">اختر المادة</option>`;
         data.subjects.forEach((s) => {
           const opt = document.createElement("option");
           opt.value = s;
@@ -1090,7 +1199,7 @@
         });
 
         const yearSelect = document.getElementById("saudiYear");
-        yearSelect.innerHTML = "";
+        yearSelect.innerHTML = `<option value="">اختر السنة</option>`;
         data.years.forEach((y) => {
           const opt = document.createElement("option");
           opt.value = y;
@@ -1099,7 +1208,7 @@
         });
 
         const termSelect = document.getElementById("saudiTerm");
-        termSelect.innerHTML = "";
+        termSelect.innerHTML = `<option value="">اختر الفصل</option>`;
         data.terms.forEach((t) => {
           const opt = document.createElement("option");
           opt.value = t;
@@ -1128,7 +1237,7 @@
         const val = document.getElementById("newSaudiYear").value.trim();
         if (!val) return alert("اكتب السنة أولا");
         const data = getSaudiData();
-        data.years = [val];
+        data.years.push(val);
         saveSaudiData(data);
         document.getElementById("newSaudiYear").value = "";
       }
@@ -1144,7 +1253,7 @@
         const val = document.getElementById("newSaudiTerm").value.trim();
         if (!val) return alert("اكتب الفصل أولا");
         const data = getSaudiData();
-        if (!data.terms.includes(val)) data.terms.push(val);
+        data.terms.push(val);
         saveSaudiData(data);
         document.getElementById("newSaudiTerm").value = "";
       }
@@ -1156,193 +1265,118 @@
         saveSaudiData(data);
       }
 
-      // ===== وظائف رفع الملفات =====
-
-      function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = reject;
-          reader.readAsDataURL(file);
-        });
-      }
-
-      function setupFileUpload(inputId, zoneId, previewId, hiddenId, type) {
-        const fileInput = document.getElementById(inputId);
-        const uploadZone = document.getElementById(zoneId);
-        const preview = document.getElementById(previewId);
-        const hiddenInput = document.getElementById(hiddenId);
-
-        uploadZone.addEventListener("click", function () {
-          fileInput.click();
-        });
-
-        fileInput.addEventListener("change", async function (e) {
-          const file = e.target.files[0];
-          if (file) {
-            await handleFileUpload(file, preview, hiddenInput, type);
-          }
-        });
-
-        uploadZone.addEventListener("dragover", function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          uploadZone.classList.add("drag-over");
-        });
-
-        uploadZone.addEventListener("dragleave", function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          uploadZone.classList.remove("drag-over");
-        });
-
-        uploadZone.addEventListener("drop", async function (e) {
-          e.preventDefault();
-          e.stopPropagation();
-          uploadZone.classList.remove("drag-over");
-
-          const file = e.dataTransfer.files[0];
-          if (file) {
-            if (type === "image" && !file.type.startsWith("image/")) {
-              alert("يرجى اختيار ملف صورة فقط");
-              return;
-            }
-            if (type === "pdf" && file.type !== "application/pdf") {
-              alert("يرجى اختيار ملف PDF فقط");
-              return;
-            }
-
-            fileInput.files = e.dataTransfer.files;
-            await handleFileUpload(file, preview, hiddenInput, type);
-          }
-        });
-      }
-
-      async function handleFileUpload(file, preview, hiddenInput, type) {
-        try {
-          const base64 = await fileToBase64(file);
-          hiddenInput.value = base64;
-
-          preview.style.display = "block";
-          if (type === "image") {
-            preview.innerHTML = `
-              <img src="${base64}" alt="معاينة الصورة" />
-              <div class="file-info">
-                <strong>${file.name}</strong> (${(file.size / 1024).toFixed(
-              2
-            )} KB)
-              </div>
-              <button type="button" class="remove-file" onclick="removeFile('${
-                hiddenInput.id
-              }', '${preview.id}')">إزالة الصورة</button>
-            `;
-          } else if (type === "pdf") {
-            preview.innerHTML = `
-              <div style="text-align: center;">
-                <div style="font-size: 3em;">📕</div>
-                <div class="file-info">
-                  <strong>${file.name}</strong> (${(
-              file.size /
-              1024 /
-              1024
-            ).toFixed(2)} MB)
-                </div>
-                <button type="button" class="remove-file" onclick="removeFile('${
-                  hiddenInput.id
-                }', '${preview.id}')">إزالة الملف</button>
-              </div>
-            `;
-          }
-        } catch (error) {
-          console.error("خطأ في رفع الملف:", error);
-          alert("حدث خطأ أثناء رفع الملف. يرجى المحاولة مرة أخرى.");
+      // ----- إدارة الكتب -----
+      document.getElementById("egyptForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        
+        // التحقق من الحقول المطلوبة
+        const title = document.getElementById("egyptTitle").value.trim();
+        const coverImage = document.getElementById("egyptCoverImage").value.trim();
+        const driveLink = document.getElementById("egyptDriveLink").value.trim();
+        const subject = document.getElementById("egyptSubject").value;
+        const year = document.getElementById("egyptYear").value;
+        const term = document.getElementById("egyptTerm").value;
+        const grade = document.getElementById("egyptGrade").value;
+        const language = document.getElementById("egyptLanguage").value;
+        
+        // التحقق من وجود ملف مرفوع أو رابط
+        if (!coverImage && !egyptCoverFile) {
+          alert("يجب إضافة صورة الغلاف إما برفع ملف أو إدخال رابط");
+          return;
         }
-      }
+        
+        if (!driveLink && !egyptPdfFile) {
+          alert("يجب إضافة ملف الكتاب إما برفع ملف أو إدخال رابط");
+          return;
+        }
+        
+        if (!title || !subject || !year || !term || !grade || !language) {
+          alert("يرجى ملء جميع الحقول المطلوبة");
+          return;
+        }
+        
+        const data = getEgyptData();
+        const book = {
+          id: Date.now(),
+          title: title,
+          drive_link: egyptPdfFile ? "ملف مرفوع: " + egyptPdfFile.name : driveLink,
+          cover_image: egyptCoverFile ? "ملف مرفوع: " + egyptCoverFile.name : coverImage,
+          subject: subject,
+          year: year,
+          term: term,
+          grade: grade,
+          language: language,
+        };
+        
+        data.books.push(book);
+        saveEgyptData(data);
+        
+        // إعادة تعيين النموذج
+        this.reset();
+        removeEgyptCover({ stopPropagation: () => {} });
+        removeEgyptPdf({ stopPropagation: () => {} });
+        
+        // إعادة تحميل قائمة الكتب
+        loadEgyptBooks();
+        
+        alert("تم إضافة الكتاب المصري بنجاح!");
+      });
 
-      function removeFile(hiddenId, previewId) {
-        document.getElementById(hiddenId).value = "";
-        document.getElementById(previewId).style.display = "none";
-        document.getElementById(previewId).innerHTML = "";
-      }
-
-      // تهيئة مناطق رفع الملفات
-      setupFileUpload(
-        "egyptCoverFile",
-        "egyptCoverUploadZone",
-        "egyptCoverPreview",
-        "egyptCoverImage",
-        "image"
-      );
-      setupFileUpload(
-        "egyptPdfFile",
-        "egyptPdfUploadZone",
-        "egyptPdfPreview",
-        "egyptDriveLink",
-        "pdf"
-      );
-      setupFileUpload(
-        "saudiCoverFile",
-        "saudiCoverUploadZone",
-        "saudiCoverPreview",
-        "saudiCoverImage",
-        "image"
-      );
-      setupFileUpload(
-        "saudiPdfFile",
-        "saudiPdfUploadZone",
-        "saudiPdfPreview",
-        "saudiDriveLink",
-        "pdf"
-      );
-
-      // ----- إدارة الكتب (إضافة - حذف - تعديل) -----
-      document
-        .getElementById("egyptForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const data = getEgyptData();
-          const book = {
-            id: Date.now(),
-            title: document.getElementById("egyptTitle").value,
-            drive_link: document.getElementById("egyptDriveLink").value,
-            cover_image: document.getElementById("egyptCoverImage").value,
-            subject: document.getElementById("egyptSubject").value,
-            year: document.getElementById("egyptYear").value,
-            term: document.getElementById("egyptTerm").value,
-            grade: document.getElementById("egyptGrade").value,
-            language: document.getElementById("egyptLanguage").value,
-          };
-          data.books.push(book);
-          saveEgyptData(data);
-          this.reset();
-          document.getElementById("egyptCoverPreview").style.display = "none";
-          document.getElementById("egyptPdfPreview").style.display = "none";
-          loadEgyptBooks();
-        });
-
-      document
-        .getElementById("saudiForm")
-        .addEventListener("submit", function (e) {
-          e.preventDefault();
-          const data = getSaudiData();
-          const book = {
-            id: Date.now(),
-            title: document.getElementById("saudiTitle").value,
-            drive_link: document.getElementById("saudiDriveLink").value,
-            cover_image: document.getElementById("saudiCoverImage").value,
-            subject: document.getElementById("saudiSubject").value,
-            year: document.getElementById("saudiYear").value,
-            term: document.getElementById("saudiTerm").value,
-            grade: document.getElementById("saudiGrade").value,
-            language: document.getElementById("saudiLanguage").value,
-          };
-          data.books.push(book);
-          saveSaudiData(data);
-          this.reset();
-          document.getElementById("saudiCoverPreview").style.display = "none";
-          document.getElementById("saudiPdfPreview").style.display = "none";
-          loadSaudiBooks();
-        });
+      document.getElementById("saudiForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        
+        // التحقق من الحقول المطلوبة
+        const title = document.getElementById("saudiTitle").value.trim();
+        const coverImage = document.getElementById("saudiCoverImage").value.trim();
+        const driveLink = document.getElementById("saudiDriveLink").value.trim();
+        const subject = document.getElementById("saudiSubject").value;
+        const year = document.getElementById("saudiYear").value;
+        const term = document.getElementById("saudiTerm").value;
+        const grade = document.getElementById("saudiGrade").value;
+        const language = document.getElementById("saudiLanguage").value;
+        
+        // التحقق من وجود ملف مرفوع أو رابط
+        if (!coverImage && !saudiCoverFile) {
+          alert("يجب إضافة صورة الغلاف إما برفع ملف أو إدخال رابط");
+          return;
+        }
+        
+        if (!driveLink && !saudiPdfFile) {
+          alert("يجب إضافة ملف الكتاب إما برفع ملف أو إدخال رابط");
+          return;
+        }
+        
+        if (!title || !subject || !year || !term || !grade || !language) {
+          alert("يرجى ملء جميع الحقول المطلوبة");
+          return;
+        }
+        
+        const data = getSaudiData();
+        const book = {
+          id: Date.now(),
+          title: title,
+          drive_link: saudiPdfFile ? "ملف مرفوع: " + saudiPdfFile.name : driveLink,
+          cover_image: saudiCoverFile ? "ملف مرفوع: " + saudiCoverFile.name : coverImage,
+          subject: subject,
+          year: year,
+          term: term,
+          grade: grade,
+          language: language,
+        };
+        
+        data.books.push(book);
+        saveSaudiData(data);
+        
+        // إعادة تعيين النموذج
+        this.reset();
+        removeSaudiCover({ stopPropagation: () => {} });
+        removeSaudiPdf({ stopPropagation: () => {} });
+        
+        // إعادة تحميل قائمة الكتب
+        loadSaudiBooks();
+        
+        alert("تم إضافة الكتاب السعودي بنجاح!");
+      });
 
       function loadBooks() {
         loadEgyptBooks();
@@ -1353,18 +1387,17 @@
         const data = getEgyptData();
         const books = data.books || [];
         const container = document.getElementById("egyptBooksList");
+        
         if (books.length === 0) {
-          container.innerHTML =
-            '<p style="color: #718096;">لا توجد كتب مضافة بعد</p>';
+          container.innerHTML = '<p style="color: #718096; text-align: center; padding: 20px;">لا توجد كتب مضافة بعد</p>';
           return;
         }
-        container.innerHTML = books
-          .map(
-            (book) => `
+        
+        container.innerHTML = books.map((book, index) => `
           <div class="book-item">
             <div class="book-item-info">
               <div class="book-item-title">${book.title}</div>
-              <div class="book-item-details">${book.subject} - ${book.grade} - الترم ${book.term} - ${book.year}</div>
+              <div class="book-item-details">${book.subject} - ${book.grade} - الترم ${book.term} - ${book.year} - ${book.language}</div>
             </div>
             <div class="book-item-actions">
               <button class="btn btn-small" onclick="editBook('egypt', ${book.id})">تعديل</button>
@@ -1372,27 +1405,24 @@
               <a class="btn btn-small" href="${book.drive_link}" target="_blank">فتح</a>
             </div>
           </div>
-        `
-          )
-          .join("");
+        `).join("");
       }
 
       function loadSaudiBooks() {
         const data = getSaudiData();
         const books = data.books || [];
         const container = document.getElementById("saudiBooksList");
+        
         if (books.length === 0) {
-          container.innerHTML =
-            '<p style="color: #718096;">لا توجد كتب مضافة بعد</p>';
+          container.innerHTML = '<p style="color: #718096; text-align: center; padding: 20px;">لا توجد كتب مضافة بعد</p>';
           return;
         }
-        container.innerHTML = books
-          .map(
-            (book) => `
+        
+        container.innerHTML = books.map((book, index) => `
           <div class="book-item">
             <div class="book-item-info">
               <div class="book-item-title">${book.title}</div>
-              <div class="book-item-details">${book.subject} - ${book.grade} - الفصل ${book.term} - ${book.year}</div>
+              <div class="book-item-details">${book.subject} - ${book.grade} - الفصل ${book.term} - ${book.year} - ${book.language}</div>
             </div>
             <div class="book-item-actions">
               <button class="btn btn-small" onclick="editBook('saudi', ${book.id})">تعديل</button>
@@ -1400,19 +1430,17 @@
               <a class="btn btn-small" href="${book.drive_link}" target="_blank">فتح</a>
             </div>
           </div>
-        `
-          )
-          .join("");
+        `).join("");
       }
 
       function deleteBook(path, id) {
         if (!confirm("هل أنت متأكد من حذف هذا الكتاب؟")) return;
         const keyData = path === "egypt" ? getEgyptData() : getSaudiData();
-        const filtered = keyData.books.filter((b) => b.id !== id);
-        keyData.books = filtered;
+        keyData.books = keyData.books.filter((b) => b.id !== id);
         if (path === "egypt") saveEgyptData(keyData);
         else saveSaudiData(keyData);
         loadBooks();
+        alert("تم حذف الكتاب بنجاح!");
       }
 
       function editBook(path, id) {
@@ -1421,19 +1449,17 @@
         if (!book) return alert("الكتاب غير موجود");
 
         const newTitle = prompt("عنوان الكتاب:", book.title) || book.title;
-        const newDrive =
-          prompt("رابط Google Drive:", book.drive_link) || book.drive_link;
-        const newCover =
-          prompt("رابط صورة الغلاف:", book.cover_image) || book.cover_image;
+        const newCover = prompt("رابط صورة الغلاف:", book.cover_image) || book.cover_image;
+        const newDrive = prompt("رابط ملف الكتاب:", book.drive_link) || book.drive_link;
         const newSubject = prompt("المادة:", book.subject) || book.subject;
         const newYear = prompt("السنة الدراسية:", book.year) || book.year;
-        const newTerm = prompt("الترم/الفصل:", book.term) || book.term;
+        const newTerm = prompt(path === "egypt" ? "الترم:" : "الفصل:", book.term) || book.term;
         const newGrade = prompt("الصف:", book.grade) || book.grade;
         const newLang = prompt("اللغة:", book.language) || book.language;
 
         book.title = newTitle;
-        book.drive_link = newDrive;
         book.cover_image = newCover;
+        book.drive_link = newDrive;
         book.subject = newSubject;
         book.year = newYear;
         book.term = newTerm;
@@ -1443,6 +1469,7 @@
         if (path === "egypt") saveEgyptData(keyData);
         else saveSaudiData(keyData);
         loadBooks();
+        alert("تم تعديل الكتاب بنجاح!");
       }
 
       function showSuccess() {
@@ -1453,16 +1480,20 @@
         }, 2000);
       }
 
-      document
-        .getElementById("passwordInput")
-        .addEventListener("keypress", function (e) {
-          if (e.key === "Enter") {
-            login();
-          }
-        });
+      // السماح بالدخول بالضغط على Enter
+      document.getElementById("passwordInput").addEventListener("keypress", function (e) {
+        if (e.key === "Enter") {
+          login();
+        }
+      });
 
-      initLanguage();
+      // تهيئة الصفحة عند التحميل
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log("صفحة الإدارة جاهزة");
+        // التحقق من الجلسة
+        checkSession();
+      });
+      
     </script>
-    <script src="theme-menu.js"></script>
   </body>
 </html>
