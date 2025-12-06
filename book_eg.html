@@ -1,723 +1,622 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>المسار المصري - كتب مدارس الأبرار</title>
     <link rel="icon" href="مدارس الأبرار.webp" type="image/png" />
-
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-      body {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
-        min-height: 100vh;
-      }
-      .navbar {
-        background: white;
-        padding: 15px 30px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        position: sticky;
-        top: 0;
-        z-index: 100;
-      }
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2c5282 100%);
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: white;
+            padding: 15px 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-      .navbar-content {
-        max-width: 1200px;
-        margin: 0 auto;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .site-title {
-        font-size: 1.5em;
-        color: #2d3748;
-        font-weight: 700;
-      }
-
-      .nav-links {
-        display: flex;
-        gap: 20px;
-      }
-
-      .nav-links a {
-        color: #e74c3c;
-        text-decoration: none;
-        font-weight: 600;
-        padding: 8px 16px;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-      }
-
-      .nav-links a:hover {
-        background: #e74c3c;
-        color: white;
-      }
-
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 40px 20px;
-      }
-
-      .page-header {
-        text-align: center;
-        margin-bottom: 30px;
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-      }
-
-      .page-header img {
-        max-width: 200px;
-        height: auto;
-        margin-bottom: 20px;
-      }
-
-      .page-header h1 {
-        color: #2d3748;
-        font-size: 2.5em;
-        margin-bottom: 10px;
-      }
-
-      .page-header .flag {
-        font-size: 3em;
-      }
-
-      .search-section {
-        background: white;
-        padding: 30px;
-        border-radius: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        margin-bottom: 30px;
-      }
-
-      .search-box {
-        width: 100%;
-        padding: 15px 20px;
-        font-size: 1.1em;
-        border: 2px solid #e2e8f0;
-        border-radius: 10px;
-        margin-bottom: 20px;
-        transition: border-color 0.3s ease;
-      }
-
-      .search-box:focus {
-        outline: none;
-        border-color: #e74c3c;
-      }
-
-      .filters {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 15px;
-      }
-
-      .filter-group {
-        display: flex;
-        flex-direction: column;
-      }
-
-      .filter-group label {
-        color: #4a5568;
-        font-weight: 600;
-        margin-bottom: 5px;
-      }
-
-      .filter-group select {
-        padding: 10px;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 1em;
-        cursor: pointer;
-        transition: border-color 0.3s ease;
-      }
-
-      .filter-group select:focus {
-        outline: none;
-        border-color: #e74c3c;
-      }
-
-      .books-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 25px;
-        margin-top: 30px;
-      }
-
-      .book-card {
-        background: white;
-        border-radius: 15px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease;
-      }
-
-      .book-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
-      }
-
-      .book-cover {
-        width: 100%;
-        height: 350px;
-        object-fit: cover;
-        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-      }
-
-      .book-info {
-        padding: 20px;
-      }
-
-      .book-title {
-        color: #2d3748;
-        font-size: 1.3em;
-        font-weight: 600;
-        margin-bottom: 10px;
-      }
-
-      .book-details {
-        color: #718096;
-        font-size: 0.9em;
-        margin-bottom: 15px;
-      }
-
-      .book-details span {
-        display: block;
-        margin-bottom: 5px;
-      }
-
-      .open-btn {
-        display: block;
-        width: 100%;
-        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
-        color: white;
-        padding: 12px;
-        border: none;
-        border-radius: 8px;
-        font-size: 1.1em;
-        font-weight: 600;
-        cursor: pointer;
-        text-decoration: none;
-        text-align: center;
-        transition: all 0.3s ease;
-      }
-
-      .open-btn:hover {
-        transform: scale(1.05);
-      }
-
-      .no-results {
-        text-align: center;
-        color: white;
-        font-size: 1.2em;
-        margin-top: 50px;
-        background: rgba(255, 255, 255, 0.1);
-        padding: 30px;
-        border-radius: 15px;
-      }
-
-      footer {
-        background: white;
-        padding: 20px;
-        text-align: center;
-        margin-top: 50px;
-        border-radius: 15px;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      footer a {
-        color: #e74c3c;
-        text-decoration: none;
-        font-weight: 600;
-        transition: color 0.3s ease;
-      }
-
-      footer a:hover {
-        color: #c0392b;
-      }
-
-      @media (max-width: 768px) {
         .navbar-content {
-          flex-direction: column;
-          gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .site-title {
+            font-size: 1.5em;
+            color: #2d3748;
+            font-weight: 700;
         }
 
         .nav-links {
-          flex-wrap: wrap;
-          justify-content: center;
+            display: flex;
+            gap: 20px;
+            align-items: center;
         }
 
-        .page-header h1 {
-          font-size: 2em;
+        .nav-links a {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .refresh-btn {
+            background: #4CAF50 !important;
+            color: white !important;
+        }
+
+        .refresh-btn:hover {
+            background: #45a049 !important;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
         }
 
         .page-header img {
-          max-width: 150px;
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        .page-header h1 {
+            color: #2d3748;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .page-header .flag {
+            font-size: 3em;
+        }
+
+        .search-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1em;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: border-color 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: #e74c3c;
         }
 
         .filters {
-          grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            color: #4a5568;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .filter-group select {
+            padding: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: #e74c3c;
         }
 
         .books-grid {
-          grid-template-columns: 1fr;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
         }
-      }
+
+        .book-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .book-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        }
+
+        .book-info {
+            padding: 20px;
+        }
+
+        .book-title {
+            color: #2d3748;
+            font-size: 1.3em;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .book-details {
+            color: #718096;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .book-details span {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .open-btn {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .open-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .no-results {
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            margin-top: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        footer {
+            background: white;
+            padding: 20px;
+            text-align: center;
+            margin-top: 50px;
+            border-radius: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        footer a {
+            color: #e74c3c;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: #c0392b;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .page-header h1 {
+                font-size: 2em;
+            }
+
+            .page-header img {
+                max-width: 150px;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-    <script>
-      // ✅ حماية الصفحة - إجبار الرجوع لصفحة التسجيل
-      (function () {
-        // الحصول على اسم الصفحة الحالية
-        const currentPage = window.location.pathname.split("/").pop();
-
-        // قائمة الصفحات المسموحة بدون تسجيل دخول
-        const allowedPages = ["login.html", "signin.html", "تسجيل.html"];
-
-        // إذا لم يكن في صفحة التسجيل
-        if (
-          !allowedPages.some(
-            (page) => currentPage.includes(page) || currentPage === ""
-          )
-        ) {
-          // التحقق من تسجيل الدخول
-          if (!sessionStorage.getItem("isLoggedIn")) {
-            // إعادة التوجيه فوراً لصفحة التسجيل
-            window.location.replace("login.html");
-          }
-        }
-      })();
-    </script>
-  </head>
-  <body>
+</head>
+<body>
     <nav class="navbar">
-      <div class="navbar-content">
-        <div
-          class="site-title"
-          data-en="Abrar Schools Books"
-          data-ar="كتب مدارس الأبرار"
-        >
-          كتب مدارس الأبرار
+        <div class="navbar-content">
+            <div class="site-title" data-en="Abrar Schools Books" data-ar="كتب مدارس الأبرار">
+                كتب مدارس الأبرار
+            </div>
+            <div class="nav-links">
+                <a href="index.html" data-en="Curriculums" data-ar="المسار">المسار</a>
+                <a href="book_eg.html" data-en="Books" data-ar="الكتب">الكتب</a>
+                <a href="about.html" data-en="About" data-ar="عن المشروع">عن المشروع</a>
+                <a href="contact.html" data-en="Contact" data-ar="التواصل">التواصل</a>
+                <a href="#" onclick="refreshBooks(); return false;" class="refresh-btn">🔄 تحديث الكتب</a>
+            </div>
         </div>
-        <div class="nav-links">
-          <a href="index.html" data-en="Curriculums" data-ar="المسار">المسار</a>
-          <a href="book_eg.html" data-en="Books" data-ar="الكتب">الكتب</a>
-          <a href="about.html" data-en="About" data-ar="عن المشروع"
-            >عن المشروع</a
-          >
-          <a href="contact.html" data-en="Contact" data-ar="التواصل">التواصل</a>
-        </div>
-      </div>
     </nav>
 
     <div class="container">
-      <div class="page-header">
-        <img src="لوجو محسن 1.png" alt="شعار مدارس الأبرار" />
-        <div class="flag">🇪🇬</div>
-        <h1 data-en="Egyptian Curriculum" data-ar="المسار المصري">
-          المسار المصري
-        </h1>
-      </div>
-
-      <div class="search-section">
-        <input
-          type="text"
-          id="searchBox"
-          class="search-box"
-          data-placeholder-en="Search by title or author..."
-          data-placeholder-ar="ابحث عن كتاب بالعنوان أو المؤلف..."
-          placeholder="ابحث عن كتاب بالعنوان أو المؤلف..."
-        />
-
-        <div class="filters">
-          <div class="filter-group">
-            <label data-en="Subject" data-ar="المادة">المادة</label>
-            <select id="subjectFilter">
-              <option value="" data-en="All Subjects" data-ar="جميع المواد">
-                جميع المواد
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label data-en="Grade" data-ar="الصف">الصف</label>
-            <select id="gradeFilter">
-              <option value="" data-en="All Grades" data-ar="جميع الصفوف">
-                جميع الصفوف
-              </option>
-              <option value="الأول الابتدائي">الأول الابتدائي</option>
-              <option value="الثاني الابتدائي">الثاني الابتدائي</option>
-              <option value="الثالث الابتدائي">الثالث الابتدائي</option>
-              <option value="الرابع الابتدائي">الرابع الابتدائي</option>
-              <option value="الخامس الابتدائي">الخامس الابتدائي</option>
-              <option value="السادس الابتدائي">السادس الابتدائي</option>
-              <option value="الأول الإعدادي">الأول الإعدادي</option>
-              <option value="الثاني الإعدادي">الثاني الإعدادي</option>
-              <option value="الثالث الإعدادي">الثالث الإعدادي</option>
-              <option value="الأول الثانوي">الأول الثانوي</option>
-              <option value="الثاني الثانوي">الثاني الثانوي</option>
-              <option value="الثالث الثانوي">الثالث الثانوي</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label data-en="Term" data-ar="الترم">الترم</label>
-            <select id="termFilter">
-              <option value="" data-en="All Terms" data-ar="جميع الأترام">
-                جميع الأترام
-              </option>
-              <option value="الأول" data-en="First Term" data-ar="الترم الأول">
-                الترم الأول
-              </option>
-              <option
-                value="الثاني"
-                data-en="Second Term"
-                data-ar="الترم الثاني"
-              >
-                الترم الثاني
-              </option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label data-en="Academic Year" data-ar="السنة الدراسية"
-              >السنة الدراسية</label
-            >
-            <select id="yearFilter">
-              <option value="" data-en="All Years" data-ar="جميع السنوات">
-                جميع السنوات
-              </option>
-              <option value="2024/2025">2024/2025</option>
-              <option value="2023/2024">2023/2024</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label data-en="Language" data-ar="اللغة">اللغة</label>
-            <select id="languageFilter">
-              <option value="" data-en="All Languages" data-ar="جميع اللغات">
-                جميع اللغات
-              </option>
-              <option value="عربي" data-en="Arabic" data-ar="عربي">عربي</option>
-              <option value="إنجليزي" data-en="English" data-ar="إنجليزي">
-                إنجليزي
-              </option>
-            </select>
-          </div>
+        <div class="page-header">
+            <img src="لوجو محسن 1.png" alt="شعار مدارس الأبرار" />
+            <div class="flag">🇪🇬</div>
+            <h1 data-en="Egyptian Curriculum" data-ar="المسار المصري">
+                المسار المصري
+            </h1>
         </div>
-      </div>
 
-      <div id="booksGrid" class="books-grid"></div>
-      <div
-        id="noResults"
-        class="no-results"
-        style="display: none"
-        data-en="No results match your search"
-        data-ar="لا توجد نتائج تطابق البحث"
-      >
-        لا توجد نتائج تطابق البحث
-      </div>
+        <div class="search-section">
+            <input type="text" id="searchBox" class="search-box" data-placeholder-en="Search by title or author..." data-placeholder-ar="ابحث عن كتاب بالعنوان أو المؤلف..." placeholder="ابحث عن كتاب بالعنوان أو المؤلف..." />
 
-      <footer>
-        <a
-          href="rights.html"
-          data-en="All Rights Reserved © 2025 Abrar Private Schools"
-          data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية"
-          >جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية</a
-        >
-      </footer>
+            <div class="filters">
+                <div class="filter-group">
+                    <label data-en="Subject" data-ar="المادة">المادة</label>
+                    <select id="subjectFilter">
+                        <option value="" data-en="All Subjects" data-ar="جميع المواد">جميع المواد</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label data-en="Grade" data-ar="الصف">الصف</label>
+                    <select id="gradeFilter">
+                        <option value="" data-en="All Grades" data-ar="جميع الصفوف">جميع الصفوف</option>
+                        <option value="الأول الابتدائي">الأول الابتدائي</option>
+                        <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                        <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                        <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                        <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                        <option value="السادس الابتدائي">السادس الابتدائي</option>
+                        <option value="الأول الإعدادي">الأول الإعدادي</option>
+                        <option value="الثاني الإعدادي">الثاني الإعدادي</option>
+                        <option value="الثالث الإعدادي">الثالث الإعدادي</option>
+                        <option value="الأول الثانوي">الأول الثانوي</option>
+                        <option value="الثاني الثانوي">الثاني الثانوي</option>
+                        <option value="الثالث الثانوي">الثالث الثانوي</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label data-en="Term" data-ar="الترم">الترم</label>
+                    <select id="termFilter">
+                        <option value="" data-en="All Terms" data-ar="جميع الأترام">جميع الأترام</option>
+                        <option value="الأول" data-en="First Term" data-ar="الترم الأول">الترم الأول</option>
+                        <option value="الثاني" data-en="Second Term" data-ar="الترم الثاني">الترم الثاني</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label data-en="Academic Year" data-ar="السنة الدراسية">السنة الدراسية</label>
+                    <select id="yearFilter">
+                        <option value="" data-en="All Years" data-ar="جميع السنوات">جميع السنوات</option>
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label data-en="Language" data-ar="اللغة">اللغة</label>
+                    <select id="languageFilter">
+                        <option value="" data-en="All Languages" data-ar="جميع اللغات">جميع اللغات</option>
+                        <option value="عربي" data-en="Arabic" data-ar="عربي">عربي</option>
+                        <option value="إنجليزي" data-en="English" data-ar="إنجليزي">إنجليزي</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div id="booksGrid" class="books-grid"></div>
+        <div id="noResults" class="no-results" style="display: none" data-en="No results match your search" data-ar="لا توجد نتائج تطابق البحث">
+            لا توجد نتائج تطابق البحث
+        </div>
+
+        <footer>
+            <a href="rights.html" data-en="All Rights Reserved © 2025 Abrar Private Schools" data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية">
+                جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية
+            </a>
+        </footer>
     </div>
 
     <script>
-      let currentLang = localStorage.getItem("siteLang") || "ar";
-
-      function initLanguage() {
-        if (currentLang === "en") applyLanguage("en");
-      }
-
-      function toggleLanguage() {
-        currentLang = currentLang === "ar" ? "en" : "ar";
-        localStorage.setItem("siteLang", currentLang);
-        applyLanguage(currentLang);
-      }
-
-      function applyLanguage(lang) {
-        document.documentElement.lang = lang;
-        document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-
-        document.querySelectorAll("[data-ar][data-en]").forEach((el) => {
-          el.textContent = el.getAttribute("data-" + lang);
-        });
-
-        document
-          .querySelectorAll("[data-placeholder-ar][data-placeholder-en]")
-          .forEach((el) => {
-            el.placeholder = el.getAttribute("data-placeholder-" + lang);
-          });
-
-        document.getElementById("langButton").textContent =
-          lang === "ar" ? "🌐 EN" : "🌐 AR";
-      }
-
-      function getBooks() {
-        // جلب البيانات من localStorage بنفس المفتاح المستخدم في صفحة الإدارة
-        const egyptData = JSON.parse(localStorage.getItem("egyptData"));
-        
-        if (egyptData && egyptData.books && egyptData.books.length > 0) {
-          // تحويل البيانات إلى الصيغة المتوقعة في صفحة الكتب
-          return egyptData.books.map(book => ({
-            title: book.title,
-            drive_link: book.drive_link,
-            cover_image: book.cover_image,
-            subject: book.subject,
-            year: book.year,
-            term: book.term,
-            grade: book.grade,
-            language: book.language
-          }));
+        // معالج أخطاء الصور العام
+        function handleImageError(img) {
+            const title = img.alt || 'كتاب';
+            const subject = img.dataset.subject || 'كتاب';
+            const color = 'e74c3c';
+            img.src = `https://via.placeholder.com/280x350/${color}/ffffff?text=${encodeURIComponent(subject.substring(0, 15))}`;
+            img.onerror = null;
         }
-        
-        // البيانات الافتراضية في حالة عدم وجود بيانات
-        return [
-          {
-            title: "الرياضيات - الصف الأول الثانوي",
-            drive_link: "https://drive.google.com/file/d/EXAMPLE1",
-            cover_image:
-              "https://via.placeholder.com/280x350/e74c3c/ffffff?text=رياضيات",
-            subject: "رياضيات",
-            year: "2024/2025",
-            term: "الأول",
-            grade: "الأول الثانوي",
-            language: "عربي",
-          },
-          {
-            title: "اللغة العربية - الصف الثاني الإعدادي",
-            drive_link: "https://drive.google.com/file/d/EXAMPLE2",
-            cover_image:
-              "https://via.placeholder.com/280x350/c0392b/ffffff?text=عربي",
-            subject: "لغة عربية",
-            year: "2024/2025",
-            term: "الأول",
-            grade: "الثاني الإعدادي",
-            language: "عربي",
-          },
-        ];
-      }
 
-      function populateSubjectFilter() {
-        const egyptData = JSON.parse(localStorage.getItem("egyptData"));
-        const subjectFilter = document.getElementById("subjectFilter");
-        
-        if (egyptData && egyptData.subjects && egyptData.subjects.length > 0) {
-          // مسح الخيارات الحالية (باستثناء الخيار الأول)
-          while (subjectFilter.options.length > 1) {
-            subjectFilter.remove(1);
-          }
-          
-          // إضافة المواد المخزنة
-          egyptData.subjects.forEach(subject => {
-            const option = document.createElement("option");
-            option.value = subject;
-            option.textContent = subject;
-            subjectFilter.appendChild(option);
-          });
-        } else {
-          // إضافة المواد الافتراضية
-          const defaultSubjects = [
-            "رياضيات", "لغة عربية", "لغة إنجليزية", "علوم", 
-            "دراسات", "تربية دينية"
-          ];
-          
-          defaultSubjects.forEach(subject => {
-            const option = document.createElement("option");
-            option.value = subject;
-            option.textContent = subject;
-            subjectFilter.appendChild(option);
-          });
+        let currentLang = localStorage.getItem("siteLang") || "ar";
+        let allBooks = [];
+
+        function initLanguage() {
+            if (currentLang === "en") applyLanguage("en");
         }
-      }
 
-      let allBooks = getBooks();
-
-      function renderBooks(books) {
-        const grid = document.getElementById("booksGrid");
-        const noResults = document.getElementById("noResults");
-
-        if (books.length === 0) {
-          grid.innerHTML = "";
-          noResults.style.display = "block";
-          return;
+        function toggleLanguage() {
+            currentLang = currentLang === "ar" ? "en" : "ar";
+            localStorage.setItem("siteLang", currentLang);
+            applyLanguage(currentLang);
+            renderBooks(allBooks);
         }
-        noResults.style.display = "none";
-        grid.innerHTML = books
-          .map(
-            (book) => `
+
+        function applyLanguage(lang) {
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+
+            document.querySelectorAll("[data-ar][data-en]").forEach((el) => {
+                el.textContent = el.getAttribute("data-" + lang);
+            });
+
+            document.querySelectorAll("[data-placeholder-ar][data-placeholder-en]").forEach((el) => {
+                el.placeholder = el.getAttribute("data-placeholder-" + lang);
+            });
+
+            const langButton = document.getElementById("langButton");
+            if (langButton) {
+                langButton.textContent = lang === "ar" ? "🌐 EN" : "🌐 AR";
+            }
+        }
+
+        // وظيفة محسنة لجلب الكتب المصرية
+        function getBooks() {
+            const egyptData = JSON.parse(localStorage.getItem("egyptData"));
+            
+            if (egyptData && egyptData.books && egyptData.books.length > 0) {
+                console.log("تم تحميل الكتب المصرية:", egyptData.books.length, "كتاب");
+                
+                return egyptData.books.map(book => {
+                    // التحقق من وجود صورة صالحة
+                    if (book.cover_image) {
+                        // إذا كانت صورة base64 (تبدأ بـ data:image)
+                        if (book.cover_image.startsWith('data:image')) {
+                            return book;
+                        }
+                        
+                        // إذا كانت رابط http
+                        if (book.cover_image.startsWith('http')) {
+                            return book;
+                        }
+                        
+                        // إذا كانت اسم ملف فقط
+                        if (book.cover_image.includes('.')) {
+                            // تحويل اسم الملف لرابط افتراضي
+                            book.cover_image = `https://via.placeholder.com/280x350/e74c3c/ffffff?text=${encodeURIComponent(book.subject || "كتاب")}`;
+                        } else {
+                            // إذا كانت نص عادي
+                            book.cover_image = `https://via.placeholder.com/280x350/e74c3c/ffffff?text=${encodeURIComponent(book.subject || "كتاب")}`;
+                        }
+                    } else {
+                        // إذا لم تكن هناك صورة
+                        book.cover_image = `https://via.placeholder.com/280x350/e74c3c/ffffff?text=${encodeURIComponent(book.subject || "كتاب")}`;
+                    }
+                    
+                    return book;
+                });
+            }
+            
+            console.log("لا توجد كتب مصرية، استخدام البيانات الافتراضية");
+            return [
+                {
+                    title: "الرياضيات - الصف الأول الثانوي",
+                    drive_link: "https://drive.google.com/file/d/EXAMPLE1",
+                    cover_image: "https://via.placeholder.com/280x350/e74c3c/ffffff?text=رياضيات",
+                    subject: "رياضيات",
+                    year: "2024/2025",
+                    term: "الأول",
+                    grade: "الأول الثانوي",
+                    language: "عربي",
+                },
+                {
+                    title: "اللغة العربية - الصف الثاني الإعدادي",
+                    drive_link: "https://drive.google.com/file/d/EXAMPLE2",
+                    cover_image: "https://via.placeholder.com/280x350/c0392b/ffffff?text=عربي",
+                    subject: "لغة عربية",
+                    year: "2024/2025",
+                    term: "الأول",
+                    grade: "الثاني الإعدادي",
+                    language: "عربي",
+                },
+            ];
+        }
+
+        function populateFilters() {
+            const egyptData = JSON.parse(localStorage.getItem("egyptData"));
+            const subjectFilter = document.getElementById("subjectFilter");
+            const yearFilter = document.getElementById("yearFilter");
+            
+            subjectFilter.innerHTML = '<option value="" data-en="All Subjects" data-ar="جميع المواد">جميع المواد</option>';
+            yearFilter.innerHTML = '<option value="" data-en="All Years" data-ar="جميع السنوات">جميع السنوات</option>';
+            
+            if (egyptData) {
+                if (egyptData.subjects && egyptData.subjects.length > 0) {
+                    egyptData.subjects.forEach(subject => {
+                        const option = document.createElement("option");
+                        option.value = subject;
+                        option.textContent = subject;
+                        subjectFilter.appendChild(option);
+                    });
+                }
+                
+                if (egyptData.years && egyptData.years.length > 0) {
+                    egyptData.years.forEach(year => {
+                        const option = document.createElement("option");
+                        option.value = year;
+                        option.textContent = year;
+                        yearFilter.appendChild(option);
+                    });
+                }
+            }
+        }
+
+        function renderBooks(books) {
+            const grid = document.getElementById("booksGrid");
+            const noResults = document.getElementById("noResults");
+
+            if (books.length === 0) {
+                grid.innerHTML = "";
+                noResults.style.display = "block";
+                return;
+            }
+            
+            noResults.style.display = "none";
+            grid.innerHTML = books.map((book) => `
                 <div class="book-card">
-                    <img src="${book.cover_image}" alt="${
-              book.title
-            }" class="book-cover">
+                    <img src="${book.cover_image}" 
+                         alt="${book.title}" 
+                         data-subject="${book.subject}"
+                         class="book-cover" 
+                         onerror="handleImageError(this)">
                     <div class="book-info">
                         <h3 class="book-title">${book.title}</h3>
                         <div class="book-details">
                             <span>📚 ${book.subject}</span>
                             <span>🎓 ${book.grade}</span>
-                            <span>📅 ${
-                              currentLang === "ar" ? "الترم" : "Term"
-                            } ${book.term} - ${book.year}</span>
+                            <span>📅 ${currentLang === "ar" ? "الترم" : "Term"} ${book.term} - ${book.year}</span>
                             <span>🌐 ${book.language}</span>
                         </div>
-                        <a href="${
-                          book.drive_link
-                        }" target="_blank" rel="noopener noreferrer" class="open-btn">${
-              currentLang === "ar" ? "افتح" : "Open"
-            }</a>
+                        <a href="${book.drive_link}" target="_blank" rel="noopener noreferrer" class="open-btn">
+                            ${currentLang === "ar" ? "افتح" : "Open"}
+                        </a>
                     </div>
                 </div>
-            `
-          )
-          .join("");
-      }
-      function filterBooks() {
-        const search = document.getElementById("searchBox").value.toLowerCase();
-        const subject = document.getElementById("subjectFilter").value;
-        const grade = document.getElementById("gradeFilter").value;
-        const term = document.getElementById("termFilter").value;
-        const year = document.getElementById("yearFilter").value;
-        const language = document.getElementById("languageFilter").value;
+            `).join("");
+        }
 
-        const filtered = allBooks.filter((book) => {
-          const matchSearch = book.title.toLowerCase().includes(search);
-          const matchSubject = !subject || book.subject === subject;
-          const matchGrade = !grade || book.grade === grade;
-          const matchTerm = !term || book.term === term;
-          const matchYear = !year || book.year === year;
-          const matchLanguage = !language || book.language === language;
+        function filterBooks() {
+            const search = document.getElementById("searchBox").value.toLowerCase();
+            const subject = document.getElementById("subjectFilter").value;
+            const grade = document.getElementById("gradeFilter").value;
+            const term = document.getElementById("termFilter").value;
+            const year = document.getElementById("yearFilter").value;
+            const language = document.getElementById("languageFilter").value;
 
-          return (
-            matchSearch &&
-            matchSubject &&
-            matchGrade &&
-            matchTerm &&
-            matchYear &&
-            matchLanguage
-          );
+            const filtered = allBooks.filter((book) => {
+                const matchSearch = book.title.toLowerCase().includes(search);
+                const matchSubject = !subject || book.subject === subject;
+                const matchGrade = !grade || book.grade === grade;
+                const matchTerm = !term || book.term === term;
+                const matchYear = !year || book.year === year;
+                const matchLanguage = !language || book.language === language;
+
+                return matchSearch && matchSubject && matchGrade && matchTerm && matchYear && matchLanguage;
+            });
+
+            renderBooks(filtered);
+        }
+
+        function refreshBooks() {
+            allBooks = getBooks();
+            populateFilters();
+            renderBooks(allBooks);
+            
+            const notification = document.createElement('div');
+            notification.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #4CAF50; color: white; padding: 15px; border-radius: 8px; z-index: 1000;';
+            notification.textContent = '✅ تم تحديث الكتب بنجاح';
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                document.body.removeChild(notification);
+            }, 3000);
+        }
+
+        document.getElementById("searchBox").addEventListener("input", filterBooks);
+        document.getElementById("subjectFilter").addEventListener("change", filterBooks);
+        document.getElementById("gradeFilter").addEventListener("change", filterBooks);
+        document.getElementById("termFilter").addEventListener("change", filterBooks);
+        document.getElementById("yearFilter").addEventListener("change", filterBooks);
+        document.getElementById("languageFilter").addEventListener("change", filterBooks);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            allBooks = getBooks();
+            renderBooks(allBooks);
+            populateFilters();
+            initLanguage();
         });
 
-        renderBooks(filtered);
-      }
-      document
-        .getElementById("searchBox")
-        .addEventListener("input", filterBooks);
-      document
-        .getElementById("subjectFilter")
-        .addEventListener("change", filterBooks);
-      document
-        .getElementById("gradeFilter")
-        .addEventListener("change", filterBooks);
-      document
-        .getElementById("termFilter")
-        .addEventListener("change", filterBooks);
-      document
-        .getElementById("yearFilter")
-        .addEventListener("change", filterBooks);
-      document
-        .getElementById("languageFilter")
-        .addEventListener("change", filterBooks);
-
-      // تحميل البيانات عند بدء الصفحة
-      document.addEventListener('DOMContentLoaded', function() {
-        allBooks = getBooks();
-        renderBooks(allBooks);
-        populateSubjectFilter();
-        initLanguage();
-      });
-
-      // تحديث الكتب عند تغيير لغة الصفحة
-      document.getElementById('langButton')?.addEventListener('click', function() {
-        toggleLanguage();
-        renderBooks(allBooks);
-      });
-    </script>
-    <script>
-      // في صفحات الكتب
-      document.addEventListener("click", (e) => {
-        if (e.target.classList.contains("open-btn")) {
-          const bookTitle = e.target
-            .closest(".book-card")
-            .querySelector(".book-title").textContent;
-          recordDownload(bookTitle);
-        }
-      });
-      function recordDownload(bookId) {
-        const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
-        if (!stats.downloads) stats.downloads = {};
-        if (!stats.downloads[bookId]) stats.downloads[bookId] = 0;
-        stats.downloads[bookId]++;
-
-        const today = new Date().toDateString();
-        if (!stats.todayDownloads) stats.todayDownloads = {};
-        if (!stats.todayDownloads[today]) stats.todayDownloads[today] = 0;
-        stats.todayDownloads[today]++;
-
-        localStorage.setItem("siteStats", JSON.stringify(stats));
-      }
-      // 📂 في book_eg.html - تعديل وظيفة getBooks()
-async function getBooks() {
-    try {
-        // محاولة جلب البيانات من Supabase
-        const response = await fetch('https://hotggrxbxnffyaplabzl.supabase.co/rest/v1/egypt_books?select=*', {
-            headers: {
-                'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvdGdncnhieG5mZnlhcGxhYnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MzMzOTYsImV4cCI6MjA4MDQwOTM5Nn0.kWL2o6lbViPfGNdpyj4NfUlK0AxdIH9NOcl6ruvrXAg',
-                'Content-Type': 'application/json'
+        document.addEventListener("click", (e) => {
+            if (e.target.classList.contains("open-btn")) {
+                const bookTitle = e.target.closest(".book-card").querySelector(".book-title").textContent;
+                recordDownload(bookTitle);
             }
         });
-        
-        if (response.ok) {
-            const books = await response.json();
-            return books;
+
+        function recordDownload(bookId) {
+            const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
+            if (!stats.downloads) stats.downloads = {};
+            if (!stats.downloads[bookId]) stats.downloads[bookId] = 0;
+            stats.downloads[bookId]++;
+
+            const today = new Date().toDateString();
+            if (!stats.todayDownloads) stats.todayDownloads = {};
+            if (!stats.todayDownloads[today]) stats.todayDownloads[today] = 0;
+            stats.todayDownloads[today]++;
+
+            localStorage.setItem("siteStats", JSON.stringify(stats));
         }
-    } catch (error) {
-        console.log('استخدام البيانات المحلية كنسخة احتياطية');
-    }
-    
-    // النسخة الاحتياطية
-    const egyptData = JSON.parse(localStorage.getItem("egyptData"));
-    if (egyptData && egyptData.books && egyptData.books.length > 0) {
-        return egyptData.books.map(book => ({
-            title: book.title,
-            drive_link: book.drive_link,
-            cover_image: book.cover_image,
-            subject: book.subject,
-            year: book.year,
-            term: book.term,
-            grade: book.grade,
-            language: book.language
-        }));
-    }
-    
-    // البيانات الافتراضية
-    return [
-        {
-            title: "الرياضيات - الصف الأول الثانوي",
-            drive_link: "https://drive.google.com/file/d/EXAMPLE1",
-            cover_image: "https://via.placeholder.com/280x350/e74c3c/ffffff?text=رياضيات",
-            subject: "رياضيات",
-            year: "2024/2025",
-            term: "الأول",
-            grade: "الأول الثانوي",
-            language: "عربي",
-        }
-    ];
-}
     </script>
     
     <script src="theme-menu.js"></script>
-  </body>
+</body>
 </html>

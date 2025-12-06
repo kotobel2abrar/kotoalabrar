@@ -1,3 +1,5 @@
+[file name]: manage.html
+[file content begin]
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
   <head>
@@ -5,62 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>لوحة التحكم - كتب مدارس الأبرار</title>
     <link rel="icon" href="مدارس الأبرار.webp" type="image/png" />
-    <style>
-      /* أضفت الأنماط التالية فقط */
-      .upload-area {
-        border: 2px dashed #cbd5e0;
-        border-radius: 8px;
-        padding: 30px;
-        text-align: center;
-        background: #f8fafc;
-        cursor: pointer;
-        margin-bottom: 15px;
-        transition: all 0.3s ease;
-      }
-      
-      .upload-area:hover {
-        border-color: #3182ce;
-        background: #edf2f7;
-      }
-      
-      .upload-area.dragover {
-        border-color: #3182ce;
-        background: #e6fffa;
-      }
-      
-      .upload-icon {
-        font-size: 2em;
-        color: #718096;
-        margin-bottom: 10px;
-      }
-      
-      .upload-text {
-        color: #4a5568;
-        margin-bottom: 5px;
-      }
-      
-      .upload-subtext {
-        color: #a0aec0;
-        font-size: 0.9em;
-      }
-      
-      .upload-preview {
-        margin-top: 15px;
-        max-width: 200px;
-        border-radius: 5px;
-      }
-      
-      .uploaded-file {
-        background: #e6fffa;
-        padding: 10px;
-        border-radius: 5px;
-        margin-top: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-    </style>
-    <!-- الأنماط الأصلية تبقى كما هي -->
     <style>
       * {
         margin: 0;
@@ -76,12 +22,32 @@
       }
 
       .login-container {
-        max-width: 400px;
+        max-width: 450px;
         margin: 100px auto;
-        background: white;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        padding: 50px;
+        border-radius: 20px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        border: 2px solid #e2e8f0;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .login-container h1 {
+        color: #2d3748;
+        margin-bottom: 40px;
+        font-size: 2em;
+        text-align: center;
       }
 
       .admin-container {
@@ -122,44 +88,51 @@
       input[type="password"],
       select {
         width: 100%;
-        padding: 12px;
+        padding: 14px;
         border: 2px solid #e2e8f0;
-        border-radius: 8px;
+        border-radius: 10px;
         font-size: 1em;
-        transition: border-color 0.3s ease;
+        transition: all 0.3s ease;
+        background: white;
       }
 
       input:focus,
       select:focus {
         outline: none;
         border-color: #3182ce;
+        box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
       }
 
       .btn {
         background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
         color: white;
         border: none;
-        padding: 12px 30px;
-        border-radius: 8px;
+        padding: 14px 25px;
+        border-radius: 10px;
         font-size: 1em;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
-        width: 100%;
+        min-width: 120px;
       }
 
       .btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(44, 82, 130, 0.4);
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(44, 82, 130, 0.3);
       }
 
       .btn-danger {
         background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       }
 
+      .btn-danger:hover {
+        box-shadow: 0 7px 20px rgba(231, 76, 60, 0.3);
+      }
+
       .btn-small {
         padding: 8px 16px;
         font-size: 0.9em;
+        min-width: auto;
       }
 
       .books-list {
@@ -167,28 +140,48 @@
       }
 
       .book-item {
-        background: #f7fafc;
+        background: white;
         padding: 20px;
-        border-radius: 10px;
+        border-radius: 12px;
         margin-bottom: 15px;
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+      }
+
+      .book-item:hover {
+        border-color: #3182ce;
+        box-shadow: 0 5px 20px rgba(49, 130, 206, 0.1);
+        transform: translateY(-3px);
       }
 
       .book-item-info {
         flex: 1;
+        margin-left: 20px;
       }
 
       .book-item-title {
-        font-weight: 600;
+        font-weight: 700;
         color: #2d3748;
-        margin-bottom: 5px;
+        margin-bottom: 8px;
+        font-size: 1.1em;
       }
 
       .book-item-details {
         color: #718096;
         font-size: 0.9em;
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+      }
+
+      .book-item-details span {
+        background: #f7fafc;
+        padding: 4px 10px;
+        border-radius: 6px;
+        border: 1px solid #e2e8f0;
       }
 
       .book-item-actions {
@@ -196,27 +189,39 @@
         gap: 10px;
       }
 
+      /* تحسين تصميم التبويبات */
       .tabs {
         display: flex;
-        gap: 10px;
+        gap: 5px;
         margin-bottom: 30px;
-        border-bottom: 2px solid #e2e8f0;
+        background: #f1f5f9;
+        padding: 10px;
+        border-radius: 12px;
       }
 
       .tab {
-        padding: 12px 24px;
-        background: none;
-        border: none;
-        color: #718096;
+        padding: 15px 30px;
+        background: white;
+        border: 2px solid #e2e8f0;
+        color: #4a5568;
         font-weight: 600;
         cursor: pointer;
-        border-bottom: 3px solid transparent;
+        border-radius: 8px;
         transition: all 0.3s ease;
+        flex: 1;
+        text-align: center;
+      }
+
+      .tab:hover {
+        border-color: #3182ce;
+        transform: translateY(-2px);
       }
 
       .tab.active {
-        color: #3182ce;
-        border-bottom-color: #3182ce;
+        background: linear-gradient(135deg, #2c5282 0%, #2d3748 100%);
+        color: white;
+        border-color: #2c5282;
+        box-shadow: 0 4px 15px rgba(44, 82, 130, 0.2);
       }
 
       .tab-content {
@@ -235,28 +240,52 @@
       }
 
       .success-message {
-        background: #27ae60;
+        background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
         color: white;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
+        padding: 20px;
+        border-radius: 10px;
+        margin-bottom: 25px;
         display: none;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 4px 15px rgba(39, 174, 96, 0.2);
       }
 
       .error-message {
-        background: #e74c3c;
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
         color: white;
-        padding: 15px;
-        border-radius: 8px;
+        padding: 20px;
+        border-radius: 10px;
         margin-top: 15px;
         display: none;
+        animation: slideIn 0.3s ease;
+        box-shadow: 0 4px 15px rgba(231, 76, 60, 0.2);
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
 
       .manage-section {
-        background: #f1f5f9;
-        padding: 15px;
-        border-radius: 8px;
+        background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 100%);
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        border: 2px solid #e2e8f0;
+      }
+
+      .manage-section h3 {
+        color: #2d3748;
         margin-bottom: 20px;
+        font-size: 1.3em;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e2e8f0;
       }
 
       .list-inline {
@@ -267,30 +296,200 @@
 
       .chip {
         background: white;
-        padding: 8px 12px;
-        border-radius: 999px;
-        border: 1px solid #e2e8f0;
-        display: flex;
-        gap: 8px;
+        padding: 10px 15px;
+        border-radius: 25px;
+        border: 2px solid #e2e8f0;
+        display: inline-flex;
+        gap: 10px;
         align-items: center;
+        margin: 5px;
+        transition: all 0.3s ease;
+      }
+
+      .chip:hover {
+        border-color: #3182ce;
+        transform: translateY(-2px);
+        box-shadow: 0 3px 10px rgba(49, 130, 206, 0.1);
+      }
+
+      .upload-area {
+        border: 3px dashed #cbd5e0;
+        border-radius: 12px;
+        padding: 40px 20px;
+        text-align: center;
+        background: #f8fafc;
+        cursor: pointer;
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .upload-area:hover {
+        border-color: #3182ce;
+        background: #edf2f7;
+        transform: translateY(-2px);
+      }
+
+      .upload-area.dragover {
+        border-color: #3182ce;
+        background: #ebf8ff;
+        animation: pulse 1.5s infinite;
+      }
+
+      @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(49, 130, 206, 0.4); }
+        70% { box-shadow: 0 0 0 15px rgba(49, 130, 206, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(49, 130, 206, 0); }
+      }
+
+      .upload-icon {
+        font-size: 3em;
+        color: #718096;
+        margin-bottom: 15px;
+        transition: all 0.3s ease;
+      }
+
+      .upload-area:hover .upload-icon {
+        color: #3182ce;
+        transform: scale(1.1);
+      }
+
+      .upload-text {
+        color: #2d3748;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 1.1em;
+      }
+
+      .upload-subtext {
+        color: #a0aec0;
+        font-size: 0.9em;
+      }
+
+      .upload-preview {
+        margin-top: 20px;
+        max-width: 100%;
+        border-radius: 8px;
+        overflow: hidden;
+        border: 2px solid #e2e8f0;
+      }
+
+      .uploaded-file {
+        background: linear-gradient(135deg, #e6fffa 0%, #d6f7ee 100%);
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border: 2px solid #38b2ac;
+        animation: slideIn 0.3s ease;
+      }
+
+      .backup-section {
+        margin: 30px 0;
+        padding: 25px;
+        background: linear-gradient(135deg, #e6fffa 0%, #d6f7ee 100%);
+        border-radius: 15px;
+        text-align: center;
+        border: 2px dashed #38b2ac;
+      }
+
+      .backup-section h3 {
+        color: #2d3748;
+        margin-bottom: 20px;
+        font-size: 1.3em;
+      }
+
+      .backup-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 15px;
+        flex-wrap: wrap;
+      }
+
+      .backup-btn {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+        color: white;
+        border: none;
+        padding: 14px 25px;
+        border-radius: 10px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        min-width: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
+
+      .backup-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 7px 20px rgba(52, 152, 219, 0.3);
+      }
+
+      .backup-btn.import {
+        background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+      }
+
+      .backup-btn.delete {
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
       }
 
       @media (max-width: 768px) {
+        .tabs {
+          flex-direction: column;
+        }
+        
+        .tab {
+          width: 100%;
+        }
+        
         .book-item {
           flex-direction: column;
           align-items: flex-start;
-          gap: 15px;
+          gap: 20px;
         }
-
-        .tabs {
-          flex-wrap: wrap;
+        
+        .book-item-info {
+          margin-left: 0;
         }
-
-        .logout-btn {
-          position: relative;
-          top: 0;
-          left: 0;
-          margin-bottom: 20px;
+        
+        .book-item-actions {
+          width: 100%;
+          display: flex;
+          gap: 10px;
+        }
+        
+        .book-item-actions .btn {
+          flex: 1;
+        }
+        
+        .backup-buttons {
+          flex-direction: column;
+          align-items: center;
+        }
+        
+        .backup-btn {
+          width: 100%;
+          max-width: 300px;
+        }
+        
+        .login-container {
+          margin: 50px 20px;
+          padding: 30px;
+        }
+        
+        .admin-container {
+          padding: 20px;
+        }
+        
+        .btn {
+          min-width: auto;
+          padding: 12px 20px;
         }
       }
     </style>
@@ -311,7 +510,6 @@
       <p id="loginError" class="error-message" style="display: none">
         كلمة مرور خاطئة
       </p>
-      <!-- تم إخفاء كلمة المرور الافتراضية -->
     </div>
 
     <!-- لوحة التحكم -->
@@ -324,6 +522,16 @@
 
       <div id="successMessage" class="success-message" style="display: none">
         تم الحفظ بنجاح!
+      </div>
+
+      <!-- قسم النسخ الاحتياطي -->
+      <div class="backup-section">
+        <h3>نسخ احتياطي للبيانات</h3>
+        <div class="backup-buttons">
+          <button class="backup-btn" onclick="exportData()">📥 تصدير البيانات</button>
+          <button class="backup-btn import" onclick="importData()">📤 استيراد بيانات</button>
+          <button class="backup-btn delete" onclick="clearAllData()">🗑️ حذف جميع البيانات</button>
+        </div>
       </div>
 
       <div class="tabs">
@@ -664,20 +872,6 @@
           ],
           years: ["2024/2025", "2025/2026"],
           terms: ["الأول", "الثاني"],
-          grades: [
-            "الأول الابتدائي",
-            "الثاني الابتدائي",
-            "الثالث الابتدائي",
-            "الرابع الابتدائي",
-            "الخامس الابتدائي",
-            "السادس الابتدائي",
-            "الأول الإعدادي",
-            "الثاني الإعدادي",
-            "الثالث الإعدادي",
-            "الأول الثانوي",
-            "الثاني الثانوي",
-            "الثالث الثانوي"
-          ],
           books: [],
         },
         saudi: {
@@ -695,20 +889,6 @@
           ],
           years: ["2024/2025", "2025/2026"],
           terms: ["الأول", "الثاني"],
-          grades: [
-            "الأول الابتدائي",
-            "الثاني الابتدائي",
-            "الثالث الابتدائي",
-            "الرابع الابتدائي",
-            "الخامس الابتدائي",
-            "السادس الابتدائي",
-            "الأول المتوسط",
-            "الثاني المتوسط",
-            "الثالث المتوسط",
-            "الأول الثانوي",
-            "الثاني الثانوي",
-            "الثالث الثانوي"
-          ],
           books: [],
         },
       };
@@ -729,6 +909,7 @@
           initData();
           loadBooks();
           setupUploadAreas();
+          showSuccess("تم تسجيل الدخول بنجاح!");
         } else {
           document.getElementById("loginError").style.display = "block";
           setTimeout(() => {
@@ -742,6 +923,7 @@
         document.getElementById("loginContainer").style.display = "block";
         document.getElementById("adminContainer").style.display = "none";
         document.getElementById("passwordInput").value = "";
+        showSuccess("تم تسجيل الخروج بنجاح!");
       }
 
       function checkSession() {
@@ -793,7 +975,6 @@
         // مصر - صورة الغلاف
         const egyptCoverArea = document.getElementById('egyptCoverUploadArea');
         const egyptCoverInput = document.getElementById('egyptCoverFileInput');
-        const egyptCoverPreview = document.getElementById('egyptCoverPreview');
         
         egyptCoverArea.addEventListener('dragover', (e) => {
           e.preventDefault();
@@ -850,7 +1031,6 @@
         // السعودية - صورة الغلاف
         const saudiCoverArea = document.getElementById('saudiCoverUploadArea');
         const saudiCoverInput = document.getElementById('saudiCoverFileInput');
-        const saudiCoverPreview = document.getElementById('saudiCoverPreview');
         
         saudiCoverArea.addEventListener('dragover', (e) => {
           e.preventDefault();
@@ -905,24 +1085,30 @@
         });
       }
       
-      // معالجة ملفات مصر
+      // معالجة ملفات مصر - صورة الغلاف
       function handleEgyptCoverFile(file) {
         if (!file.type.match('image.*')) {
           alert('الرجاء اختيار صورة فقط');
           return;
         }
         
-        egyptCoverFile = file;
-        document.getElementById('egyptCoverFileInfo').style.display = 'flex';
-        document.getElementById('egyptCoverImage').value = file.name;
-        
-        // عرض معاينة الصورة
         const reader = new FileReader();
         reader.onload = function(e) {
+          // حفظ الصورة كبيانات base64 في المتغير
+          egyptCoverFile = { 
+            data: e.target.result,
+            name: file.name,
+            type: file.type 
+          };
+          
+          document.getElementById('egyptCoverFileInfo').style.display = 'flex';
+          document.getElementById('egyptCoverImage').value = e.target.result; // حفظ base64 في حقل الصورة
+          
           const preview = document.getElementById('egyptCoverPreview');
           preview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; border-radius: 5px;">`;
           preview.style.display = 'block';
         };
+        
         reader.readAsDataURL(file);
       }
       
@@ -954,24 +1140,30 @@
         document.getElementById('egyptPdfFileInput').value = '';
       }
       
-      // معالجة ملفات السعودية
+      // معالجة ملفات السعودية - صورة الغلاف
       function handleSaudiCoverFile(file) {
         if (!file.type.match('image.*')) {
           alert('الرجاء اختيار صورة فقط');
           return;
         }
         
-        saudiCoverFile = file;
-        document.getElementById('saudiCoverFileInfo').style.display = 'flex';
-        document.getElementById('saudiCoverImage').value = file.name;
-        
-        // عرض معاينة الصورة
         const reader = new FileReader();
         reader.onload = function(e) {
+          // حفظ الصورة كبيانات base64 في المتغير
+          saudiCoverFile = { 
+            data: e.target.result,
+            name: file.name,
+            type: file.type 
+          };
+          
+          document.getElementById('saudiCoverFileInfo').style.display = 'flex';
+          document.getElementById('saudiCoverImage').value = e.target.result; // حفظ base64 في حقل الصورة
+          
           const preview = document.getElementById('saudiCoverPreview');
           preview.innerHTML = `<img src="${e.target.result}" style="max-width: 100%; border-radius: 5px;">`;
           preview.style.display = 'block';
         };
+        
         reader.readAsDataURL(file);
       }
       
@@ -1017,7 +1209,8 @@
         localStorage.setItem("egyptData", JSON.stringify(data));
         populateEgyptControls();
         populateEgyptFormOptions();
-        showSuccess();
+        showSuccess("تم حفظ البيانات المصرية بنجاح!");
+        console.log("تم حفظ البيانات المصرية، عدد المواد:", data.subjects.length, "عدد الكتب:", data.books.length);
       }
 
       function populateEgyptControls() {
@@ -1148,7 +1341,8 @@
         localStorage.setItem("saudiData", JSON.stringify(data));
         populateSaudiControls();
         populateSaudiFormOptions();
-        showSuccess();
+        showSuccess("تم حفظ البيانات السعودية بنجاح!");
+        console.log("تم حفظ البيانات السعودية، عدد المواد:", data.subjects.length, "عدد الكتب:", data.books.length);
       }
 
       function populateSaudiControls() {
@@ -1265,11 +1459,10 @@
         saveSaudiData(data);
       }
 
-      // ----- إدارة الكتب -----
+      // ----- إضافة الكتب مع حفظ الصور كـ base64 -----
       document.getElementById("egyptForm").addEventListener("submit", function (e) {
         e.preventDefault();
         
-        // التحقق من الحقول المطلوبة
         const title = document.getElementById("egyptTitle").value.trim();
         const coverImage = document.getElementById("egyptCoverImage").value.trim();
         const driveLink = document.getElementById("egyptDriveLink").value.trim();
@@ -1279,53 +1472,58 @@
         const grade = document.getElementById("egyptGrade").value;
         const language = document.getElementById("egyptLanguage").value;
         
-        // التحقق من وجود ملف مرفوع أو رابط
-        if (!coverImage && !egyptCoverFile) {
-          alert("يجب إضافة صورة الغلاف إما برفع ملف أو إدخال رابط");
-          return;
-        }
-        
-        if (!driveLink && !egyptPdfFile) {
-          alert("يجب إضافة ملف الكتاب إما برفع ملف أو إدخال رابط");
-          return;
-        }
-        
         if (!title || !subject || !year || !term || !grade || !language) {
           alert("يرجى ملء جميع الحقول المطلوبة");
           return;
+        }
+        
+        // استخدام صورة base64 إذا تم رفع ملف
+        let finalCoverImage = coverImage;
+        if (egyptCoverFile && egyptCoverFile.data) {
+          finalCoverImage = egyptCoverFile.data;
+        } else if (!finalCoverImage) {
+          // استخدام صورة افتراضية إذا لم يكن هناك رابط
+          finalCoverImage = `https://via.placeholder.com/280x350/e74c3c/ffffff?text=${encodeURIComponent(subject.substring(0, 20))}`;
         }
         
         const data = getEgyptData();
         const book = {
           id: Date.now(),
           title: title,
-          drive_link: egyptPdfFile ? "ملف مرفوع: " + egyptPdfFile.name : driveLink,
-          cover_image: egyptCoverFile ? "ملف مرفوع: " + egyptCoverFile.name : coverImage,
+          drive_link: driveLink || "https://drive.google.com/file/d/EXAMPLE_" + Date.now(),
+          cover_image: finalCoverImage,
           subject: subject,
           year: year,
           term: term,
           grade: grade,
           language: language,
+          date_added: new Date().toISOString()
         };
         
         data.books.push(book);
         saveEgyptData(data);
         
         // إعادة تعيين النموذج
-        this.reset();
+        document.getElementById("egyptTitle").value = "";
+        document.getElementById("egyptCoverImage").value = "";
+        document.getElementById("egyptDriveLink").value = "";
+        document.getElementById("egyptSubject").selectedIndex = 0;
+        document.getElementById("egyptYear").selectedIndex = 0;
+        document.getElementById("egyptTerm").selectedIndex = 0;
+        document.getElementById("egyptGrade").selectedIndex = 0;
+        document.getElementById("egyptLanguage").selectedIndex = 0;
+        
+        // إعادة تعيين ملفات الرفع
         removeEgyptCover({ stopPropagation: () => {} });
         removeEgyptPdf({ stopPropagation: () => {} });
         
-        // إعادة تحميل قائمة الكتب
         loadEgyptBooks();
-        
-        alert("تم إضافة الكتاب المصري بنجاح!");
+        showSuccess("تم إضافة الكتاب المصري بنجاح!");
       });
 
       document.getElementById("saudiForm").addEventListener("submit", function (e) {
         e.preventDefault();
         
-        // التحقق من الحقول المطلوبة
         const title = document.getElementById("saudiTitle").value.trim();
         const coverImage = document.getElementById("saudiCoverImage").value.trim();
         const driveLink = document.getElementById("saudiDriveLink").value.trim();
@@ -1335,47 +1533,53 @@
         const grade = document.getElementById("saudiGrade").value;
         const language = document.getElementById("saudiLanguage").value;
         
-        // التحقق من وجود ملف مرفوع أو رابط
-        if (!coverImage && !saudiCoverFile) {
-          alert("يجب إضافة صورة الغلاف إما برفع ملف أو إدخال رابط");
-          return;
-        }
-        
-        if (!driveLink && !saudiPdfFile) {
-          alert("يجب إضافة ملف الكتاب إما برفع ملف أو إدخال رابط");
-          return;
-        }
-        
         if (!title || !subject || !year || !term || !grade || !language) {
           alert("يرجى ملء جميع الحقول المطلوبة");
           return;
+        }
+        
+        // استخدام صورة base64 إذا تم رفع ملف
+        let finalCoverImage = coverImage;
+        if (saudiCoverFile && saudiCoverFile.data) {
+          finalCoverImage = saudiCoverFile.data;
+        } else if (!finalCoverImage) {
+          // استخدام صورة افتراضية إذا لم يكن هناك رابط
+          finalCoverImage = `https://via.placeholder.com/280x350/27ae60/ffffff?text=${encodeURIComponent(subject.substring(0, 20))}`;
         }
         
         const data = getSaudiData();
         const book = {
           id: Date.now(),
           title: title,
-          drive_link: saudiPdfFile ? "ملف مرفوع: " + saudiPdfFile.name : driveLink,
-          cover_image: saudiCoverFile ? "ملف مرفوع: " + saudiCoverFile.name : coverImage,
+          drive_link: driveLink || "https://drive.google.com/file/d/EXAMPLE_" + Date.now(),
+          cover_image: finalCoverImage,
           subject: subject,
           year: year,
           term: term,
           grade: grade,
           language: language,
+          date_added: new Date().toISOString()
         };
         
         data.books.push(book);
         saveSaudiData(data);
         
         // إعادة تعيين النموذج
-        this.reset();
+        document.getElementById("saudiTitle").value = "";
+        document.getElementById("saudiCoverImage").value = "";
+        document.getElementById("saudiDriveLink").value = "";
+        document.getElementById("saudiSubject").selectedIndex = 0;
+        document.getElementById("saudiYear").selectedIndex = 0;
+        document.getElementById("saudiTerm").selectedIndex = 0;
+        document.getElementById("saudiGrade").selectedIndex = 0;
+        document.getElementById("saudiLanguage").selectedIndex = 0;
+        
+        // إعادة تعيين ملفات الرفع
         removeSaudiCover({ stopPropagation: () => {} });
         removeSaudiPdf({ stopPropagation: () => {} });
         
-        // إعادة تحميل قائمة الكتب
         loadSaudiBooks();
-        
-        alert("تم إضافة الكتاب السعودي بنجاح!");
+        showSuccess("تم إضافة الكتاب السعودي بنجاح!");
       });
 
       function loadBooks() {
@@ -1440,7 +1644,7 @@
         if (path === "egypt") saveEgyptData(keyData);
         else saveSaudiData(keyData);
         loadBooks();
-        alert("تم حذف الكتاب بنجاح!");
+        showSuccess("تم حذف الكتاب بنجاح!");
       }
 
       function editBook(path, id) {
@@ -1469,15 +1673,93 @@
         if (path === "egypt") saveEgyptData(keyData);
         else saveSaudiData(keyData);
         loadBooks();
-        alert("تم تعديل الكتاب بنجاح!");
+        showSuccess("تم تعديل الكتاب بنجاح!");
       }
 
-      function showSuccess() {
+      function showSuccess(message) {
         const msg = document.getElementById("successMessage");
+        msg.textContent = message || "تم الحفظ بنجاح!";
         msg.style.display = "block";
+        
+        // إضافة تأثير إضافي
+        msg.style.animation = "slideIn 0.3s ease";
+        
         setTimeout(() => {
-          msg.style.display = "none";
-        }, 2000);
+          msg.style.animation = "none";
+          setTimeout(() => {
+            msg.style.display = "none";
+          }, 300);
+        }, 3000);
+      }
+
+      // ----- وظائف النسخ الاحتياطي مع دعم الصور base64 -----
+      function exportData() {
+        const egyptData = getEgyptData();
+        const saudiData = getSaudiData();
+        
+        const allData = {
+          egypt: egyptData,
+          saudi: saudiData,
+          exportDate: new Date().toISOString(),
+          version: "1.1"
+        };
+        
+        const dataStr = JSON.stringify(allData, null, 2);
+        const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+        
+        const exportFileDefaultName = `abrar-schools-backup-${new Date().toISOString().split('T')[0]}.json`;
+        
+        const linkElement = document.createElement('a');
+        linkElement.setAttribute('href', dataUri);
+        linkElement.setAttribute('download', exportFileDefaultName);
+        linkElement.click();
+        
+        showSuccess("تم تصدير البيانات بنجاح!");
+      }
+
+      function importData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.json';
+        
+        input.onchange = e => {
+          const file = e.target.files[0];
+          const reader = new FileReader();
+          
+          reader.onload = function(event) {
+            try {
+              const importedData = JSON.parse(event.target.result);
+              
+              if (importedData.egypt) {
+                localStorage.setItem("egyptData", JSON.stringify(importedData.egypt));
+              }
+              
+              if (importedData.saudi) {
+                localStorage.setItem("saudiData", JSON.stringify(importedData.saudi));
+              }
+              
+              initData();
+              loadBooks();
+              showSuccess("تم استيراد البيانات بنجاح!");
+            } catch (error) {
+              alert("خطأ في تنسيق الملف: " + error.message);
+            }
+          };
+          
+          reader.readAsText(file);
+        };
+        
+        input.click();
+      }
+
+      function clearAllData() {
+        if (confirm("⚠️ تحذير: هذا سيحذف جميع الكتب والمواد والبيانات. هل أنت متأكد؟")) {
+          localStorage.removeItem("egyptData");
+          localStorage.removeItem("saudiData");
+          initData();
+          loadBooks();
+          showSuccess("تم حذف جميع البيانات بنجاح!");
+        }
       }
 
       // السماح بالدخول بالضغط على Enter
@@ -1490,307 +1772,9 @@
       // تهيئة الصفحة عند التحميل
       document.addEventListener('DOMContentLoaded', function() {
         console.log("صفحة الإدارة جاهزة");
-        // التحقق من الجلسة
         checkSession();
       });
-      // 📂 في نهاية script في manage.html
-
-// استيراد مكتبة Supabase
-const supabaseScript = document.createElement('script');
-supabaseScript.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
-document.head.appendChild(supabaseScript);
-
-// بعد تحميل Supabase، ننشئ العميل
-let supabaseClient = null;
-
-supabaseScript.onload = async () => {
-    const { createClient } = window.supabaseJs;
-    
-    supabaseClient = createClient(
-        'https://hotggrxbxnffyaplabzl.supabase.co',
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhvdGdncnhieG5mZnlhcGxhYnpsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ4MzMzOTYsImV4cCI6MjA4MDQwOTM5Nn0.kWL2o6lbViPfGNdpyj4NfUlK0AxdIH9NOcl6ruvrXAg'
-    );
-    
-    // تحميل البيانات من Supabase
-    await loadAllData();
-};
-
-// 📊 وظائف لتحميل وحفظ البيانات في Supabase
-async function loadAllData() {
-    try {
-        // جلب التصنيفات من Supabase
-        const { data: categoriesData, error: categoriesError } = await supabaseClient
-            .from('categories')
-            .select('*');
-        
-        if (categoriesError) throw categoriesError;
-        
-        // تنظيم التصنيفات
-        const organized = { egypt: {}, saudi: {} };
-        categoriesData?.forEach(item => {
-            if (!organized[item.curriculum]) organized[item.curriculum] = {};
-            if (!organized[item.curriculum][item.type]) organized[item.curriculum][item.type] = [];
-            organized[item.curriculum][item.type].push(item.name);
-        });
-        
-        // تحديث القوائم
-        updateEgyptControls(organized.egypt);
-        updateSaudiControls(organized.saudi);
-        
-        // جلب الكتب المصرية
-        const { data: egyptBooks, error: egyptError } = await supabaseClient
-            .from('egypt_books')
-            .select('*')
-            .order('created_at', { ascending: false });
-        
-        if (!egyptError && egyptBooks) {
-            loadEgyptBooksFromDB(egyptBooks);
-        }
-        
-        // جلب الكتب السعودية
-        const { data: saudiBooks, error: saudiError } = await supabaseClient
-            .from('saudi_books')
-            .select('*')
-            .order('created_at', { ascending: false });
-        
-        if (!saudiError && saudiBooks) {
-            loadSaudiBooksFromDB(saudiBooks);
-        }
-        
-    } catch (error) {
-        console.error('خطأ في تحميل البيانات:', error);
-        // استخدام البيانات المحلية كنسخة احتياطية
-        initData();
-    }
-}
-
-// تحديث عناصر التحكم المصرية
-function updateEgyptControls(data) {
-    const egyptData = {
-        subjects: data.subject || DEFAULT_DATA.egypt.subjects,
-        years: data.year || DEFAULT_DATA.egypt.years,
-        terms: data.term || DEFAULT_DATA.egypt.terms,
-        books: []
-    };
-    
-    localStorage.setItem("egyptData", JSON.stringify(egyptData));
-    populateEgyptControls();
-}
-
-// تحديث عناصر التحكم السعودية
-function updateSaudiControls(data) {
-    const saudiData = {
-        subjects: data.subject || DEFAULT_DATA.saudi.subjects,
-        years: data.year || DEFAULT_DATA.saudi.years,
-        terms: data.term || DEFAULT_DATA.saudi.terms,
-        books: []
-    };
-    
-    localStorage.setItem("saudiData", JSON.stringify(saudiData));
-    populateSaudiControls();
-}
-
-// 📝 تعديل وظائف إضافة التصنيفات
-async function addEgyptSubject() {
-    const val = document.getElementById("newEgyptSubject").value.trim();
-    if (!val) return alert("اكتب اسم المادة أولا");
-    
-    if (supabaseClient) {
-        const { error } = await supabaseClient
-            .from('categories')
-            .insert([{ curriculum: 'egypt', type: 'subject', name: val }]);
-        
-        if (error) {
-            console.error('خطأ في إضافة المادة:', error);
-            alert('حدث خطأ في إضافة المادة');
-            return;
-        }
-    }
-    
-    // تحديث محلي
-    const data = getEgyptData();
-    data.subjects.push(val);
-    saveEgyptData(data);
-    document.getElementById("newEgyptSubject").value = "";
-}
-
-// 📝 تعديل وظيفة إضافة الكتاب المصري
-document.getElementById("egyptForm").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    
-    // التحقق من الحقول المطلوبة
-    const title = document.getElementById("egyptTitle").value.trim();
-    const coverImage = document.getElementById("egyptCoverImage").value.trim();
-    const driveLink = document.getElementById("egyptDriveLink").value.trim();
-    const subject = document.getElementById("egyptSubject").value;
-    const year = document.getElementById("egyptYear").value;
-    const term = document.getElementById("egyptTerm").value;
-    const grade = document.getElementById("egyptGrade").value;
-    const language = document.getElementById("egyptLanguage").value;
-    
-    if (!title || !coverImage || !driveLink || !subject || !year || !term || !grade || !language) {
-        alert("يرجى ملء جميع الحقول المطلوبة");
-        return;
-    }
-    
-    const bookData = {
-        title,
-        drive_link: driveLink,
-        cover_image: coverImage,
-        subject,
-        year,
-        term,
-        grade,
-        language
-    };
-    
-    // حفظ في Supabase
-    if (supabaseClient) {
-        const { data, error } = await supabaseClient
-            .from('egypt_books')
-            .insert([bookData])
-            .select();
-        
-        if (error) {
-            console.error('خطأ في إضافة الكتاب:', error);
-            alert('حدث خطأ في إضافة الكتاب');
-            return;
-        }
-        
-        // إعادة تعيين النموذج
-        this.reset();
-        removeEgyptCover({ stopPropagation: () => {} });
-        removeEgyptPdf({ stopPropagation: () => {} });
-        
-        // تحميل الكتب المحدثة
-        const { data: books } = await supabaseClient
-            .from('egypt_books')
-            .select('*')
-            .order('created_at', { ascending: false });
-        
-        loadEgyptBooksFromDB(books);
-        
-        alert("تم إضافة الكتاب المصري بنجاح!");
-        return;
-    }
-    
-    // إذا لم يكن Supabase متاحًا، استخدم التخزين المحلي
-    const data = getEgyptData();
-    const book = {
-        id: Date.now(),
-        ...bookData
-    };
-    
-    data.books.push(book);
-    saveEgyptData(data);
-    
-    this.reset();
-    removeEgyptCover({ stopPropagation: () => {} });
-    removeEgyptPdf({ stopPropagation: () => {} });
-    
-    loadEgyptBooks();
-    alert("تم إضافة الكتاب المصري بنجاح!");
-});
-
-// وظيفة لتحميل الكتب من قاعدة البيانات
-function loadEgyptBooksFromDB(books) {
-    const container = document.getElementById("egyptBooksList");
-    
-    if (!books || books.length === 0) {
-        container.innerHTML = '<p style="color: #718096; text-align: center; padding: 20px;">لا توجد كتب مضافة بعد</p>';
-        return;
-    }
-    
-    container.innerHTML = books.map((book) => `
-        <div class="book-item">
-            <div class="book-item-info">
-                <div class="book-item-title">${book.title}</div>
-                <div class="book-item-details">${book.subject} - ${book.grade} - الترم ${book.term} - ${book.year} - ${book.language}</div>
-            </div>
-            <div class="book-item-actions">
-                <button class="btn btn-small" onclick="editBookDB('egypt', ${book.id})">تعديل</button>
-                <button class="btn btn-small btn-danger" onclick="deleteBookDB('egypt', ${book.id})">حذف</button>
-                <a class="btn btn-small" href="${book.drive_link}" target="_blank">فتح</a>
-            </div>
-        </div>
-    `).join("");
-}
-
-// وظائف مشابهة للسعودية
-// ... (أضف نفس التعديلات للمسار السعودي)
-
-// حذف كتاب من قاعدة البيانات
-async function deleteBookDB(path, id) {
-    if (!confirm("هل أنت متأكد من حذف هذا الكتاب؟")) return;
-    
-    if (supabaseClient) {
-        const table = path === 'egypt' ? 'egypt_books' : 'saudi_books';
-        const { error } = await supabaseClient
-            .from(table)
-            .delete()
-            .eq('id', id);
-        
-        if (error) {
-            console.error('خطأ في حذف الكتاب:', error);
-            alert('حدث خطأ في حذف الكتاب');
-            return;
-        }
-        
-        // إعادة تحميل الكتب
-        const { data: books } = await supabaseClient
-            .from(table)
-            .select('*')
-            .order('created_at', { ascending: false });
-        
-        if (path === 'egypt') {
-            loadEgyptBooksFromDB(books);
-        } else {
-            loadSaudiBooksFromDB(books);
-        }
-        
-        alert("تم حذف الكتاب بنجاح!");
-        return;
-    }
-    
-    // النسخة المحلية
-    deleteBook(path, id);
-}
-
-// استبدال initData للاستخدام المشترك
-function initData() {
-    // التحميل المحلي كنسخة احتياطية
-    let egyptData = JSON.parse(localStorage.getItem("egyptData"));
-    if (!egyptData) {
-        egyptData = DEFAULT_DATA.egypt;
-        localStorage.setItem("egyptData", JSON.stringify(egyptData));
-    }
-    
-    let saudiData = JSON.parse(localStorage.getItem("saudiData"));
-    if (!saudiData) {
-        saudiData = DEFAULT_DATA.saudi;
-        localStorage.setItem("saudiData", JSON.stringify(saudiData));
-    }
-    
-    populateEgyptControls();
-    populateSaudiControls();
-}
-
-// تحديث تحميل الصفحة
-document.addEventListener('DOMContentLoaded', function() {
-    console.log("صفحة الإدارة جاهزة");
-    
-    // إذا كان Supabase غير متاح بعد، استخدم البيانات المحلية
-    setTimeout(() => {
-        if (!supabaseClient) {
-            console.log("استخدام البيانات المحلية");
-            if (checkSession()) {
-                initData();
-                loadBooks();
-                setupUploadAreas();
-            }
-        }
-    }, 2000);
-});
     </script>
   </body>
 </html>
+[file content end]
