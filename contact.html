@@ -231,7 +231,7 @@
           data-ar="نسعد بتواصلكم معنا لأي استفسارات، اقتراحات، أو ملاحظات حول المحتوى التعليمي المقدم."
         >
           نسعد بتواصلكم معنا لأي استفسارات، اقتراحات، أو ملاحظات حول المحتوى
-          التعليمي المقدم.
+          التعليمي المقدم و اي اقتراحات. 
         </p>
 
         <div class="contact-info">
@@ -285,5 +285,60 @@
       initLanguage();
     </script>
     <script src="theme-menu.js"></script>
+    <script>
+// تضمين نظام تعقب الوقت
+if (typeof TimeTracker === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'global-tracking.js';
+    document.head.appendChild(script);
+}
+
+// تحديث التواريخ إلى ميلادي
+function updateBookDates() {
+    // تحديث تواريخ الكتب
+    document.querySelectorAll('.book-details').forEach(details => {
+        if (details.textContent.includes('1446')) {
+            details.textContent = details.textContent.replace(/1446/g, '2026');
+        }
+    });
+    
+    // تحديث خيارات السنة في الفلاتر
+    const yearFilter = document.getElementById('yearFilter');
+    if (yearFilter) {
+        Array.from(yearFilter.options).forEach(option => {
+            if (option.value && option.value.includes('1446')) {
+                option.value = option.value.replace('1446', '2026');
+                option.textContent = option.textContent.replace('1446', '2026');
+            }
+        });
+    }
+}
+
+// تحديث دالة getBooks لتحويل التواريخ
+const originalGetBooks = window.getBooks || function() { return []; };
+window.getBooks = function() {
+    const books = originalGetBooks();
+    return books.map(book => {
+        if (book.year && book.year.includes('1446')) {
+            book.year = book.year.replace('1446', '2026');
+        }
+        return book;
+    });
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+    // تحديث التواريخ
+    updateBookDates();
+    
+    // تعقب الوقت في صفحة الكتب
+    setTimeout(() => {
+        if (window.pageTimeTracker) {
+            console.log('نظام تعقب الوقت مفعل في صفحة الكتب');
+        }
+    }, 1000);
+});
+</script>
+<script src="global-tracking.js"></script>
+<script src="auth-check.js"></script>
   </body>
 </html>

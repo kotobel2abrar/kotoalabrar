@@ -49,7 +49,6 @@
         100% { background-position: 0% 50%; }
       }
       
-      /* تأثير الجسيمات */
       .particles {
         position: fixed;
         top: 0;
@@ -150,16 +149,6 @@
         text-align: right;
       }
       
-      .form-row {
-        display: flex;
-        gap: 15px;
-        margin-bottom: 20px;
-      }
-      
-      .form-col {
-        flex: 1;
-      }
-      
       label {
         display: block;
         margin-bottom: 8px;
@@ -191,18 +180,13 @@
         font-size: 18px;
       }
       
-      input, select {
+      input {
         width: 100%;
         background: transparent;
         border: 0;
         outline: none;
         color: white;
         font-size: 15px;
-      }
-      
-      select option {
-        background: var(--primary-dark);
-        color: white;
       }
       
       input::placeholder {
@@ -300,15 +284,16 @@
         to { transform: rotate(360deg); }
       }
       
+      @keyframes shake {
+        0%, 100% { transform: translateX(0); }
+        10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+        20%, 40%, 60%, 80% { transform: translateX(5px); }
+      }
+      
       @media (max-width: 480px) {
         .card {
           padding: 25px 20px;
           width: 100%;
-        }
-        
-        .form-row {
-          flex-direction: column;
-          gap: 0;
         }
         
         h1 {
@@ -333,7 +318,6 @@
     </style>
   </head>
   <body>
-    <!-- تأثير الجسيمات -->
     <div class="particles" id="particles"></div>
     
     <div class="card">
@@ -343,50 +327,6 @@
         </div>
         <h1>تسجيل الدخول</h1>
         <p class="subtitle">مدارس الأبرار الأهلية الحديثة</p>
-      </div>
-      
-      <div class="form-group">
-        <label for="name">الاسم الكامل</label>
-        <div class="input-wrap">
-          <i class="fas fa-user"></i>
-          <input id="name" type="text" placeholder="أدخل اسمك بالكامل" />
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-col">
-          <label for="grade">الصف الدراسي</label>
-          <div class="input-wrap">
-            <i class="fas fa-school"></i>
-            <select id="grade">
-              <option value="">اختر الصف</option>
-              <option value="الصف الأول"> الصف الأول الابتدائي</option>
-              <option value="الصف الثاني">الصف الثاني الأبتدائي</option>
-              <option value="الصف الثالث">الصف الثالث الأبتدائي</option>
-              <option value="الصف الرابع">الصف الرابع الأبتدائي</option>
-              <option value="الصف الخامس">الصف الخامس الأبتدائي</option>
-              <option value="الصف السادس">الصف السادس الأبتدائي</option>
-              <option value="الصف السابع">الصف الاول الأعدادي</option>
-              <option value="الصف الثامن">الصف الثاني الأعدادي</option>
-              <option value="الصف التاسع">الصف الثالث الأعدادي</option>
-              <option value="الصف العاشر">الصف الأول الثانوي</option>
-              <option value="الصف العاشر">الصف الثاني الثانوي</option>
-              <option value="الصف العاشر">الصف الثالث الثانوي</option>
-            </select>
-          </div>
-        </div>
-        
-        <div class="form-col">
-          <label for="curriculum">المسار</label>
-          <div class="input-wrap">
-            <i class="fas fa-road"></i>
-            <select id="curriculum">
-              <option value="">اختر المسار</option>
-              <option value="مصري">المسار المصري</option>
-              <option value="سعودي">المسار السعودي</option>
-            </select>
-          </div>
-        </div>
       </div>
       
       <div class="form-group">
@@ -404,8 +344,7 @@
       
       <div id="message" class="message"></div>
       
-      <p class="footer-text">هذا الموقع مخصص حصريًا لطلاب مدارس الأبرار الأهلية الحديثة</p>
-      <p>كلمة المرور هي webbook2025-2026-951357</p>
+      <p class="footer-text">كلمة المرور هي webbook2025-2026-951357</p>
     </div>
     
     <script>
@@ -448,68 +387,23 @@
           .join("");
       }
       
-      // ✅ إجبار المستخدم على البقاء في صفحة التسجيل
-      // التأكد من تسجيل الخروج عند تحميل صفحة التسجيل
-      sessionStorage.removeItem("isLoggedIn");
-      localStorage.removeItem("isLoggedIn");
-      
-      // حذف وقت الدخول السابق إن وجد
-      localStorage.removeItem("loginTime");
-      
       // تهيئة صفحة التسجيل
       document.addEventListener('DOMContentLoaded', function() {
-        // إنشاء تأثير الجسيمات
         createParticles();
         
-        // عناصر الصفحة
-        const nameInput = document.getElementById('name');
-        const gradeSelect = document.getElementById('grade');
-        const curriculumSelect = document.getElementById('curriculum');
         const passwordInput = document.getElementById('password');
         const loginBtn = document.getElementById('loginBtn');
         const btnText = document.getElementById('btnText');
         const messageDiv = document.getElementById('message');
         
-        // التركيز على حقل الاسم
         setTimeout(() => {
-          nameInput.focus();
+          passwordInput.focus();
         }, 500);
         
-        // دالة التحقق من صحة البيانات
-        function validateInputs() {
-          if (!nameInput.value.trim()) {
-            showMessage("⚠ الرجاء إدخال الاسم الكامل", "error");
-            nameInput.focus();
-            return false;
-          }
-          
-          if (!gradeSelect.value) {
-            showMessage("⚠ الرجاء اختيار الصف الدراسي", "error");
-            gradeSelect.focus();
-            return false;
-          }
-          
-          if (!curriculumSelect.value) {
-            showMessage("⚠ الرجاء اختيار المسار", "error");
-            curriculumSelect.focus();
-            return false;
-          }
-          
-          if (!passwordInput.value.trim()) {
-            showMessage("⚠ الرجاء إدخال كلمة المرور", "error");
-            passwordInput.focus();
-            return false;
-          }
-          
-          return true;
-        }
-        
-        // دالة عرض الرسائل
         function showMessage(text, type) {
           messageDiv.textContent = text;
           messageDiv.className = `message ${type}`;
           
-          // إخفاء الرسالة بعد 5 ثواني إذا كانت خطأ
           if (type === 'error') {
             setTimeout(() => {
               if (messageDiv.textContent === text) {
@@ -520,7 +414,6 @@
           }
         }
         
-        // دالة لتعطيل زر الدخول أثناء التحميل
         function setLoading(isLoading) {
           if (isLoading) {
             loginBtn.disabled = true;
@@ -531,70 +424,59 @@
           }
         }
         
-        // دالة تسجيل الدخول
         async function performLogin() {
-          // التحقق من صحة البيانات
-          if (!validateInputs()) return;
+          if (!passwordInput.value.trim()) {
+            showMessage("⚠ الرجاء إدخال كلمة المرور", "error");
+            passwordInput.focus();
+            return;
+          }
           
-          // تعطيل الزر وإظهار حالة التحميل
           setLoading(true);
           
           try {
             const userInput = passwordInput.value.trim();
             const userHash = await hash(userInput);
             
-            // محاكاة تأخير الشبكة
             await new Promise(resolve => setTimeout(resolve, 800));
             
             if (userHash === hashedPassword) {
-              // تسجيل بيانات المستخدم
+              // إنشاء معرف جلسة فريد
+              const sessionId = 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+              
               const userData = {
-                name: nameInput.value.trim(),
-                grade: gradeSelect.value,
-                curriculum: curriculumSelect.value,
                 loginTime: new Date().toISOString(),
-                sessionId: Date.now().toString(36) + Math.random().toString(36).substr(2)
+                sessionId: sessionId
               };
               
-              // حفظ بيانات المستخدم في الجلسة
               sessionStorage.setItem('userData', JSON.stringify(userData));
+              sessionStorage.setItem("isLoggedIn", "true");
+              sessionStorage.setItem("sessionId", sessionId);
               
-              // تسجيل وقت الدخول لحساب مدة البقاء
-              localStorage.setItem('loginTime', Date.now().toString());
+              // تسجيل الجلسة في localStorage
+              let timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+              if (!timeTracking.sessions) timeTracking.sessions = {};
               
-              // تسجيل عملية الدخول في الإحصائيات
-              const loginRecord = {
-                ...userData,
-                date: new Date().toLocaleDateString('ar-SA'),
-                time: new Date().toLocaleTimeString('ar-SA')
+              timeTracking.sessions[sessionId] = {
+                sessionId: sessionId,
+                loginTime: userData.loginTime,
+                pages: {},
+                downloads: 0,
+                lastActive: Date.now(),
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                screenSize: `${window.screen.width}x${window.screen.height}`
               };
               
-              // حفظ سجل الدخول
-              const loginHistory = JSON.parse(localStorage.getItem('loginHistory') || '[]');
-              loginHistory.unshift(loginRecord);
+              localStorage.setItem('timeTracking', JSON.stringify(timeTracking));
               
-              // الاحتفاظ فقط بآخر 100 تسجيل
-              if (loginHistory.length > 100) {
-                loginHistory.length = 100;
-              }
+              console.log('✅ تم تسجيل الدخول بنجاح');
+              console.log('🆔 معرف الجلسة:', sessionId);
+              console.log('📅 وقت الدخول:', userData.loginTime);
               
-              localStorage.setItem('loginHistory', JSON.stringify(loginHistory));
-              
-              // تحديث إحصائيات الدخول
-              const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
-              stats.logins = (stats.logins || 0) + 1;
-              localStorage.setItem("siteStats", JSON.stringify(stats));
-              
-              // عرض رسالة النجاح
               showMessage("✓ تم تسجيل الدخول بنجاح، جاري التوجيه...", "success");
               
-              // حفظ حالة تسجيل الدخول
-              sessionStorage.setItem("isLoggedIn", "true");
-              
-              // إضافة تأثير للبطاقة
               document.querySelector('.card').style.transform = 'scale(1.02)';
               
-              // الانتقال للصفحة الرئيسية بعد تأخير بسيط
               setTimeout(() => {
                 window.location.href = "index.html";
               }, 1200);
@@ -604,7 +486,6 @@
               passwordInput.focus();
               setLoading(false);
               
-              // إضافة تأثير اهتزاز لحقل كلمة المرور
               passwordInput.parentElement.style.animation = 'shake 0.5s ease-in-out';
               setTimeout(() => {
                 passwordInput.parentElement.style.animation = '';
@@ -617,85 +498,18 @@
           }
         }
         
-        // إضافة مستمعي الأحداث
         loginBtn.addEventListener('click', performLogin);
         
-        // السماح بالدخول بالضغط على Enter في أي حقل
-        const inputs = [nameInput, gradeSelect, curriculumSelect, passwordInput];
-        
-        inputs.forEach(input => {
-          input.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-              e.preventDefault();
-              
-              if (input === nameInput) {
-                gradeSelect.focus();
-              } else if (input === gradeSelect) {
-                curriculumSelect.focus();
-              } else if (input === curriculumSelect) {
-                passwordInput.focus();
-              } else {
-                performLogin();
-              }
-            }
-          });
+        passwordInput.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            performLogin();
+          }
         });
-        
-        // إضافة تأثير اهتزاز
-        const style = document.createElement('style');
-        style.textContent = `
-          @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-            20%, 40%, 60%, 80% { transform: translateX(5px); }
-          }
-        `;
-        document.head.appendChild(style);
-      });
-      
-      // تسجيل وقت الخروج لقياس مدة البقاء
-      window.addEventListener('beforeunload', function() {
-        const loginTime = localStorage.getItem('loginTime');
-        if (loginTime && sessionStorage.getItem('isLoggedIn')) {
-          const sessionDuration = Date.now() - parseInt(loginTime);
-          const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
-          
-          // حفظ مدة الجلسة
-          const sessionHistory = JSON.parse(localStorage.getItem('sessionHistory') || '[]');
-          sessionHistory.unshift({
-            name: userData.name,
-            grade: userData.grade,
-            curriculum: userData.curriculum,
-            sessionId: userData.sessionId,
-            duration: sessionDuration,
-            date: new Date().toLocaleDateString('ar-SA'),
-            time: new Date().toLocaleTimeString('ar-SA')
-          });
-          
-          // الاحتفاظ فقط بآخر 50 جلسة
-          if (sessionHistory.length > 50) {
-            sessionHistory.length = 50;
-          }
-          
-          localStorage.setItem('sessionHistory', JSON.stringify(sessionHistory));
-          
-          // تحديث إحصائيات مدة الجلسات
-          const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
-          if (!stats.sessionDurations) stats.sessionDurations = [];
-          stats.sessionDurations.push(sessionDuration);
-          
-          // حساب المتوسط
-          if (stats.sessionDurations.length > 0) {
-            const sum = stats.sessionDurations.reduce((a, b) => a + b, 0);
-            stats.averageSessionDuration = Math.round(sum / stats.sessionDurations.length);
-          }
-          
-          localStorage.setItem("siteStats", JSON.stringify(stats));
-          
-          // حذف وقت الدخول
-          localStorage.removeItem('loginTime');
-        }
       });
     </script>
+    
+    <!-- تحميل نظام التتبع -->
+    <script src="global-tracking.js"></script>
   </body>
 </html>

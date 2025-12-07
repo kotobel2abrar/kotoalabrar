@@ -1,2995 +1,1628 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>الإحصائيات - مدارس الأبرار</title>
-    <link rel="icon" href="مدارس الأبرار.webp" type="image/png" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الإحصائيات المتقدمة - مدارس الأبرار</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
         :root {
-            --primary-dark: #0a3d2f;
-            --primary: #16a085;
-            --primary-light: #1abc9c;
-            --secondary: #27ae60;
-            --accent: #2ecc71;
-            --glass: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.25);
-            --white: #ffffff;
-            --text-light: #f0f0f0;
-            --shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            --gold: #f39c12;
-            --silver: #95a5a6;
-            --bronze: #cd7f32;
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
             --danger: #e74c3c;
-            --warning: #f1c40f;
-            --info: #3498db;
-            --light-bg: #f8f9fa;
+            --warning: #f39c12;
+            --info: #16a085;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: "Cairo", sans-serif;
+            font-family: 'Cairo', sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
             min-height: 100vh;
-            color: #333;
-            line-height: 1.6;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
         }
-        
-        /* تأثير الجسيمات */
-        .particles {
+
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -2;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(240, 147, 251, 0.1) 0%, transparent 50%);
             pointer-events: none;
-        }
-        
-        .particle {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 50%;
-            animation: float 8s infinite ease-in-out;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
-        }
-        
-        .navbar {
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            padding: 15px 30px;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 4px solid var(--primary);
-        }
-
-        .navbar-content {
-            max-width: 1600px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .site-title {
-            font-size: 1.6em;
-            color: var(--primary-dark);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .site-title i {
-            color: var(--primary);
-            font-size: 1.8em;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 10px;
-        }
-
-        .nav-links a {
-            color: var(--primary-dark);
-            text-decoration: none;
-            font-weight: 600;
-            padding: 12px 20px;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.95em;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .nav-links a:hover {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(22, 160, 133, 0.3);
-        }
-        
-        .nav-links a.active {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            box-shadow: 0 4px 12px rgba(22, 160, 133, 0.4);
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 0;
-            height: 3px;
-            background: white;
-            transition: width 0.3s ease;
-        }
-        
-        .nav-links a.active::after {
-            width: 100%;
-        }
-
-        .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            padding: 30px 20px;
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            position: relative;
-            overflow: hidden;
-            border-left: 6px solid var(--primary);
-            backdrop-filter: blur(10px);
-        }
-        
-        .page-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-        }
-        
-        .page-header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 200px;
-            height: 200px;
-            background: radial-gradient(circle, rgba(46, 204, 113, 0.1) 0%, transparent 70%);
             z-index: 0;
         }
 
-        .page-header h1 {
-            color: var(--primary-dark);
-            font-size: 2.8em;
-            margin-bottom: 15px;
+        .container {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* صفحة تسجيل الدخول */
+        .login-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .page-header h1 i {
-            color: var(--primary);
-            font-size: 1.2em;
+            min-height: 100vh;
         }
 
-        .page-header p {
-            color: #555;
-            font-size: 1.2em;
-            max-width: 800px;
-            margin: 0 auto 25px;
-            line-height: 1.8;
-            position: relative;
-            z-index: 1;
+        .login-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 0 100px rgba(102, 126, 234, 0.2);
+            width: 100%;
+            max-width: 480px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 0.6s ease;
         }
-        
-        .page-actions {
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .login-header .icon-wrapper {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+            background: var(--gradient-1);
+            border-radius: 50%;
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 15px;
-            margin-top: 30px;
-            flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: pulse 2s infinite;
         }
-        
-        .action-btn {
-            padding: 14px 28px;
-            background: linear-gradient(135deg, var(--light-bg), white);
-            border: 2px solid var(--primary);
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            }
+        }
+
+        .login-header i {
+            font-size: 45px;
+            color: white;
+        }
+
+        .login-header h1 {
+            color: var(--primary);
+            font-size: 30px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .login-header p {
+            color: #7f8c8d;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 16px 50px 16px 20px;
+            border: 2px solid #e0e0e0;
             border-radius: 12px;
-            color: var(--primary-dark);
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .input-wrapper input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+            background: white;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #95a5a6;
+            font-size: 18px;
+        }
+
+        .toggle-password {
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--secondary);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .login-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            background: #ffe6e6;
+            color: var(--danger);
+            padding: 14px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            border: 1px solid #ffcccc;
+            font-weight: 600;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* الصفحة الرئيسية للإحصائيات */
+        .stats-container {
+            display: none;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .stats-header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .stats-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .stats-title .icon-circle {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .stats-title i {
+            font-size: 35px;
+            color: white;
+        }
+
+        .stats-title h1 {
+            color: var(--primary);
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .stats-title .update-time {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .live-indicator {
+            width: 10px;
+            height: 10px;
+            background: #27ae60;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .stats-actions {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 14px 26px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1em;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .action-btn:hover {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            border-color: var(--accent);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(22, 160, 133, 0.4);
-        }
-        
-        .action-btn:active {
-            transform: translateY(-1px);
-        }
-        
-        .action-btn i {
-            font-size: 1.2em;
-        }
-        
-        .action-btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.7s;
-        }
-        
-        .action-btn:hover::after {
-            left: 100%;
+            font-size: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
+        .btn-primary {
+            background: var(--gradient-3);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--gradient-4);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--gradient-2);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--gradient-5);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* بطاقات الإحصائيات */
         .stats-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
         }
 
         .stat-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(255, 255, 255, 0.98);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
-            border-top: 5px solid var(--primary);
-            height: 100%;
-            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
-        
-        .stat-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-        }
-        
-        .stat-card.premium {
-            border-top-color: var(--gold);
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 248, 225, 0.95));
-        }
-        
-        .stat-card.danger {
-            border-top-color: var(--danger);
-        }
-        
-        .stat-card.warning {
-            border-top-color: var(--warning);
-        }
-        
-        .stat-card.info {
-            border-top-color: var(--info);
-        }
-        
+
         .stat-card::before {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
-            transform: translateX(-100%);
-            transition: transform 0.6s;
+            height: 5px;
         }
-        
-        .stat-card:hover::before {
-            transform: translateX(100%);
+
+        .stat-card.purple::before { background: var(--gradient-1); }
+        .stat-card.pink::before { background: var(--gradient-2); }
+        .stat-card.blue::before { background: var(--gradient-3); }
+        .stat-card.green::before { background: var(--gradient-4); }
+        .stat-card.orange::before { background: var(--gradient-5); }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stat-title {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .stat-icon {
-            font-size: 3.2em;
-            margin-bottom: 20px;
-            color: var(--primary);
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
-        }
-        
-        .stat-card.premium .stat-icon {
-            color: var(--gold);
-        }
-        
-        .stat-card.danger .stat-icon {
-            color: var(--danger);
-        }
-        
-        .stat-card.warning .stat-icon {
-            color: var(--warning);
-        }
-        
-        .stat-card.info .stat-icon {
-            color: var(--info);
-        }
-
-        .stat-number {
-            font-size: 3.2em;
-            font-weight: 800;
-            color: var(--primary-dark);
-            margin-bottom: 10px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .stat-unit {
-            font-size: 0.5em;
-            color: #666;
-            font-weight: normal;
-        }
-
-        .stat-label {
-            color: #444;
-            font-size: 1.3em;
-            font-weight: 700;
-            margin-bottom: 15px;
-        }
-        
-        .stat-subtext {
-            font-size: 1em;
-            color: #666;
-            margin-top: 10px;
-            line-height: 1.6;
-            padding: 0 10px;
-        }
-        
-        .progress-container {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(0, 0, 0, 0.03);
+            width: 60px;
+            height: 60px;
             border-radius: 15px;
-        }
-        
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .progress-bar {
-            height: 12px;
-            background: #e0e0e0;
-            border-radius: 6px;
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 6px;
-            transition: width 1.5s ease;
-        }
-        
-        .progress-fill.premium {
-            background: linear-gradient(90deg, var(--gold), #f1c40f);
-        }
-
-        .charts-section {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 35px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
-            position: relative;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .charts-section::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 20px 20px 0 0;
-        }
-
-        .section-title {
-            color: var(--primary-dark);
-            font-size: 1.8em;
-            font-weight: 700;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid rgba(22, 160, 133, 0.2);
-        }
-        
-        .section-title i {
-            color: var(--primary);
-            font-size: 1.2em;
-        }
-        
-        .section-description {
-            color: #666;
-            margin-bottom: 30px;
-            font-size: 1.1em;
-            line-height: 1.8;
-            background: rgba(248, 249, 250, 0.8);
-            padding: 20px;
-            border-radius: 12px;
-            border-right: 4px solid var(--primary);
-        }
-
-        .chart-container {
-            margin-bottom: 40px;
-        }
-
-        .bar-chart {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .bar-item {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-            padding: 10px 0;
-        }
-
-        .bar-label {
-            min-width: 250px;
-            font-weight: 600;
-            color: #444;
-            font-size: 1.1em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .bar-label i {
-            color: var(--primary);
-            font-size: 1.2em;
-        }
-
-        .bar-container {
-            flex: 1;
-            height: 40px;
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .bar-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 20px;
-            transition: width 1.5s ease;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 20px;
-            min-width: 50px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .bar-fill.premium {
-            background: linear-gradient(90deg, var(--gold), #f1c40f);
-        }
-        
-        .bar-fill.danger {
-            background: linear-gradient(90deg, #e74c3c, #e67e22);
-        }
-        
-        .bar-fill.info {
-            background: linear-gradient(90deg, #3498db, #2980b9);
-        }
-
-        .bar-value {
-            color: white;
-            font-weight: 800;
-            font-size: 1.1em;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            z-index: 1;
-        }
-        
-        .bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent 30%, rgba(255, 255, 255, 0.2) 50%, transparent 70%);
-            animation: shimmer 2s infinite;
-        }
-
-        .tables-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 50px;
-        }
-        
-        @media (max-width: 1200px) {
-            .tables-container {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-            border-radius: 15px;
-            overflow: hidden;
-            font-size: 1em;
-            border: 1px solid rgba(0, 0, 0, 0.05);
-        }
-
-        .data-table th,
-        .data-table td {
-            padding: 18px 25px;
-            text-align: right;
-            border-bottom: 1px solid rgba(238, 242, 247, 0.8);
-        }
-
-        .data-table th {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-            color: white;
-            font-weight: 700;
-            font-size: 1.1em;
-            border-bottom: none;
-            position: relative;
-        }
-        
-        .data-table th::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--accent);
-        }
-
-        .data-table tr:hover {
-            background: rgba(22, 160, 133, 0.05);
-        }
-        
-        .data-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .data-table td {
-            color: #444;
-            transition: all 0.3s ease;
-        }
-        
-        .data-table tr:hover td {
-            transform: translateX(-5px);
-        }
-
-        .curriculum-badge {
-            display: inline-block;
-            padding: 8px 20px;
-            border-radius: 25px;
-            font-size: 0.95em;
-            font-weight: 700;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
-
-        .badge-egypt {
-            background: linear-gradient(135deg, #e8f6f3, #a3e4d7);
-            color: var(--primary-dark);
-            border: 2px solid var(--primary);
-        }
-
-        .badge-saudi {
-            background: linear-gradient(135deg, #fef9e7, #f8c471);
-            color: #d35400;
-            border: 2px solid var(--gold);
-        }
-        
-        .duration-badge {
-            display: inline-block;
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 700;
-            background: linear-gradient(135deg, #e8f6f3, #a3e4d7);
-            color: var(--primary-dark);
-            border: 2px solid var(--primary);
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
-        
-        .date-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: 700;
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            color: #0d47a1;
-            border: 2px solid #2196f3;
-        }
-        
-        .time-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 15px;
-            font-size: 0.9em;
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff8e1, #ffe082);
-            color: #e65100;
-            border: 2px solid #ff9800;
-        }
-
-        .table-container {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            height: 100%;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-        
-        .table-container h3 {
-            color: var(--primary-dark);
-            font-size: 1.6em;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid rgba(22, 160, 133, 0.2);
-        }
-        
-        .table-container h3 i {
-            color: var(--primary);
-            font-size: 1.2em;
-        }
-        
-        .table-description {
-            color: #666;
-            margin-bottom: 25px;
-            font-size: 1.05em;
-            line-height: 1.7;
-            background: rgba(248, 249, 250, 0.8);
-            padding: 18px;
-            border-radius: 12px;
-            border-right: 4px solid var(--primary);
-        }
-
-        footer {
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            text-align: center;
-            margin-top: 60px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border-top: 4px solid var(--primary);
-            backdrop-filter: blur(10px);
-        }
-
-        footer a {
-            color: var(--primary-dark);
-            text-decoration: none;
-            font-weight: 800;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
+            font-size: 28px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
-        
-        footer a:hover {
+
+        .stat-card.purple .stat-icon { background: var(--gradient-1); }
+        .stat-card.pink .stat-icon { background: var(--gradient-2); }
+        .stat-card.blue .stat-icon { background: var(--gradient-3); }
+        .stat-card.green .stat-icon { background: var(--gradient-4); }
+        .stat-card.orange .stat-icon { background: var(--gradient-5); }
+
+        .stat-value {
+            font-size: 42px;
+            font-weight: 800;
             color: var(--primary);
-            transform: translateY(-2px);
+            margin-bottom: 8px;
+            line-height: 1;
         }
-        
-        .empty-state {
-            text-align: center;
-            padding: 60px 30px;
-            color: #777;
+
+        .stat-label {
+            color: #95a5a6;
+            font-size: 14px;
+            font-weight: 600;
         }
-        
-        .empty-state i {
-            font-size: 4em;
+
+        .stat-change {
+            margin-top: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .stat-change.positive {
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* الجداول */
+        .table-container {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .table-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .table-title i {
+            font-size: 26px;
+            color: var(--secondary);
+        }
+
+        .search-box {
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            width: 320px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+            background: white;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            border-radius: 12px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 800px;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        th {
+            padding: 18px 20px;
+            text-align: right;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+        }
+
+        td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #2c3e50;
+            font-size: 15px;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-success {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+
+        .badge-info {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .badge-warning {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .badge-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        /* الرسوم البيانية */
+        .chart-container {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .chart-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chart-title i {
+            font-size: 26px;
+            color: var(--secondary);
+        }
+
+        .progress-bar {
+            background: #f0f0f0;
+            height: 40px;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 18px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            color: white;
+            font-weight: 700;
+            font-size: 13px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* التنبيهات */
+        .alert {
+            padding: 18px 22px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            color: #ddd;
-            opacity: 0.5;
-        }
-        
-        .empty-state p {
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            color: #666;
-        }
-        
-        .empty-state .subtext {
-            font-size: 1em;
-            color: #999;
-            max-width: 400px;
-            margin: 0 auto;
-            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
-        @media (max-width: 992px) {
-            .navbar-content {
+        .alert-info {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+
+        .alert i {
+            font-size: 24px;
+        }
+
+        /* التحميل */
+        .loading {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* توزيع الوقت */
+        .time-distribution {
+            margin-top: 20px;
+        }
+
+        .time-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .time-item:last-child {
+            border-bottom: none;
+        }
+
+        .time-label {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 15px;
+        }
+
+        .time-value {
+            color: var(--secondary);
+            font-weight: 800;
+            font-size: 16px;
+        }
+
+        /* رسالة النجاح */
+        .success-toast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 18px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.4);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* استجابة */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .login-card {
+                padding: 35px 25px;
+            }
+
+            .stats-header {
+                padding: 20px;
                 flex-direction: column;
-                gap: 20px;
-            }
-            
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
+                align-items: flex-start;
             }
 
-            .page-header h1 {
-                font-size: 2.2em;
+            .stats-title h1 {
+                font-size: 24px;
             }
-            
-            .page-header {
-                padding: 30px 25px;
+
+            .stats-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
             }
 
             .stats-grid {
                 grid-template-columns: 1fr;
-                gap: 25px;
             }
 
-            .bar-label {
-                min-width: 180px;
-                font-size: 1em;
+            .search-box {
+                width: 100%;
             }
-            
-            .tables-container {
-                grid-template-columns: 1fr;
-                gap: 30px;
+
+            .table-wrapper {
+                font-size: 13px;
             }
-            
-            .data-table {
-                font-size: 0.95em;
+
+            th, td {
+                padding: 12px 10px;
             }
-            
-            .data-table th,
-            .data-table td {
-                padding: 15px 20px;
-            }
-            
-            .section-title {
-                font-size: 1.6em;
+
+            .stat-value {
+                font-size: 36px;
             }
         }
-        
-        @media (max-width: 768px) {
-            .page-header h1 {
-                font-size: 1.8em;
-                flex-direction: column;
-                gap: 10px;
-            }
-            
-            .page-actions {
-                gap: 10px;
-            }
-            
-            .action-btn {
-                padding: 12px 20px;
-                font-size: 0.9em;
-            }
-            
-            .bar-label {
-                min-width: 150px;
-                font-size: 0.95em;
-            }
+
+        .no-data {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
         }
-        
-        /* تخصيص شريط التمرير */
-        ::-webkit-scrollbar {
-            width: 12px;
+
+        .no-data i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
         }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 10px;
-            border: 3px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary));
-        }
-        
-        /* تحسينات إضافية */
-        .grade-badge {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            font-weight: 700;
-            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-            color: #0d47a1;
-            border: 2px solid #2196f3;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
-        }
-        
-        .stats-summary {
-            display: flex;
-            justify-content: space-around;
-            margin-top: 15px;
-            padding-top: 20px;
-            border-top: 2px dashed rgba(22, 160, 133, 0.3);
-            font-size: 0.95em;
-            color: #666;
-        }
-        
-        .stats-summary div {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        
-        .stats-summary span:first-child {
-            font-weight: 800;
-            color: var(--primary-dark);
-            font-size: 1.2em;
-            margin-bottom: 5px;
-        }
-        
-        .stats-summary span:last-child {
-            color: #666;
-            font-size: 0.9em;
-        }
-        
-        /* تحسينات للرتب */
-        .rank-1 { color: var(--gold); font-weight: 900; }
-        .rank-2 { color: var(--silver); font-weight: 800; }
-        .rank-3 { color: var(--bronze); font-weight: 800; }
-        
-        /* تأثيرات جديدة */
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        /* تحسينات للمودال */
-        .modal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: fadeIn 0.4s ease;
-            backdrop-filter: blur(10px);
-        }
-        
-        .modal-content {
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.98));
-            border-radius: 25px;
-            padding: 40px;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow-y: auto;
-            position: relative;
-            width: 95%;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            animation: slideUp 0.5s ease;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes slideUp {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        
-        .close-modal {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1.2em;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .close-modal:hover {
-            transform: rotate(90deg) scale(1.1);
-            background: #c0392b;
-        }
-        
-        /* تحسينات للفلاتر */
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-btn {
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.8);
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            color: #555;
+
+        .no-data p {
+            font-size: 18px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .filter-btn:hover {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-        
-        .filter-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(22, 160, 133, 0.3);
-        }
-        
-        /* تحسينات للأقسام المتداخلة */
-        .section-collapse {
-            cursor: pointer;
-            user-select: none;
-        }
-        
-        .section-collapse i {
-            transition: transform 0.3s ease;
-        }
-        
-        .section-collapse.collapsed i {
-            transform: rotate(-90deg);
-        }
-        
-        .section-content {
-            overflow: hidden;
-            transition: max-height 0.5s ease, opacity 0.3s ease;
-        }
-        
-        /* تحسينات للإشعارات */
-        .notification {
-            position: fixed;
-            top: 100px;
-            right: 30px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-            padding: 20px 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            z-index: 1000;
-            font-weight: 700;
-            animation: slideIn 0.4s ease, slideOut 0.4s ease 2.6s;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            max-width: 400px;
-            border-left: 5px solid white;
-        }
-        
-        .notification i {
-            font-size: 1.5em;
-        }
-        
-        @keyframes slideIn {
-            from { transform: translateX(100%); opacity: 0; }
-            to { transform: translateX(0); opacity: 1; }
-        }
-        
-        @keyframes slideOut {
-            from { transform: translateX(0); opacity: 1; }
-            to { transform: translateX(100%); opacity: 0; }
-        }
-        
-        /* تحسينات للأزرار */
-        .btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .btn-icon {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 10px 20px;
-            border-radius: 10px;
-            border: none;
-            cursor: pointer;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-icon.primary {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: white;
-        }
-        
-        .btn-icon.secondary {
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--primary-dark);
-            border: 2px solid var(--primary);
-        }
-        
-        .btn-icon:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        /* تحسينات للتواريخ */
-        .date-display {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            color: white;
-            font-weight: 600;
-        }
-        
-        /* تحسينات للأيقونات */
-        .icon-badge {
-            position: relative;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .icon-badge::after {
-            content: attr(data-badge);
-            position: absolute;
-            top: -8px;
-            right: -8px;
-            background: var(--danger);
-            color: white;
-            font-size: 0.7em;
-            padding: 3px 8px;
-            border-radius: 10px;
-            font-weight: 800;
         }
     </style>
 </head>
 <body>
-    <!-- تأثير الجسيمات -->
-    <div class="particles" id="particles"></div>
-    
-    <!-- شريط التنقل -->
-    <nav class="navbar">
-        <div class="navbar-content">
-            <div class="site-title">
-                <i class="fas fa-chart-network"></i>
-                <span data-en="Abrar Schools Analytics" data-ar="لوحة تحليلات مدارس الأبرار">
-                    لوحة تحليلات مدارس الأبرار
-                </span>
-            </div>
-            <div class="nav-links">
-                <a href="index.html">
-                    <i class="fas fa-home"></i>
-                    <span data-en="Home" data-ar="الرئيسية">الرئيسية</span>
-                </a>
-                <a href="statistics.html" class="active">
-                    <i class="fas fa-analytics"></i>
-                    <span data-en="Analytics" data-ar="التحليلات">التحليلات</span>
-                </a>
-                <a href="about.html">
-                    <i class="fas fa-info-circle"></i>
-                    <span data-en="About" data-ar="عن المشروع">عن المشروع</span>
-                </a>
-                <a href="contact.html">
-                    <i class="fas fa-envelope"></i>
-                    <span data-en="Contact" data-ar="التواصل">التواصل</span>
-                </a>
-                <a href="login.html" id="logoutBtn" style="display: none;">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span data-en="Logout" data-ar="تسجيل خروج">تسجيل خروج</span>
-                </a>
-            </div>
-        </div>
-    </nav>
-
     <div class="container">
-        <!-- رأس الصفحة -->
-        <div class="page-header">
-            <h1>
-                <i class="fas fa-analytics"></i>
-                <span data-en="Advanced Analytics Dashboard" data-ar="لوحة التحليلات المتقدمة">
-                    لوحة التحليلات المتقدمة
-                </span>
-            </h1>
-            <p data-en="Real-time analytics and insights about platform usage" 
-               data-ar="تحليلات فورية ورؤى ذكية حول استخدام المنصة التعليمية لمدارس الأبرار الأهلية الحديثة">
-                تحليلات فورية ورؤى ذكية حول استخدام المنصة التعليمية لمدارس الأبرار الأهلية الحديثة
-            </p>
-            <div class="page-actions">
-                <button class="action-btn" onclick="refreshStatistics()">
-                    <i class="fas fa-sync-alt"></i>
-                    <span data-en="Refresh Data" data-ar="تحديث البيانات">تحديث البيانات</span>
-                </button>
-                <button class="action-btn" onclick="exportData()">
-                    <i class="fas fa-file-export"></i>
-                    <span data-en="Export Data" data-ar="تصدير البيانات">تصدير البيانات</span>
-                </button>
-                <button class="action-btn" onclick="clearOldData()">
-                    <i class="fas fa-trash-restore"></i>
-                    <span data-en="Clear Old Data" data-ar="حذف البيانات القديمة">حذف البيانات القديمة</span>
-                </button>
-                <button class="action-btn" onclick="showDetailedReport()">
-                    <i class="fas fa-file-alt"></i>
-                    <span data-en="Detailed Report" data-ar="تقرير مفصل">تقرير مفصل</span>
-                </button>
-                <button class="action-btn" onclick="showSettings()">
-                    <i class="fas fa-cog"></i>
-                    <span data-en="Settings" data-ar="الإعدادات">الإعدادات</span>
-                </button>
+        <!-- صفحة تسجيل الدخول -->
+        <div id="loginContainer" class="login-container">
+            <div class="login-card">
+                <div class="login-header">
+                    <div class="icon-wrapper">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h1>لوحة الإحصائيات المحمية</h1>
+                    <p>للوصول إلى تحليلات وإحصائيات الموقع المتقدمة<br>يرجى إدخال كلمة المرور</p>
+                </div>
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="adminPassword">كلمة المرور الإدارية</label>
+                        <div class="input-wrapper">
+                            <input type="password" id="adminPassword" placeholder="أدخل كلمة المرور" required>
+                            <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+                        </div>
+                    </div>
+                    <button type="submit" class="login-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>دخول إلى لوحة التحكم</span>
+                    </button>
+                    <div id="loginError" class="error-message"></div>
+                </form>
+                <div class="alert alert-info" style="margin-top: 25px;">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>كلمة المرور:</strong> admin@abrar2025
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- إحصائيات عامة -->
-        <div class="charts-section">
-            <h2 class="section-title">
-                <i class="fas fa-chart-pie"></i>
-                <span data-en="General Statistics" data-ar="الإحصائيات العامة">
-                    الإحصائيات العامة
-                </span>
-            </h2>
-            <p class="section-description">
-                <i class="fas fa-info-circle"></i> نظرة عامة شاملة على استخدام المنصة التعليمية تشمل عدد المستخدمين والتحميلات ومدة الجلسات. يتم تحديث هذه البيانات تلقائيًا في الوقت الفعلي.
-            </p>
-            
+        <!-- صفحة الإحصائيات -->
+        <div id="statsContainer" class="stats-container">
+            <!-- رأس الصفحة -->
+            <div class="stats-header">
+                <div class="stats-title">
+                    <div class="icon-circle">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div>
+                        <h1>لوحة الإحصائيات المتقدمة</h1>
+                        <div class="update-time">
+                            <div class="live-indicator"></div>
+                            <span>آخر تحديث: <span id="lastUpdate"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="stats-actions">
+                    <button class="btn btn-primary" onclick="refreshStats()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>تحديث البيانات</span>
+                    </button>
+                    <button class="btn btn-success" onclick="exportToExcel()">
+                        <i class="fas fa-file-excel"></i>
+                        <span>تصدير Excel</span>
+                    </button>
+                    <button class="btn btn-warning" onclick="clearAllData()">
+                        <i class="fas fa-trash-alt"></i>
+                        <span>مسح البيانات</span>
+                    </button>
+                    <button class="btn btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>خروج</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- بطاقات الإحصائيات الرئيسية -->
             <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon">👥</div>
-                    <div class="stat-number" id="totalLogins">0</div>
-                    <div class="stat-label" data-en="Total Logins" data-ar="إجمالي تسجيلات الدخول">
-                        إجمالي تسجيلات الدخول
-                    </div>
-                    <div class="stat-subtext" id="uniqueUsers"></div>
-                    <div class="progress-container">
-                        <div class="progress-label">
-                            <span>اليوم</span>
-                            <span id="todayLogins">0</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="todayLoginsProgress"></div>
+                <div class="stat-card purple">
+                    <div class="stat-header">
+                        <span class="stat-title">إجمالي الزوار</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
                         </div>
                     </div>
-                    <div class="stats-summary">
-                        <div>
-                            <span id="weeklyLogins">0</span>
-                            <span>أسبوعيًا</span>
-                        </div>
-                        <div>
-                            <span id="monthlyLogins">0</span>
-                            <span>شهريًا</span>
-                        </div>
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">مستخدم فريد</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="userChange">+0%</span> من الأسبوع الماضي
                     </div>
                 </div>
 
-                <div class="stat-card premium">
-                    <div class="stat-icon">📥</div>
-                    <div class="stat-number" id="totalDownloads">0</div>
-                    <div class="stat-label" data-en="Total Downloads" data-ar="إجمالي التحميلات">
-                        إجمالي التحميلات
-                    </div>
-                    <div class="stat-subtext" id="downloadTrend"></div>
-                    <div class="progress-container">
-                        <div class="progress-label">
-                            <span>اليوم</span>
-                            <span id="todayDownloads">0</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill premium" id="todayDownloadsProgress"></div>
+                <div class="stat-card pink">
+                    <div class="stat-header">
+                        <span class="stat-title">إجمالي التحميلات</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-download"></i>
                         </div>
                     </div>
-                    <div class="stats-summary">
-                        <div>
-                            <span id="avgDailyDownloads">0</span>
-                            <span>يوميًا</span>
-                        </div>
-                        <div>
-                            <span id="peakHour">--:--</span>
-                            <span>ساعة الذروة</span>
-                        </div>
+                    <div class="stat-value" id="totalDownloads">0</div>
+                    <div class="stat-label">ملف تم تحميله</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="downloadChange">+0%</span> من الأسبوع الماضي
                     </div>
                 </div>
 
-                <div class="stat-card info">
-                    <div class="stat-icon">⏱️</div>
-                    <div class="stat-number" id="avgSessionTime">0</div>
-                    <div class="stat-unit">دقيقة</div>
-                    <div class="stat-label" data-en="Avg. Session Time" data-ar="متوسط مدة الجلسة">
-                        متوسط مدة الجلسة
-                    </div>
-                    <div class="stat-subtext" id="sessionTrend"></div>
-                    <div class="progress-container">
-                        <div class="progress-label">
-                            <span>أطول جلسة</span>
-                            <span id="longestSession">0</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill info" id="sessionDurationProgress"></div>
+                <div class="stat-card blue">
+                    <div class="stat-header">
+                        <span class="stat-title">إجمالي الوقت</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
                         </div>
                     </div>
-                    <div class="stats-summary">
-                        <div>
-                            <span id="totalSessionTime">0</span>
-                            <span>إجمالي الوقت</span>
-                        </div>
-                        <div>
-                            <span id="shortestSession">0</span>
-                            <span>أقصر جلسة</span>
-                        </div>
+                    <div class="stat-value" id="totalTime">0</div>
+                    <div class="stat-label">ساعة من الاستخدام النشط</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span id="timeChange">+0%</span> من الأسبوع الماضي
                     </div>
                 </div>
 
-                <div class="stat-card warning">
-                    <div class="stat-icon">📚</div>
-                    <div class="stat-number" id="totalBooks">0</div>
-                    <div class="stat-label" data-en="Available Books" data-ar="الكتب المتوفرة">
-                        الكتب المتوفرة
-                    </div>
-                    <div class="stat-subtext" id="booksTrend"></div>
-                    <div class="progress-container">
-                        <div class="progress-label">
-                            <span>المصري</span>
-                            <span id="egyptBooksCount">0</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill warning" id="egyptBooksProgress"></div>
+                <div class="stat-card green">
+                    <div class="stat-header">
+                        <span class="stat-title">الزوار اليوم</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-calendar-day"></i>
                         </div>
                     </div>
-                    <div class="stats-summary">
-                        <div>
-                            <span id="saudiBooksCount">0</span>
-                            <span>السعودي</span>
+                    <div class="stat-value" id="todayVisitors">0</div>
+                    <div class="stat-label">زائر نشط اليوم</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-fire"></i>
+                        <span>نشاط مرتفع</span>
+                    </div>
+                </div>
+
+                <div class="stat-card orange">
+                    <div class="stat-header">
+                        <span class="stat-title">متوسط الجلسة</span>
+                        <div class="stat-icon">
+                            <i class="fas fa-user-clock"></i>
                         </div>
-                        <div>
-                            <span id="newBooks">0</span>
-                            <span>كتب جديدة</span>
-                        </div>
+                    </div>
+                    <div class="stat-value" id="avgSession">0</div>
+                    <div class="stat-label">دقيقة لكل مستخدم</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-chart-line"></i>
+                        <span>أداء جيد</span>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <!-- قسم سجلات الدخول -->
-        <div class="charts-section">
-            <div class="section-title section-collapse" onclick="toggleSection(this)">
-                <i class="fas fa-chevron-down"></i>
-                <i class="fas fa-history"></i>
-                <span data-en="Last 100 Login Records" data-ar="آخر 100 سجل دخول">
-                    آخر 100 سجل دخول
-                </span>
-            </div>
-            <div class="section-description">
-                <i class="fas fa-info-circle"></i> قائمة بآخر 100 عملية تسجيل دخول للمنصة التعليمية مع عرض التاريخ الميلادي والوقت. يتم ترتيب السجلات من الأحدث إلى الأقدم.
-            </div>
-            
-            <div class="filters">
-                <button class="filter-btn active" onclick="filterTable('all')">
-                    <i class="fas fa-filter"></i> الكل
-                </button>
-                <button class="filter-btn" onclick="filterTable('مصري')">
-                    <i class="fas fa-flag"></i> المسار المصري
-                </button>
-                <button class="filter-btn" onclick="filterTable('سعودي')">
-                    <i class="fas fa-flag"></i> المسار السعودي
-                </button>
-                <button class="filter-btn" onclick="filterTable('today')">
-                    <i class="fas fa-calendar-day"></i> اليوم
-                </button>
-            </div>
-            
+
+            <!-- جدول تفاصيل المستخدمين -->
             <div class="table-container">
+                <div class="table-header">
+                    <div class="table-title">
+                        <i class="fas fa-user-friends"></i>
+                        تفاصيل جلسات المستخدمين
+                    </div>
+                    <input type="text" class="search-box" id="userSearch" placeholder="🔍 ابحث عن مستخدم أو جلسة...">
+                </div>
                 <div class="table-wrapper">
-                    <table class="data-table">
+                    <table id="usersTable">
                         <thead>
                             <tr>
-                                <th data-en="#" data-ar="#">#</th>
-                                <th data-en="Student Name" data-ar="اسم الطالب">اسم الطالب</th>
-                                <th data-en="Grade" data-ar="الصف الدراسي">الصف الدراسي</th>
-                                <th data-en="Curriculum" data-ar="المسار">المسار</th>
-                                <th data-en="Date" data-ar="التاريخ">التاريخ</th>
-                                <th data-en="Time" data-ar="الوقت">الوقت</th>
-                                <th data-en="Actions" data-ar="الإجراءات">الإجراءات</th>
+                                <th>#</th>
+                                <th>اسم المستخدم</th>
+                                <th>المسار</th>
+                                <th>الصف</th>
+                                <th>وقت الدخول</th>
+                                <th>مدة الجلسة</th>
+                                <th>الصفحات</th>
+                                <th>التحميلات</th>
+                                <th>الحالة</th>
                             </tr>
                         </thead>
-                        <tbody id="loginHistoryTable">
-                            <!-- سيتم ملؤها بواسطة JavaScript -->
-                        </tbody>
-                    </table>
-                    <div id="loginHistoryEmpty" class="empty-state" style="display: none;">
-                        <i class="fas fa-clipboard-list"></i>
-                        <p data-en="No login records available" data-ar="لا توجد سجلات دخول متاحة">
-                            لا توجد سجلات دخول متاحة
-                        </p>
-                        <p class="subtext">سيظهر هنا سجل الدخول بعد أول عملية تسجيل دخول ناجحة</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- قسم مدة الجلسات والكتب الأكثر تحميلاً -->
-        <div class="tables-container">
-            <div class="table-container">
-                <h3 class="section-collapse" onclick="toggleSection(this)">
-                    <i class="fas fa-chevron-down"></i>
-                    <i class="fas fa-clock"></i>
-                    <span data-en="Session Duration History" data-ar="سجل مدة الجلسات">
-                        سجل مدة الجلسات
-                    </span>
-                </h3>
-                <p class="table-description">
-                    <i class="fas fa-info-circle"></i> تفاصيل مدة بقاء الطلاب في المنصة التعليمية. يتم حساب المدة تلقائيًا من وقت الدخول إلى وقت الخروج.
-                </p>
-                
-                <div class="filters">
-                    <button class="filter-btn active" onclick="filterSessions('all')">
-                        <i class="fas fa-filter"></i> الكل
-                    </button>
-                    <button class="filter-btn" onclick="filterSessions('long')">
-                        <i class="fas fa-hourglass-end"></i> أطول الجلسات
-                    </button>
-                    <button class="filter-btn" onclick="filterSessions('short')">
-                        <i class="fas fa-hourglass-start"></i> أقصر الجلسات
-                    </button>
-                    <button class="filter-btn" onclick="filterSessions('today')">
-                        <i class="fas fa-calendar-day"></i> اليوم
-                    </button>
-                </div>
-                
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
+                        <tbody id="usersTableBody">
                             <tr>
-                                <th data-en="Student Name" data-ar="اسم الطالب">اسم الطالب</th>
-                                <th data-en="Grade" data-ar="الصف">الصف</th>
-                                <th data-en="Duration" data-ar="المدة">المدة</th>
-                                <th data-en="Login Time" data-ar="وقت الدخول">وقت الدخول</th>
-                                <th data-en="Logout Time" data-ar="وقت الخروج">وقت الخروج</th>
+                                <td colspan="9" style="text-align: center; padding: 40px; color: #95a5a6;">
+                                    <i class="fas fa-spinner fa-spin" style="font-size: 32px; margin-bottom: 15px;"></i>
+                                    <p style="font-weight: 600;">جاري تحميل البيانات...</p>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody id="sessionHistoryTable">
-                            <!-- سيتم ملؤها بواسطة JavaScript -->
                         </tbody>
                     </table>
-                    <div id="sessionHistoryEmpty" class="empty-state" style="display: none;">
-                        <i class="fas fa-hourglass-half"></i>
-                        <p data-en="No session history available" data-ar="لا توجد سجلات جلسات متاحة">
-                            لا توجد سجلات جلسات متاحة
-                        </p>
-                        <p class="subtext">سيظهر هنا سجل الجلسات بعد أن يقوم الطلاب بتسجيل الخروج من المنصة</p>
-                    </div>
                 </div>
             </div>
-            
-            <div class="table-container">
-                <h3 class="section-collapse" onclick="toggleSection(this)">
-                    <i class="fas fa-chevron-down"></i>
-                    <i class="fas fa-book-open"></i>
-                    <span data-en="Top 10 Downloaded Books" data-ar="أكثر 10 كتب تحميلاً">
-                        أكثر 10 كتب تحميلاً
-                    </span>
-                </h3>
-                <p class="table-description">
-                    <i class="fas fa-info-circle"></i> قائمة بالكتب الأكثر تحميلاً من قبل الطلاب في المنصة التعليمية. تساعد في تحديد المواد الأكثر طلبًا.
-                </p>
-                
-                <div class="filters">
-                    <button class="filter-btn active" onclick="filterBooks('all')">
-                        <i class="fas fa-filter"></i> الكل
-                    </button>
-                    <button class="filter-btn" onclick="filterBooks('مصري')">
-                        <i class="fas fa-flag"></i> المصري
-                    </button>
-                    <button class="filter-btn" onclick="filterBooks('سعودي')">
-                        <i class="fas fa-flag"></i> السعودي
-                    </button>
-                    <button class="filter-btn" onclick="filterBooks('month')">
-                        <i class="fas fa-calendar-alt"></i> هذا الشهر
-                    </button>
+
+            <!-- توزيع الوقت على الصفحات -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-file-alt"></i>
+                    توزيع الوقت على صفحات الموقع
                 </div>
-                
-                <div class="table-wrapper">
-                    <table class="data-table">
-                        <thead>
-                            <tr>
-                                <th data-en="#" data-ar="#">#</th>
-                                <th data-en="Book Title" data-ar="اسم الكتاب">اسم الكتاب</th>
-                                <th data-en="Curriculum" data-ar="المسار">المسار</th>
-                                <th data-en="Downloads" data-ar="التحميلات">التحميلات</th>
-                                <th data-en="Trend" data-ar="التوجه">التوجه</th>
-                            </tr>
-                        </thead>
-                        <tbody id="topDownloadsTable">
-                            <!-- سيتم ملؤها بواسطة JavaScript -->
-                        </tbody>
-                    </table>
-                    <div id="topDownloadsEmpty" class="empty-state" style="display: none;">
-                        <i class="fas fa-book"></i>
-                        <p data-en="No download data available" data-ar="لا توجد بيانات تحميل متاحة">
-                            لا توجد بيانات تحميل متاحة
-                        </p>
-                        <p class="subtext">سيظهر هنا إحصائيات التحميل بعد أن يقوم الطلاب بتحميل الكتب</p>
-                    </div>
-                </div>
+                <div id="pageTimeDistribution"></div>
             </div>
-        </div>
 
-        <!-- الرسوم البيانية -->
-        <div class="charts-section">
-            <h2 class="section-title section-collapse" onclick="toggleSection(this)">
-                <i class="fas fa-chevron-down"></i>
-                <i class="fas fa-calendar-alt"></i>
-                <span data-en="Downloads by Academic Year" data-ar="التحميلات حسب السنة الدراسية">
-                    التحميلات حسب السنة الدراسية
-                </span>
-            </h2>
-            <p class="section-description">
-                <i class="fas fa-info-circle"></i> توزيع تحميلات الكتب حسب السنوات الدراسية المختلفة. يساعد في فهم احتياجات الطلاب في كل مرحلة تعليمية.
-            </p>
-            <div class="bar-chart" id="yearChart"></div>
-        </div>
-
-        <div class="charts-section">
-            <h2 class="section-title section-collapse" onclick="toggleSection(this)">
-                <i class="fas fa-chevron-down"></i>
-                <i class="fas fa-layer-group"></i>
-                <span data-en="Downloads by Semester" data-ar="التحميلات حسب الفصل الدراسي">
-                    التحميلات حسب الفصل الدراسي
-                </span>
-            </h2>
-            <p class="section-description">
-                <i class="fas fa-info-circle"></i> مقارنة بين تحميلات الفصل الدراسي الأول والثاني. يساعد في تخطيط المحتوى التعليمي لكل فصل.
-            </p>
-            <div class="bar-chart" id="termChart"></div>
-        </div>
-
-        <div class="charts-section">
-            <h2 class="section-title section-collapse" onclick="toggleSection(this)">
-                <i class="fas fa-chevron-down"></i>
-                <i class="fas fa-book-reader"></i>
-                <span data-en="Downloads by Subject" data-ar="التحميلات حسب المادة الدراسية">
-                    التحميلات حسب المادة الدراسية
-                </span>
-            </h2>
-            <p class="section-description">
-                <i class="fas fa-info-circle"></i> توزيع تحميلات الكتب حسب المواد الدراسية المختلفة. يبين المواد الأكثر اهتمامًا لدى الطلاب.
-            </p>
-            <div class="bar-chart" id="subjectChart"></div>
-        </div>
-
-        <div class="charts-section">
-            <h2 class="section-title section-collapse" onclick="toggleSection(this)">
-                <i class="fas fa-chevron-down"></i>
-                <i class="fas fa-graduation-cap"></i>
-                <span data-en="Downloads by Grade Level" data-ar="التحميلات حسب المرحلة الدراسية">
-                    التحميلات حسب المرحلة الدراسية
-                </span>
-            </h2>
-            <p class="section-description">
-                <i class="fas fa-info-circle"></i> مقارنة تحميلات الكتب بين المراحل الدراسية المختلفة (الابتدائية، الإعدادية، الثانوية).
-            </p>
-            <div class="bar-chart" id="gradeChart"></div>
-        </div>
-
-        <footer>
-            <a href="rights.html">
-                <i class="fas fa-copyright"></i>
-                <span data-en="All Rights Reserved © 2025 Abrar Private Schools" 
-                      data-ar="جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية">
-                    جميع الحقوق محفوظة © 2025 مدارس الأبرار الأهلية الحديثة
-                </span>
-            </a>
-            <div style="margin-top: 15px; color: #666; font-size: 0.95em;">
-                <i class="fas fa-database"></i> آخر تحديث للبيانات: <span id="lastUpdateTime"></span> |
-                <i class="fas fa-server"></i> حجم البيانات: <span id="dataSize">0 KB</span> |
-                <i class="fas fa-history"></i> التحديث التلقائي كل: <span id="autoRefresh">60 ثانية</span>
+            <!-- أكثر الكتب تحميلاً -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-book"></i>
+                    أكثر الكتب تحميلاً (Top 10)
+                </div>
+                <div id="topDownloads"></div>
             </div>
-        </footer>
-    </div>
 
-    <!-- مودال التقرير المفصل -->
-    <div id="detailedReportModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('detailedReportModal')">✕</button>
-            <div id="detailedReportContent"></div>
-        </div>
-    </div>
-
-    <!-- مودال الإعدادات -->
-    <div id="settingsModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <button class="close-modal" onclick="closeModal('settingsModal')">✕</button>
-            <h2 style="color: var(--primary-dark); margin-bottom: 25px;">
-                <i class="fas fa-cog"></i> إعدادات التحليلات
-            </h2>
-            <div style="display: grid; gap: 20px;">
-                <div style="background: rgba(248, 249, 250, 0.8); padding: 20px; border-radius: 12px;">
-                    <h3 style="color: var(--primary-dark); margin-bottom: 15px;">
-                        <i class="fas fa-sync-alt"></i> تحديث البيانات
-                    </h3>
-                    <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                        <input type="checkbox" id="autoRefreshToggle" checked>
-                        <span>التحديث التلقائي للبيانات</span>
-                    </label>
-                    <div style="display: flex; align-items: center; gap: 10px;">
-                        <span>فترة التحديث:</span>
-                        <select id="refreshInterval" style="padding: 8px 15px; border-radius: 8px; border: 2px solid var(--primary);">
-                            <option value="30000">30 ثانية</option>
-                            <option value="60000" selected>60 ثانية</option>
-                            <option value="120000">2 دقيقة</option>
-                            <option value="300000">5 دقائق</option>
-                        </select>
-                    </div>
+            <!-- النشاط اليومي -->
+            <div class="chart-container">
+                <div class="chart-title">
+                    <i class="fas fa-chart-bar"></i>
+                    النشاط اليومي (آخر 7 أيام)
                 </div>
-                
-                <div style="background: rgba(248, 249, 250, 0.8); padding: 20px; border-radius: 12px;">
-                    <h3 style="color: var(--primary-dark); margin-bottom: 15px;">
-                        <i class="fas fa-filter"></i> الفلاتر والمظهر
-                    </h3>
-                    <label style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
-                        <input type="checkbox" id="darkModeToggle">
-                        <span>الوضع الليلي</span>
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 10px;">
-                        <input type="checkbox" id="animationsToggle" checked>
-                        <span>الحركات والانتقالات</span>
-                    </label>
-                </div>
-                
-                <div style="background: rgba(248, 249, 250, 0.8); padding: 20px; border-radius: 12px;">
-                    <h3 style="color: var(--primary-dark); margin-bottom: 15px;">
-                        <i class="fas fa-database"></i> إدارة البيانات
-                    </h3>
-                    <div class="btn-group">
-                        <button class="btn-icon primary" onclick="backupData()">
-                            <i class="fas fa-save"></i> نسخ احتياطي
-                        </button>
-                        <button class="btn-icon secondary" onclick="resetStatistics()">
-                            <i class="fas fa-redo"></i> إعادة تعيين
-                        </button>
-                        <button class="btn-icon danger" onclick="clearAllData()">
-                            <i class="fas fa-trash"></i> حذف الكل
-                        </button>
-                    </div>
-                </div>
+                <div id="dailyActivity"></div>
             </div>
         </div>
     </div>
 
+    <script src="global-tracking.js"></script>
     <script>
-        // ---------- التهيئة ----------
-        let currentLang = localStorage.getItem("siteLang") || "ar";
-        let autoRefreshInterval = null;
-        let currentFilter = 'all';
-        let expandedSections = new Set(['general', 'login', 'sessions', 'books', 'charts']);
-        
-        // ---------- تأثير الجسيمات ----------
-        function createParticles() {
-            const particlesContainer = document.getElementById('particles');
-            const particleCount = 25;
+        // تبديل إظهار كلمة المرور
+        function togglePassword() {
+            const input = document.getElementById('adminPassword');
+            const icon = document.querySelector('.toggle-password');
             
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.classList.add('particle');
-                
-                const size = Math.random() * 25 + 5;
-                const posX = Math.random() * 100;
-                const posY = Math.random() * 100;
-                const delay = Math.random() * 5;
-                const duration = Math.random() * 10 + 5;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${posX}%`;
-                particle.style.top = `${posY}%`;
-                particle.style.animationDelay = `${delay}s`;
-                particle.style.animationDuration = `${duration}s`;
-                particle.style.opacity = Math.random() * 0.3 + 0.1;
-                particle.style.background = `rgba(255, 255, 255, ${Math.random() * 0.3 + 0.1})`;
-                
-                particlesContainer.appendChild(particle);
-            }
-        }
-        
-        // ---------- دوال التحويل والتنسيق ----------
-        function formatDuration(ms) {
-            if (!ms || ms < 1000) return "أقل من ثانية";
-            
-            const seconds = Math.floor(ms / 1000);
-            const minutes = Math.floor(seconds / 60);
-            const hours = Math.floor(minutes / 60);
-            const days = Math.floor(hours / 24);
-            
-            if (days > 0) {
-                return `${days} يوم ${hours % 24} ساعة`;
-            } else if (hours > 0) {
-                return `${hours} ساعة ${minutes % 60} دقيقة`;
-            } else if (minutes > 0) {
-                return `${minutes} دقيقة ${seconds % 60} ثانية`;
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
             } else {
-                return `${seconds} ثانية`;
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
             }
         }
-        
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 B';
-            const k = 1024;
-            const sizes = ['B', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        
-        function formatGregorianDate(dateStr) {
-            if (!dateStr) return "";
-            try {
-                if (dateStr.includes('T')) {
-                    const date = new Date(dateStr);
-                    return date.toLocaleDateString('ar-SA', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        weekday: 'long'
-                    });
-                }
-                return dateStr;
-            } catch (e) {
-                return dateStr;
+
+        // تسجيل الدخول
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('adminPassword').value;
+            const loginBtn = document.querySelector('.login-btn');
+            const errorDiv = document.getElementById('loginError');
+            
+            loginBtn.innerHTML = '<div class="loading"></div> جاري التحقق...';
+            loginBtn.disabled = true;
+            
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            if (password === 'admin@abrar2025') {
+                errorDiv.style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'none';
+                document.getElementById('statsContainer').style.display = 'block';
+                initializeTimeTracking();
+                loadStatistics();
+            } else {
+                errorDiv.textContent = '❌ كلمة المرور غير صحيحة. حاول مرة أخرى';
+                errorDiv.style.display = 'block';
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> <span>دخول إلى لوحة التحكم</span>';
+                loginBtn.disabled = false;
+                document.getElementById('adminPassword').value = '';
             }
-        }
-        
-        function getTrendIcon(current, previous) {
-            if (current > previous) return '<i class="fas fa-arrow-up" style="color: #27ae60;"></i>';
-            if (current < previous) return '<i class="fas fa-arrow-down" style="color: #e74c3c;"></i>';
-            return '<i class="fas fa-minus" style="color: #95a5a6;"></i>';
-        }
-        
-        // ---------- دوال عرض الإشعارات ----------
-        function showNotification(message, type = 'success') {
-            const notification = document.createElement('div');
-            notification.className = 'notification';
-            
-            let icon = 'fas fa-check-circle';
-            if (type === 'error') icon = 'fas fa-exclamation-circle';
-            if (type === 'warning') icon = 'fas fa-exclamation-triangle';
-            if (type === 'info') icon = 'fas fa-info-circle';
-            
-            notification.innerHTML = `
-                <i class="${icon}"></i>
-                <span>${message}</span>
-            `;
-            
-            document.body.appendChild(notification);
-            
-            setTimeout(() => {
-                notification.remove();
-            }, 3000);
-        }
-        
-        // ---------- دوال إدارة المودال ----------
-        function showModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-        
-        function showSettings() {
-            showModal('settingsModal');
-        }
-        
-        // ---------- دوال إدارة البيانات ----------
-        function backupData() {
-            const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
-            const loginHistory = JSON.parse(localStorage.getItem("loginHistory") || "[]");
-            const sessionHistory = JSON.parse(localStorage.getItem("sessionHistory") || "[]");
-            
-            const data = {
-                statistics: stats,
-                loginHistory: loginHistory,
-                sessionHistory: sessionHistory,
-                backupDate: new Date().toISOString(),
-                version: '1.0.0'
-            };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `abrar-schools-backup-${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('تم إنشاء نسخة احتياطية بنجاح', 'success');
-        }
-        
-        function resetStatistics() {
-            if (confirm('هل أنت متأكد من إعادة تعيين جميع الإحصائيات؟')) {
-                const stats = {
-                    logins: 0,
-                    downloads: {},
-                    bookDownloads: {},
-                    sessionDurations: [],
-                    averageSessionDuration: 0,
-                    todayDownloads: {},
-                    lastUpdate: new Date().toISOString()
+        });
+
+        // تهيئة نظام تتبع الوقت
+        function initializeTimeTracking() {
+            if (!localStorage.getItem('timeTracking')) {
+                const timeTracking = {
+                    sessions: {},
+                    pageTotals: {},
+                    startTime: Date.now()
                 };
-                
-                localStorage.setItem("siteStats", JSON.stringify(stats));
-                localStorage.setItem("loginHistory", JSON.stringify([]));
-                localStorage.setItem("sessionHistory", JSON.stringify([]));
-                
-                refreshStatistics();
-                showNotification('تم إعادة تعيين الإحصائيات بنجاح', 'success');
+                localStorage.setItem('timeTracking', JSON.stringify(timeTracking));
             }
+
+            // بدء تسجيل الوقت للجلسة الحالية
+            const sessionId = sessionStorage.getItem('sessionId') || generateSessionId();
+            sessionStorage.setItem('sessionId', sessionId);
+            
+            startTimeTracking(sessionId);
         }
-        
-        function clearAllData() {
-            if (confirm('⚠️ تحذير: سيتم حذف جميع البيانات الإحصائية نهائيًا. هل أنت متأكد؟')) {
-                localStorage.clear();
-                refreshStatistics();
-                showNotification('تم حذف جميع البيانات بنجاح', 'warning');
+
+        // توليد معرف جلسة فريد
+        function generateSessionId() {
+            return 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        }
+
+        // بدء تتبع الوقت
+        function startTimeTracking(sessionId) {
+            const timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+            
+            if (!timeTracking.sessions) timeTracking.sessions = {};
+            if (!timeTracking.sessions[sessionId]) {
+                timeTracking.sessions[sessionId] = {
+                    loginTime: new Date().toISOString(),
+                    pages: {},
+                    downloads: 0,
+                    lastActive: Date.now()
+                };
             }
+
+            const currentPage = window.location.pathname.split('/').pop() || 'statistics.html';
+            const pageStartTime = Date.now();
+
+            // تحديث الوقت كل ثانية
+            const trackingInterval = setInterval(() => {
+                const timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+                if (!timeTracking.sessions[sessionId]) return;
+
+                const elapsed = Date.now() - pageStartTime;
+                timeTracking.sessions[sessionId].pages[currentPage] = elapsed;
+                timeTracking.sessions[sessionId].lastActive = Date.now();
+
+                // تحديث إجمالي الوقت للصفحة
+                if (!timeTracking.pageTotals) timeTracking.pageTotals = {};
+                timeTracking.pageTotals[currentPage] = (timeTracking.pageTotals[currentPage] || 0) + 1000;
+
+                localStorage.setItem('timeTracking', JSON.stringify(timeTracking));
+            }, 1000);
+
+            // حفظ معرف الفاصل الزمني
+            window.trackingIntervalId = trackingInterval;
         }
-        
-        // ---------- دوال الفلاتر والبحث ----------
-        function filterTable(filter) {
-            currentFilter = filter;
-            const buttons = document.querySelectorAll('.filter-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+
+        // تحميل الإحصائيات
+        function loadStatistics() {
+            updateLastUpdateTime();
+            loadUserStats();
+            loadSessionData();
+            loadPageTimeDistribution();
+            loadTopDownloads();
+            loadDailyActivity();
             
-            displayLoginHistory(JSON.parse(localStorage.getItem("loginHistory") || "[]"));
+            // تحديث تلقائي كل 10 ثواني
+            setInterval(() => {
+                updateLastUpdateTime();
+                loadUserStats();
+                loadSessionData();
+                loadPageTimeDistribution();
+            }, 10000);
         }
-        
-        function filterSessions(filter) {
-            displaySessionHistory(JSON.parse(localStorage.getItem("sessionHistory") || "[]"), filter);
-        }
-        
-        function filterBooks(filter) {
-            displayTopDownloads(JSON.parse(localStorage.getItem("siteStats") || "{}"), getAllBooks(), filter);
-        }
-        
-        function toggleSection(element) {
-            const section = element.closest('.charts-section, .table-container');
-            const content = section.querySelector('.section-description, .table-description');
-            const nextElements = [];
-            let next = content.nextElementSibling;
-            
-            while (next && !next.classList.contains('.charts-section') && !next.classList.contains('.table-container')) {
-                nextElements.push(next);
-                next = next.nextElementSibling;
-            }
-            
-            const isExpanded = !element.classList.contains('collapsed');
-            
-            if (isExpanded) {
-                element.classList.add('collapsed');
-                nextElements.forEach(el => {
-                    el.style.maxHeight = '0';
-                    el.style.opacity = '0';
-                    el.style.margin = '0';
-                    el.style.padding = '0';
-                });
-            } else {
-                element.classList.remove('collapsed');
-                nextElements.forEach(el => {
-                    if (el.classList.contains('bar-chart') || el.classList.contains('table-wrapper')) {
-                        el.style.maxHeight = el.scrollHeight + 'px';
-                    } else {
-                        el.style.maxHeight = '1000px';
-                    }
-                    el.style.opacity = '1';
-                    el.style.margin = '';
-                    el.style.padding = '';
-                });
-            }
-        }
-        
-        // ---------- دوال التحديث والعرض ----------
-        function refreshStatistics() {
-            displayStatistics();
-            showNotification('تم تحديث البيانات بنجاح', 'success');
-        }
-        
-        function exportData() {
-            const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
-            const loginHistory = JSON.parse(localStorage.getItem("loginHistory") || "[]");
-            const sessionHistory = JSON.parse(localStorage.getItem("sessionHistory") || "[]");
-            
-            const data = {
-                statistics: stats,
-                loginHistory: loginHistory,
-                sessionHistory: sessionHistory,
-                exportDate: new Date().toISOString(),
-                generatedBy: "Abrar Schools Analytics"
+
+        // تحديث وقت آخر تحديث (ميلادي)
+        function updateLastUpdateTime() {
+            const now = new Date();
+            const options = {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
             };
-            
-            const dataStr = JSON.stringify(data, null, 2);
-            const dataBlob = new Blob([dataStr], {type: 'application/json'});
-            const url = URL.createObjectURL(dataBlob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `abrar-analytics-export-${new Date().toISOString().slice(0,10)}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            
-            showNotification('تم تصدير البيانات بنجاح', 'success');
+            const timeString = now.toLocaleString('en-US', options);
+            document.getElementById('lastUpdate').textContent = timeString;
         }
-        
-        function clearOldData() {
-            if (confirm('هل تريد حذف البيانات القديمة (ما عدا آخر 30 يوم)؟')) {
-                const loginHistory = JSON.parse(localStorage.getItem("loginHistory") || "[]");
-                const sessionHistory = JSON.parse(localStorage.getItem("sessionHistory") || "[]");
-                
-                const thirtyDaysAgo = new Date();
-                thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-                
-                const filteredLogins = loginHistory.filter(record => {
-                    try {
-                        const recordDate = new Date(record.loginTimestamp || record.date);
-                        return recordDate >= thirtyDaysAgo;
-                    } catch {
-                        return true;
-                    }
-                });
-                
-                const filteredSessions = sessionHistory.filter(session => {
-                    try {
-                        const sessionDate = new Date(session.timestamp || session.date);
-                        return sessionDate >= thirtyDaysAgo;
-                    } catch {
-                        return true;
-                    }
-                });
-                
-                localStorage.setItem('loginHistory', JSON.stringify(filteredLogins));
-                localStorage.setItem('sessionHistory', JSON.stringify(filteredSessions));
-                
-                refreshStatistics();
-                showNotification('تم حذف البيانات القديمة بنجاح', 'success');
-            }
-        }
-        
-        function showDetailedReport() {
-            const report = generateDetailedReport();
-            const modalContent = document.getElementById('detailedReportContent');
+
+        // تحميل إحصائيات المستخدمين
+        function loadUserStats() {
+            const stats = JSON.parse(localStorage.getItem('siteStats') || '{}');
+            const timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
             
-            modalContent.innerHTML = `
-                <h2 style="color: var(--primary-dark); margin-bottom: 25px; text-align: center;">
-                    <i class="fas fa-chart-line"></i> التقرير الإحصائي المفصل
-                </h2>
-                
-                <div style="display: grid; gap: 25px;">
-                    <div style="background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 25px; border-radius: 15px; border-left: 5px solid var(--primary);">
-                        <h3 style="color: var(--primary-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-list-alt"></i> الملخص التنفيذي
-                        </h3>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                            <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                                <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">المستخدمون النشطون</div>
-                                <div style="font-size: 2.5em; font-weight: 800; color: var(--primary-dark);">${report.summary.activeUsers}</div>
-                            </div>
-                            <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                                <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">متوسط وقت الجلسة</div>
-                                <div style="font-size: 2.5em; font-weight: 800; color: var(--gold);">${Math.round(report.summary.avgSessionTime / 60000)}<span style="font-size: 0.5em;"> د</span></div>
-                            </div>
-                            <div style="background: white; padding: 20px; border-radius: 12px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
-                                <div style="font-size: 0.9em; color: #666; margin-bottom: 10px;">نسبة المشاركة</div>
-                                <div style="font-size: 2.5em; font-weight: 800; color: var(--info);">${report.summary.engagementRate}<span style="font-size: 0.5em;">%</span></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px;">
-                        <div style="background: linear-gradient(135deg, #fff8e1, #ffeaa7); padding: 25px; border-radius: 15px; border-left: 5px solid var(--gold);">
-                            <h3 style="color: #d35400; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                                <i class="fas fa-trophy"></i> الأكثر نشاطاً
-                            </h3>
-                            <div style="max-height: 300px; overflow-y: auto;">
-                                ${report.topPerformers.mostActiveUsers.map((user, index) => `
-                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
-                                        <div style="display: flex; align-items: center; gap: 10px;">
-                                            <span style="font-weight: 800; color: ${index < 3 ? 'var(--gold)' : '#666'};">${index + 1}</span>
-                                            <span style="font-weight: 600;">${user.name}</span>
-                                        </div>
-                                        <span style="background: var(--primary); color: white; padding: 5px 12px; border-radius: 15px; font-weight: 700;">${user.logins}</span>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        
-                        <div style="background: linear-gradient(135deg, #e8f6f3, #a3e4d7); padding: 25px; border-radius: 15px; border-left: 5px solid var(--primary);">
-                            <h3 style="color: var(--primary-dark); margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                                <i class="fas fa-chart-bar"></i> التوزيع الزمني
-                            </h3>
-                            <div style="max-height: 300px; overflow-y: auto;">
-                                ${report.timeAnalysis.peakHours.map(hour => `
-                                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.1);">
-                                        <span style="font-weight: 600;">${hour.hour}:00</span>
-                                        <div style="display: flex; align-items: center; gap: 10px;">
-                                            <div style="width: 100px; height: 8px; background: #ddd; border-radius: 4px; overflow: hidden;">
-                                                <div style="height: 100%; width: ${(hour.count / Math.max(...report.timeAnalysis.peakHours.map(h => h.count))) * 100}%; background: var(--primary);"></div>
-                                            </div>
-                                            <span style="font-weight: 700; color: var(--primary-dark);">${hour.count}</span>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    ${report.recommendations.length > 0 ? `
-                    <div style="background: linear-gradient(135deg, #ffeaa7, #fab1a0); padding: 25px; border-radius: 15px; border-left: 5px solid var(--danger);">
-                        <h3 style="color: #d63031; margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
-                            <i class="fas fa-lightbulb"></i> التوصيات والإجراءات
-                        </h3>
-                        <ul style="list-style: none; padding: 0;">
-                            ${report.recommendations.map(rec => `
-                                <li style="padding: 12px; background: rgba(255,255,255,0.8); margin-bottom: 10px; border-radius: 10px; display: flex; align-items: flex-start; gap: 12px;">
-                                    <i class="fas fa-check-circle" style="color: var(--primary); margin-top: 4px;"></i>
-                                    <span>${rec}</span>
-                                </li>
-                            `).join('')}
-                        </ul>
-                    </div>
-                    ` : ''}
-                    
-                    <div style="text-align: center; padding: 20px; color: #666; font-size: 0.9em; border-top: 2px solid #eee;">
-                        <i class="fas fa-clock"></i> تم إنشاء التقرير في: ${new Date().toLocaleString('ar-SA', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit'
-                        })}
-                    </div>
-                </div>
-            `;
-            
-            showModal('detailedReportModal');
-        }
-        
-        // ---------- دوال العرض الرئيسية ----------
-        function displayStatistics() {
-            const stats = initializeStats();
-            const books = getAllBooks();
-            const loginHistory = JSON.parse(localStorage.getItem("loginHistory") || "[]");
-            const sessionHistory = JSON.parse(localStorage.getItem("sessionHistory") || "[]");
-            
-            // تحديث وقت آخر تحديث
-            document.getElementById("lastUpdateTime").textContent = 
-                new Date().toLocaleTimeString('ar-SA', {
-                    hour: '2-digit',
-                    minute: '2-digit',
-                    second: '2-digit'
-                });
-            
-            // حساب حجم البيانات
-            const dataSize = JSON.stringify(localStorage).length;
-            document.getElementById("dataSize").textContent = formatFileSize(dataSize);
-            
-            // الإحصائيات العامة
-            document.getElementById("totalLogins").textContent = stats.logins || 0;
-            
-            // عدد المستخدمين الفريدين
-            const uniqueUsers = new Set(loginHistory.map(record => record.name));
-            document.getElementById("uniqueUsers").textContent = 
-                `${uniqueUsers.size} مستخدم فريد`;
-            
-            // إحصائيات الدخول
-            const today = new Date().toDateString();
-            const todayLogins = loginHistory.filter(record => {
-                try {
-                    const recordDate = new Date(record.loginTimestamp || record.date);
-                    return recordDate.toDateString() === today;
-                } catch {
-                    return false;
-                }
-            }).length;
-            
-            document.getElementById("todayLogins").textContent = todayLogins;
-            document.getElementById("todayLoginsProgress").style.width = `${Math.min((todayLogins / (stats.logins || 1)) * 100, 100)}%`;
-            
-            // إحصائيات أسبوعية وشهرية
-            const weekAgo = new Date();
-            weekAgo.setDate(weekAgo.getDate() - 7);
-            const monthAgo = new Date();
-            monthAgo.setDate(monthAgo.getDate() - 30);
-            
-            const weeklyLogins = loginHistory.filter(record => {
-                try {
-                    const recordDate = new Date(record.loginTimestamp || record.date);
-                    return recordDate >= weekAgo;
-                } catch {
-                    return false;
-                }
-            }).length;
-            
-            const monthlyLogins = loginHistory.filter(record => {
-                try {
-                    const recordDate = new Date(record.loginTimestamp || record.date);
-                    return recordDate >= monthAgo;
-                } catch {
-                    return false;
-                }
-            }).length;
-            
-            document.getElementById("weeklyLogins").textContent = weeklyLogins;
-            document.getElementById("monthlyLogins").textContent = monthlyLogins;
+            // إجمالي المستخدمين
+            const totalUsers = Object.keys(timeTracking.sessions || {}).length;
+            document.getElementById('totalUsers').textContent = totalUsers;
             
             // إجمالي التحميلات
-            const totalDownloads = Object.values(stats.downloads || {}).reduce((a, b) => a + b, 0);
-            document.getElementById("totalDownloads").textContent = totalDownloads;
+            const downloads = stats.downloads || {};
+            const totalDownloads = Object.values(downloads).reduce((sum, count) => sum + count, 0);
+            document.getElementById('totalDownloads').textContent = totalDownloads;
             
-            // تحميلات اليوم
-            const todayDownloads = getDailyStats(stats);
-            document.getElementById("todayDownloads").textContent = todayDownloads;
-            document.getElementById("todayDownloadsProgress").style.width = `${Math.min((todayDownloads / Math.max(totalDownloads, 1)) * 100, 100)}%`;
+            // إجمالي الوقت بالساعات
+            const sessions = timeTracking.sessions || {};
+            let totalMilliseconds = 0;
+            Object.values(sessions).forEach(session => {
+                const pages = session.pages || {};
+                Object.values(pages).forEach(pageTime => {
+                    totalMilliseconds += pageTime;
+                });
+            });
+            const totalHours = (totalMilliseconds / 3600000).toFixed(1);
+            document.getElementById('totalTime').textContent = totalHours;
             
-            // متوسط التحميلات اليومية وساعة الذروة
-            const avgDailyDownloads = getAvgDailyDownloads(stats);
-            document.getElementById("avgDailyDownloads").textContent = avgDailyDownloads;
-            
-            const peakHour = getPeakHour(stats);
-            document.getElementById("peakHour").textContent = peakHour;
-            
-            // اتجاه التحميلات
-            const downloadTrend = getDownloadTrend(stats);
-            document.getElementById("downloadTrend").innerHTML = downloadTrend;
-            
-            // إحصائيات الجلسات
-            const avgDuration = stats.averageSessionDuration || 0;
-            document.getElementById("avgSessionTime").textContent = Math.round(avgDuration / 60000);
-            
-            const sessionStats = getSessionStats(sessionHistory);
-            document.getElementById("longestSession").textContent = 
-                sessionStats.longest > 0 ? Math.round(sessionStats.longest / 60000) + " د" : "0";
-            document.getElementById("shortestSession").textContent = 
-                sessionStats.shortest > 0 ? Math.round(sessionStats.shortest / 60000) + " د" : "0";
-            document.getElementById("sessionDurationProgress").style.width = 
-                `${Math.min((avgDuration / Math.max(sessionStats.longest, 1)) * 100, 100)}%`;
-            
-            const totalSessionTime = (stats.sessionDurations || []).reduce((a, b) => a + b, 0);
-            document.getElementById("totalSessionTime").textContent = 
-                `${Math.round(totalSessionTime / 3600000)} ساعة`;
-            
-            // اتجاه الجلسات
-            const sessionTrend = getSessionTrend(stats);
-            document.getElementById("sessionTrend").innerHTML = sessionTrend;
-            
-            // عدد الكتب
-            document.getElementById("totalBooks").textContent = books.length;
-            
-            // الكتب حسب المنهج
-            const booksByCurriculum = getBooksByCurriculum(books);
-            document.getElementById("egyptBooksCount").textContent = booksByCurriculum.egyptCount;
-            document.getElementById("saudiBooksCount").textContent = booksByCurriculum.saudiCount;
-            document.getElementById("egyptBooksProgress").style.width = 
-                `${(booksByCurriculum.egyptCount / Math.max(books.length, 1)) * 100}%`;
-            
-            // اتجاه الكتب
-            const booksTrend = getBooksTrend(books);
-            document.getElementById("booksTrend").innerHTML = booksTrend;
-            
-            // عرض الجداول
-            displayLoginHistory(loginHistory);
-            displaySessionHistory(sessionHistory);
-            displayTopDownloads(stats, books);
-            
-            // رسم المخططات
-            drawCharts(stats, books);
+            // زوار اليوم
+            const today = new Date().toDateString();
+            const todayDownloads = stats.todayDownloads || {};
+            const todayVisitors = todayDownloads[today] || 0;
+            document.getElementById('todayVisitors').textContent = todayVisitors;
+
+            // متوسط وقت الجلسة
+            const avgMinutes = totalUsers > 0 ? (totalMilliseconds / totalUsers / 60000).toFixed(1) : 0;
+            document.getElementById('avgSession').textContent = avgMinutes;
         }
-        
-        function displayLoginHistory(loginHistory) {
-            const tableBody = document.getElementById("loginHistoryTable");
-            const emptyState = document.getElementById("loginHistoryEmpty");
+
+        // تحويل الوقت لصيغة قابلة للقراءة
+        function formatDuration(milliseconds) {
+            const seconds = Math.floor(milliseconds / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
             
-            tableBody.innerHTML = "";
+            if (hours > 0) {
+                return `${hours}س ${minutes % 60}د`;
+            } else if (minutes > 0) {
+                return `${minutes}د ${seconds % 60}ث`;
+            } else {
+                return `${seconds}ث`;
+            }
+        }
+
+        // تحميل بيانات الجلسات
+        function loadSessionData() {
+            const timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+            const sessions = timeTracking.sessions || {};
+            const tbody = document.getElementById('usersTableBody');
             
-            if (loginHistory.length === 0) {
-                emptyState.style.display = "block";
+            if (Object.keys(sessions).length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="9" class="no-data">
+                            <i class="fas fa-inbox"></i>
+                            <p>لا توجد جلسات مسجلة بعد</p>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
             
-            emptyState.style.display = "none";
-            
-            // تطبيق الفلاتر
-            let filteredLogins = loginHistory;
-            if (currentFilter === 'مصري') {
-                filteredLogins = loginHistory.filter(record => record.curriculum === 'مصري');
-            } else if (currentFilter === 'سعودي') {
-                filteredLogins = loginHistory.filter(record => record.curriculum === 'سعودي');
-            } else if (currentFilter === 'today') {
-                const today = new Date().toDateString();
-                filteredLogins = loginHistory.filter(record => {
-                    try {
-                        const recordDate = new Date(record.loginTimestamp || record.date);
-                        return recordDate.toDateString() === today;
-                    } catch {
-                        return false;
-                    }
-                });
-            }
-            
-            // عرض أول 100 سجل فقط
-            const recentLogins = filteredLogins.slice(0, 100);
-            
-            recentLogins.forEach((record, index) => {
-                const row = document.createElement("tr");
+            let html = '';
+            const sortedSessions = Object.entries(sessions).sort((a, b) => {
+                return new Date(b[1].loginTime) - new Date(a[1].loginTime);
+            });
+
+            sortedSessions.forEach(([sessionId, session], index) => {
+                const pages = session.pages || {};
+                const totalTime = Object.values(pages).reduce((sum, time) => sum + time, 0);
                 
-                row.innerHTML = `
-                    <td><strong class="rank-${index + 1}">${index + 1}</strong></td>
-                    <td><strong>${record.name || 'غير محدد'}</strong></td>
-                    <td><span class="grade-badge">${record.grade || 'غير محدد'}</span></td>
-                    <td><span class="curriculum-badge badge-${record.curriculum === "مصري" ? "egypt" : "saudi"}">
-                        ${record.curriculum || 'غير محدد'}
-                    </span></td>
-                    <td><span class="date-badge">${formatGregorianDate(record.date) || 'غير محدد'}</span></td>
-                    <td><span class="time-badge">${record.time || 'غير محدد'}</span></td>
-                    <td>
-                        <button class="btn-icon secondary" onclick="viewUserDetails('${record.name}')" style="padding: 5px 10px; font-size: 0.9em;">
-                            <i class="fas fa-eye"></i>
-                        </button>
-                    </td>
+                const loginTime = session.loginTime ? new Date(session.loginTime).toLocaleString('en-US', {
+                    month: 'short',
+                    day: 'numeric',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                }) : 'غير محدد';
+                
+                const pageCount = Object.keys(pages).length;
+                const downloads = session.downloads || 0;
+                
+                const isActive = (Date.now() - session.lastActive) < 300000; // نشط خلال آخر 5 دقائق
+                const statusBadge = isActive ? 
+                    '<span class="badge badge-success">🟢 نشط</span>' : 
+                    '<span class="badge badge-warning">🟡 غير نشط</span>';
+                
+                const userName = session.userName || 'مستخدم غير معروف';
+                const curriculum = session.curriculum || '-';
+                const grade = session.grade || '-';
+                
+                // تمييز المسار بالعلم
+                const curriculumDisplay = curriculum === 'سعودي' ? '🇸🇦 سعودي' : 
+                                         curriculum === 'مصري' ? '🇪🇬 مصري' : curriculum;
+                
+                html += `
+                    <tr>
+                        <td><strong>${index + 1}</strong></td>
+                        <td><strong style="color: #2c3e50;">${userName}</strong></td>
+                        <td>${curriculumDisplay}</td>
+                        <td>${grade}</td>
+                        <td>${loginTime}</td>
+                        <td><strong style="color: #3498db;">${formatDuration(totalTime)}</strong></td>
+                        <td><span class="badge badge-info">${pageCount} صفحة</span></td>
+                        <td><strong style="color: #27ae60;">${downloads}</strong></td>
+                        <td>${statusBadge}</td>
+                    </tr>
                 `;
-                
-                tableBody.appendChild(row);
             });
+            
+            tbody.innerHTML = html;
         }
-        
-        function displaySessionHistory(sessionHistory, filter = 'all') {
-            const tableBody = document.getElementById("sessionHistoryTable");
-            const emptyState = document.getElementById("sessionHistoryEmpty");
+
+        // تحميل توزيع الوقت على الصفحات
+        function loadPageTimeDistribution() {
+            const timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+            const pageTotals = timeTracking.pageTotals || {};
             
-            tableBody.innerHTML = "";
+            const container = document.getElementById('pageTimeDistribution');
             
-            if (sessionHistory.length === 0) {
-                emptyState.style.display = "block";
-                return;
-            }
-            
-            emptyState.style.display = "none";
-            
-            // تطبيق الفلاتر
-            let filteredSessions = sessionHistory;
-            if (filter === 'long') {
-                filteredSessions = [...sessionHistory].sort((a, b) => b.duration - a.duration);
-            } else if (filter === 'short') {
-                filteredSessions = [...sessionHistory].sort((a, b) => a.duration - b.duration);
-            } else if (filter === 'today') {
-                const today = new Date().toDateString();
-                filteredSessions = sessionHistory.filter(session => {
-                    try {
-                        const sessionDate = new Date(session.timestamp || session.date);
-                        return sessionDate.toDateString() === today;
-                    } catch {
-                        return false;
-                    }
-                });
-            }
-            
-            // عرض أول 50 جلسة فقط
-            const recentSessions = filteredSessions.slice(0, 50);
-            
-            recentSessions.forEach((session, index) => {
-                const row = document.createElement("tr");
-                
-                row.innerHTML = `
-                    <td><strong>${session.name || 'غير محدد'}</strong></td>
-                    <td><span class="grade-badge">${session.grade || 'غير محدد'}</span></td>
-                    <td><span class="duration-badge">${formatDuration(session.duration)}</span></td>
-                    <td><span class="time-badge">${session.loginTime || 'غير محدد'}</span></td>
-                    <td><span class="time-badge">${session.logoutTime || 'غير محدد'}</span></td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-        }
-        
-        function displayTopDownloads(stats, books, filter = 'all') {
-            const tableBody = document.getElementById("topDownloadsTable");
-            const emptyState = document.getElementById("topDownloadsEmpty");
-            
-            tableBody.innerHTML = "";
-            
-            // تجميع بيانات التحميل من جميع الكتب
-            const bookDownloads = [];
-            books.forEach(book => {
-                // البحث عن الكتاب في إحصائيات التحميل
-                const downloads = stats.downloads?.[book.title] || 
-                                 stats.bookDownloads?.[book.title] || 
-                                 (stats.downloads ? Object.entries(stats.downloads)
-                                     .find(([key]) => key.includes(book.title))?.[1] : 0) || 0;
-                
-                if (downloads > 0) {
-                    bookDownloads.push({
-                        ...book,
-                        downloads: downloads,
-                        trend: getBookTrend(book.title, stats)
-                    });
-                }
-            });
-            
-            // إذا لم توجد كتب مع تحميلات، نعرض الكتب المتاحة فقط
-            if (bookDownloads.length === 0) {
-                // عرض الكتب المتاحة فقط
-                books.slice(0, 10).forEach((book, index) => {
-                    const row = document.createElement("tr");
-                    
-                    row.innerHTML = `
-                        <td><strong class="rank-${index + 1}">${index + 1}</strong></td>
-                        <td>${book.title}</td>
-                        <td><span class="curriculum-badge badge-${book.curriculum === "مصري" ? "egypt" : "saudi"}">
-                            ${book.curriculum}
-                        </span></td>
-                        <td><strong>0</strong></td>
-                        <td><i class="fas fa-minus" style="color: #95a5a6;"></i></td>
-                    `;
-                    
-                    tableBody.appendChild(row);
-                });
-                
-                emptyState.style.display = "none";
-                return;
-            }
-            
-            emptyState.style.display = "none";
-            
-            // تطبيق الفلاتر
-            let filteredBooks = bookDownloads;
-            if (filter === 'مصري') {
-                filteredBooks = bookDownloads.filter(book => book.curriculum === 'مصري');
-            } else if (filter === 'سعودي') {
-                filteredBooks = bookDownloads.filter(book => book.curriculum === 'سعودي');
-            } else if (filter === 'month') {
-                const monthAgo = new Date();
-                monthAgo.setMonth(monthAgo.getMonth() - 1);
-                // يمكن إضافة فلتر حسب التاريخ إذا كان متوفراً
-            }
-            
-            // ترتيب حسب عدد التحميلات
-            filteredBooks.sort((a, b) => b.downloads - a.downloads);
-            
-            // عرض أول 10 كتب فقط
-            const topBooks = filteredBooks.slice(0, 10);
-            
-            topBooks.forEach((book, index) => {
-                const row = document.createElement("tr");
-                
-                row.innerHTML = `
-                    <td><strong class="rank-${index + 1}">${index + 1}</strong></td>
-                    <td>${book.title}</td>
-                    <td><span class="curriculum-badge badge-${book.curriculum === "مصري" ? "egypt" : "saudi"}">
-                        ${book.curriculum}
-                    </span></td>
-                    <td><strong>${book.downloads}</strong></td>
-                    <td>${book.trend}</td>
-                `;
-                
-                tableBody.appendChild(row);
-            });
-        }
-        
-        function drawCharts(stats, books) {
-            // تجميع البيانات
-            const yearData = {};
-            const termData = {};
-            const subjectData = {};
-            const gradeData = {};
-            
-            books.forEach((book) => {
-                const downloads = stats.downloads?.[book.title] || 
-                                stats.bookDownloads?.[book.title] || 0;
-                
-                yearData[book.year] = (yearData[book.year] || 0) + downloads;
-                termData[book.term] = (termData[book.term] || 0) + downloads;
-                subjectData[book.subject] = (subjectData[book.subject] || 0) + downloads;
-                gradeData[book.grade] = (gradeData[book.grade] || 0) + downloads;
-            });
-            
-            // رسم المخططات
-            drawBarChart("yearChart", yearData, 'سنة');
-            drawBarChart("termChart", termData, 'فصل');
-            drawBarChart("subjectChart", subjectData, 'مادة');
-            drawBarChart("gradeChart", gradeData, 'صف');
-        }
-        
-        function drawBarChart(elementId, data, labelType) {
-            const container = document.getElementById(elementId);
-            if (!container) return;
-            
-            container.innerHTML = "";
-            
-            const entries = Object.entries(data);
-            if (entries.length === 0) {
+            if (Object.keys(pageTotals).length === 0) {
                 container.innerHTML = `
-                    <div class="empty-state" style="padding: 30px;">
-                        <i class="fas fa-chart-bar"></i>
-                        <p>لا توجد بيانات متاحة للعرض</p>
+                    <div class="no-data">
+                        <i class="fas fa-chart-pie"></i>
+                        <p>لا توجد بيانات متاحة</p>
                     </div>
                 `;
                 return;
             }
             
-            const maxValue = Math.max(...Object.values(data), 1);
-            
-            entries
+            const sortedPages = Object.entries(pageTotals)
                 .sort((a, b) => b[1] - a[1])
-                .forEach(([label, value]) => {
-                    const percentage = (value / maxValue) * 100;
-                    const isTop = value === maxValue;
-                    
-                    const barItem = document.createElement("div");
-                    barItem.className = "bar-item";
-                    
-                    barItem.innerHTML = `
-                        <div class="bar-label">
-                            <i class="fas fa-${getIconForLabel(labelType, label)}"></i>
-                            ${label}
-                        </div>
-                        <div class="bar-container">
-                            <div class="bar-fill ${isTop ? 'premium' : ''}" style="width: ${percentage}%">
-                                <span class="bar-value">${value}</span>
-                            </div>
-                        </div>
-                    `;
-                    
-                    container.appendChild(barItem);
-                });
-        }
-        
-        function getIconForLabel(type, label) {
-            const icons = {
-                'سنة': 'calendar-alt',
-                'فصل': 'layer-group',
-                'مادة': 'book-open',
-                'صف': 'graduation-cap'
-            };
-            
-            return icons[type] || 'chart-bar';
-        }
-        
-        // ---------- دوال المساعدة ----------
-        function initializeStats() {
-            const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
-            
-            if (!stats.logins) {
-                stats.logins = 0;
-                stats.downloads = {};
-                stats.bookDownloads = {};
-                stats.sessionDurations = [];
-                stats.averageSessionDuration = 0;
-                stats.todayDownloads = {};
-                stats.lastUpdate = new Date().toISOString();
-            }
-            
-            return stats;
-        }
-        
-        function getAllBooks() {
-            // محاولة جلب الكتب من localStorage
-            let egyptBooks = [];
-            let saudiBooks = [];
-            
-            try {
-                const egyptBooksData = localStorage.getItem("egyptBooks");
-                const saudiBooksData = localStorage.getItem("saudiBooks");
-                
-                if (egyptBooksData) {
-                    egyptBooks = JSON.parse(egyptBooksData);
-                }
-                
-                if (saudiBooksData) {
-                    saudiBooks = JSON.parse(saudiBooksData);
-                }
-            } catch (error) {
-                console.error('خطأ في تحميل الكتب:', error);
-            }
-            
-            // إذا لم توجد كتب، نستخدم بيانات افتراضية
-            if (egyptBooks.length === 0 && saudiBooks.length === 0) {
-                // بيانات افتراضية للكتب المصرية
-                egyptBooks = [
-                    { title: "اللغة العربية - الصف الأول الابتدائي", curriculum: "مصري", grade: "الصف الأول الابتدائي", year: "1446", term: "الفصل الأول", subject: "اللغة العربية" },
-                    { title: "الرياضيات - الصف الأول الابتدائي", curriculum: "مصري", grade: "الصف الأول الابتدائي", year: "1446", term: "الفصل الأول", subject: "الرياضيات" },
-                    { title: "العلوم - الصف الأول الابتدائي", curriculum: "مصري", grade: "الصف الأول الابتدائي", year: "1446", term: "الفصل الأول", subject: "العلوم" },
-                    { title: "اللغة العربية - الصف الثاني الابتدائي", curriculum: "مصري", grade: "الصف الثاني الابتدائي", year: "1446", term: "الفصل الأول", subject: "اللغة العربية" },
-                    { title: "الرياضيات - الصف الثاني الابتدائي", curriculum: "مصري", grade: "الصف الثاني الابتدائي", year: "1446", term: "الفصل الأول", subject: "الرياضيات" }
-                ];
-                
-                // بيانات افتراضية للكتب السعودية
-                saudiBooks = [
-                    { title: "اللغـة العربيـة - الصـف الأول ابتـدائي", curriculum: "سعودي", grade: "الصف الأول الابتدائي", year: "1446", term: "الفصل الأول", subject: "اللغة العربية" },
-                    { title: "الرياضيـات - الصـف الأول ابتـدائي", curriculum: "سعودي", grade: "الصف الأول الابتدائي", year: "1446", term: "الفصل الأول", subject: "الرياضيات" },
-                    { title: "العلـوم - الصـف الأول ابتـدائي", curriculum: "سعودي", grade: "الصف الأول الابتدائي", year: "1446", term: "الفصل الأول", subject: "العلوم" },
-                    { title: "اللغـة العربيـة - الصـف الثاني ابتـدائي", curriculum: "سعودي", grade: "الصف الثاني الابتدائي", year: "1446", term: "الفصل الأول", subject: "اللغة العربية" },
-                    { title: "الرياضيـات - الصـف الثاني ابتـدائي", curriculum: "سعودي", grade: "الصف الثاني الابتدائي", year: "1446", term: "الفصل الأول", subject: "الرياضيات" }
-                ];
-                
-                // حفظ البيانات الافتراضية
-                try {
-                    localStorage.setItem("egyptBooks", JSON.stringify(egyptBooks));
-                    localStorage.setItem("saudiBooks", JSON.stringify(saudiBooks));
-                } catch (error) {
-                    console.error('خطأ في حفظ الكتب الافتراضية:', error);
-                }
-            }
-            
-            return [
-                ...egyptBooks.map((b) => ({ ...b, curriculum: "مصري" })),
-                ...saudiBooks.map((b) => ({ ...b, curriculum: "سعودي" })),
-            ];
-        }
-        
-        function getDailyStats(stats) {
-            const today = new Date().toDateString();
-            return (stats.todayDownloads && stats.todayDownloads[today]) || 0;
-        }
-        
-        function getAvgDailyDownloads(stats) {
-            if (!stats.todayDownloads) return 0;
-            
-            const downloadDays = Object.keys(stats.todayDownloads).length;
-            if (downloadDays === 0) return 0;
-            
-            const totalDownloads = Object.values(stats.todayDownloads).reduce((a, b) => a + b, 0);
-            return Math.round(totalDownloads / downloadDays);
-        }
-        
-        function getPeakHour(stats) {
-            // يمكن تحسين هذه الدالة لتتبع ساعات الذروة الفعلية
-            return "14:00";
-        }
-        
-        function getDownloadTrend(stats) {
-            const today = new Date().toDateString();
-            const yesterday = new Date();
-            yesterday.setDate(yesterday.getDate() - 1);
-            const yesterdayStr = yesterday.toDateString();
-            
-            const todayDownloads = stats.todayDownloads?.[today] || 0;
-            const yesterdayDownloads = stats.todayDownloads?.[yesterdayStr] || 0;
-            
-            const diff = todayDownloads - yesterdayDownloads;
-            const percentChange = yesterdayDownloads > 0 ? (diff / yesterdayDownloads) * 100 : 100;
-            
-            if (diff > 0) {
-                return `<span style="color: #27ae60;">+${Math.abs(diff)} (${percentChange.toFixed(1)}%) ↑</span>`;
-            } else if (diff < 0) {
-                return `<span style="color: #e74c3c;">-${Math.abs(diff)} (${percentChange.toFixed(1)}%) ↓</span>`;
-            } else {
-                return `<span style="color: #95a5a6;">مستقر</span>`;
-            }
-        }
-        
-        function getSessionStats(sessionHistory) {
-            if (sessionHistory.length === 0) {
-                return { longest: 0, shortest: 0 };
-            }
-            
-            const durations = sessionHistory.map(s => s.duration).filter(d => d > 0);
-            if (durations.length === 0) {
-                return { longest: 0, shortest: 0 };
-            }
-            
-            return {
-                longest: Math.max(...durations),
-                shortest: Math.min(...durations)
-            };
-        }
-        
-        function getSessionTrend(stats) {
-            const durations = stats.sessionDurations || [];
-            if (durations.length < 2) return "بيانات غير كافية";
-            
-            const recentAvg = durations.slice(-5).reduce((a, b) => a + b, 0) / 5;
-            const previousAvg = durations.slice(-10, -5).reduce((a, b) => a + b, 0) / 5;
-            
-            if (recentAvg > previousAvg) {
-                return `<span style="color: #27ae60;">تحسن ${((recentAvg - previousAvg) / previousAvg * 100).toFixed(1)}% ↑</span>`;
-            } else if (recentAvg < previousAvg) {
-                return `<span style="color: #e74c3c;">انخفاض ${((previousAvg - recentAvg) / previousAvg * 100).toFixed(1)}% ↓</span>`;
-            } else {
-                return `<span style="color: #95a5a6;">مستقر</span>`;
-            }
-        }
-        
-        function getBooksByCurriculum(books) {
-            const egyptCount = books.filter(b => b.curriculum === "مصري").length;
-            const saudiCount = books.filter(b => b.curriculum === "سعودي").length;
-            
-            return { egyptCount, saudiCount };
-        }
-        
-        function getBooksTrend(books) {
-            const egyptBooks = books.filter(b => b.curriculum === "مصري");
-            const saudiBooks = books.filter(b => b.curriculum === "سعودي");
-            
-            if (egyptBooks.length > saudiBooks.length) {
-                return `<span style="color: var(--primary);">المصري ${Math.round((egyptBooks.length / books.length) * 100)}%</span>`;
-            } else if (saudiBooks.length > egyptBooks.length) {
-                return `<span style="color: var(--gold);">السعودي ${Math.round((saudiBooks.length / books.length) * 100)}%</span>`;
-            } else {
-                return `<span style="color: #95a5a6;">متساوي</span>`;
-            }
-        }
-        
-        function getBookTrend(bookTitle, stats) {
-            // يمكن تحسين هذه الدالة لتتبع اتجاه التحميل لكل كتاب
-            return '<i class="fas fa-minus" style="color: #95a5a6;"></i>';
-        }
-        
-        function generateDetailedReport() {
-            const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
-            const loginHistory = JSON.parse(localStorage.getItem("loginHistory") || "[]");
-            const sessionHistory = JSON.parse(localStorage.getItem("sessionHistory") || "[]");
-            const books = getAllBooks();
-            
-            // حساب المستخدمين النشطين (دخلوا خلال آخر 7 أيام)
-            const weekAgo = new Date();
-            weekAgo.setDate(weekAgo.getDate() - 7);
-            const activeUsers = new Set(loginHistory.filter(record => {
-                try {
-                    const recordDate = new Date(record.loginTimestamp || record.date);
-                    return recordDate >= weekAgo;
-                } catch {
-                    return false;
-                }
-            }).map(record => record.name)).size;
-            
-            // حساب نسبة المشاركة
-            const totalUsers = new Set(loginHistory.map(record => record.name)).size;
-            const engagementRate = totalUsers > 0 ? Math.round((activeUsers / totalUsers) * 100) : 0;
-            
-            // أكثر المستخدمين نشاطاً
-            const userActivity = {};
-            loginHistory.forEach(record => {
-                userActivity[record.name] = (userActivity[record.name] || 0) + 1;
-            });
-            
-            const mostActiveUsers = Object.entries(userActivity)
-                .map(([name, logins]) => ({ name, logins }))
-                .sort((a, b) => b.logins - a.logins)
                 .slice(0, 10);
             
-            // ساعات الذروة
-            const hourCounts = {};
-            loginHistory.forEach(record => {
-                try {
-                    const time = record.time || '';
-                    const hour = time.split(':')[0];
-                    if (hour) {
-                        hourCounts[hour] = (hourCounts[hour] || 0) + 1;
-                    }
-                } catch (e) {}
-            });
+            const maxTime = Math.max(...sortedPages.map(([_, time]) => time));
             
-            const peakHours = Object.entries(hourCounts)
-                .map(([hour, count]) => ({ hour: hour.padStart(2, '0'), count }))
-                .sort((a, b) => b.count - a.count)
-                .slice(0, 5);
+            const colors = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+            ];
             
-            // توليد التوصيات
-            const recommendations = [];
-            
-            if (activeUsers < 10) {
-                recommendations.push("عدد المستخدمين النشطين منخفض، يجب زيادة المشاركة عبر الأنشطة التفاعلية");
-            }
-            
-            if (stats.averageSessionDuration < 300000) { // أقل من 5 دقائق
-                recommendations.push("مدة الجلسات قصيرة، يمكن تحسين تجربة المستخدم وزيادة المحتوى التفاعلي");
-            }
-            
-            const egyptBooks = books.filter(b => b.curriculum === "مصري").length;
-            const saudiBooks = books.filter(b => b.curriculum === "سعودي").length;
-            
-            if (egyptBooks === 0 || saudiBooks === 0) {
-                recommendations.push("يجب إضافة كتب لجميع المناهج الدراسية");
-            }
-            
-            return {
-                summary: {
-                    activeUsers,
-                    totalUsers,
-                    engagementRate,
-                    avgSessionTime: stats.averageSessionDuration || 0,
-                    totalDownloads: Object.values(stats.downloads || {}).reduce((a, b) => a + b, 0)
-                },
-                topPerformers: {
-                    mostActiveUsers
-                },
-                timeAnalysis: {
-                    peakHours
-                },
-                recommendations
-            };
-        }
-        
-        function viewUserDetails(username) {
-            const loginHistory = JSON.parse(localStorage.getItem("loginHistory") || "[]");
-            const userLogins = loginHistory.filter(record => record.name === username);
-            
-            if (userLogins.length === 0) return;
-            
-            const modal = document.createElement('div');
-            modal.className = 'modal';
-            modal.innerHTML = `
-                <div class="modal-content">
-                    <button class="close-modal" onclick="this.closest('.modal').remove()">✕</button>
-                    <h2 style="color: var(--primary-dark); margin-bottom: 20px;">
-                        <i class="fas fa-user"></i> ${username}
-                    </h2>
-                    <div style="display: grid; gap: 20px;">
-                        <div>
-                            <h3 style="color: var(--primary-dark); margin-bottom: 15px;">
-                                <i class="fas fa-history"></i> سجل الدخول
-                            </h3>
-                            <div style="max-height: 300px; overflow-y: auto;">
-                                ${userLogins.slice(0, 10).map(login => `
-                                    <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 10px;">
-                                        <div style="display: flex; justify-content: space-between;">
-                                            <span style="font-weight: 600;">${login.date || 'غير محدد'}</span>
-                                            <span style="color: #666;">${login.time || 'غير محدد'}</span>
-                                        </div>
-                                        <div style="margin-top: 10px; display: flex; gap: 10px;">
-                                            <span class="grade-badge">${login.grade || 'غير محدد'}</span>
-                                            <span class="curriculum-badge badge-${login.curriculum === "مصري" ? "egypt" : "saudi"}">
-                                                ${login.curriculum || 'غير محدد'}
-                                            </span>
-                                        </div>
-                                    </div>
-                                `).join('')}
-                            </div>
-                        </div>
-                        <div style="text-align: center; color: #666; font-size: 0.9em;">
-                            <i class="fas fa-info-circle"></i> ${userLogins.length} عملية دخول إجمالاً
+            let html = '';
+            sortedPages.forEach(([page, time], index) => {
+                const percentage = (time / maxTime * 100).toFixed(1);
+                const color = colors[index % colors.length];
+                
+                const pageNames = {
+                    'index.html': '🏠 الصفحة الرئيسية',
+                    'book_eg.html': '🇪🇬 المسار المصري',
+                    'books_sa.html': '🇸🇦 المسار السعودي',
+                    'about.html': 'ℹ️ عن المشروع',
+                    'contact.html': '📞 التواصل',
+                    'statistics.html': '📊 الإحصائيات'
+                };
+                
+                const displayName = pageNames[page] || `📄 ${page}`;
+                const duration = formatDuration(time);
+                
+                html += `
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%; background: ${color};">
+                            ${displayName} • ${duration}
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            });
             
-            document.body.appendChild(modal);
+            container.innerHTML = html;
         }
-        
-        // ---------- التهيئة عند تحميل الصفحة ----------
-        document.addEventListener('DOMContentLoaded', function() {
-            // إنشاء تأثير الجسيمات
-            createParticles();
+
+        // تحميل أكثر الكتب تحميلاً
+        function loadTopDownloads() {
+            const stats = JSON.parse(localStorage.getItem('siteStats') || '{}');
+            const downloads = stats.downloads || {};
             
-            // عرض الإحصائيات
-            displayStatistics();
+            const container = document.getElementById('topDownloads');
             
-            // إظهار زر تسجيل الخروج إذا كان المستخدم مسجلاً
-            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
-            if (isLoggedIn) {
-                document.getElementById('logoutBtn').style.display = 'flex';
-                document.getElementById('logoutBtn').onclick = function() {
-                    sessionStorage.removeItem('isLoggedIn');
-                    sessionStorage.removeItem('userData');
-                    localStorage.removeItem('loginTime');
-                    window.location.href = 'login.html';
-                };
+            if (Object.keys(downloads).length === 0) {
+                container.innerHTML = `
+                    <div class="no-data">
+                        <i class="fas fa-book-open"></i>
+                        <p>لا توجد تحميلات بعد</p>
+                    </div>
+                `;
+                return;
             }
             
-            // تهيئة التحديث التلقائي
-            const refreshInterval = localStorage.getItem('refreshInterval') || '60000';
-            const autoRefreshToggle = localStorage.getItem('autoRefreshToggle') === 'true';
+            const sortedDownloads = Object.entries(downloads)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
             
-            document.getElementById('autoRefreshToggle').checked = autoRefreshToggle;
-            document.getElementById('refreshInterval').value = refreshInterval;
-            document.getElementById('autoRefresh').textContent = `${parseInt(refreshInterval) / 1000} ثانية`;
+            const maxDownloads = Math.max(...sortedDownloads.map(([_, count]) => count));
             
-            if (autoRefreshToggle) {
-                autoRefreshInterval = setInterval(refreshStatistics, parseInt(refreshInterval));
-            }
+            const colors = [
+                'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+                'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+                'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+                'linear-gradient(135deg, #fa709a 0%, #fee140 100%)'
+            ];
             
-            // إعداد المستمعين للأحداث
-            document.getElementById('autoRefreshToggle').addEventListener('change', function() {
-                localStorage.setItem('autoRefreshToggle', this.checked);
-                clearInterval(autoRefreshInterval);
-                if (this.checked) {
-                    const interval = parseInt(document.getElementById('refreshInterval').value);
-                    autoRefreshInterval = setInterval(refreshStatistics, interval);
-                }
-            });
-            
-            document.getElementById('refreshInterval').addEventListener('change', function() {
-                localStorage.setItem('refreshInterval', this.value);
-                clearInterval(autoRefreshInterval);
-                if (document.getElementById('autoRefreshToggle').checked) {
-                    autoRefreshInterval = setInterval(refreshStatistics, parseInt(this.value));
-                }
-                document.getElementById('autoRefresh').textContent = `${parseInt(this.value) / 1000} ثانية`;
-            });
-            
-            // إضافة أنماط CSS للرسوم المتحركة
-            const style = document.createElement('style');
-            style.textContent = `
-                .btn-icon.danger {
-                    background: linear-gradient(135deg, #e74c3c, #c0392b);
-                    color: white;
-                }
+            let html = '';
+            sortedDownloads.forEach(([book, count], index) => {
+                const percentage = (count / maxDownloads * 100).toFixed(1);
+                const color = colors[index % colors.length];
+                const shortName = book.length > 45 ? book.substring(0, 45) + '...' : book;
                 
-                .btn-icon.danger:hover {
-                    background: linear-gradient(135deg, #c0392b, #a93226);
-                }
-            `;
-            document.head.appendChild(style);
+                html += `
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%; background: ${color};">
+                            📚 ${shortName} • ${count} تحميل
+                        </div>
+                    </div>
+                `;
+            });
             
-            // توسيع جميع الأقسام افتراضياً
-            setTimeout(() => {
-                document.querySelectorAll('.section-collapse').forEach(section => {
-                    if (expandedSections.has(section.closest('.charts-section, .table-container').id)) {
-                        toggleSection(section);
-                    }
+            container.innerHTML = html;
+        }
+
+        // تحميل النشاط اليومي
+        function loadDailyActivity() {
+            const stats = JSON.parse(localStorage.getItem('siteStats') || '{}');
+            const dailyDownloads = stats.todayDownloads || {};
+            
+            const container = document.getElementById('dailyActivity');
+            
+            // الحصول على آخر 7 أيام
+            const last7Days = [];
+            for (let i = 6; i >= 0; i--) {
+                const date = new Date();
+                date.setDate(date.getDate() - i);
+                last7Days.push(date);
+            }
+            
+            const maxActivity = Math.max(...last7Days.map(date => dailyDownloads[date.toDateString()] || 0), 1);
+            
+            let html = '<div class="time-distribution">';
+            last7Days.forEach(date => {
+                const dateStr = date.toDateString();
+                const dayName = date.toLocaleDateString('en-US', { 
+                    weekday: 'short', 
+                    month: 'short', 
+                    day: 'numeric' 
                 });
-            }, 100);
+                const count = dailyDownloads[dateStr] || 0;
+                const percentage = (count / maxActivity * 100).toFixed(1);
+                
+                const isToday = date.toDateString() === new Date().toDateString();
+                const dayLabel = isToday ? '🔥 ' + dayName + ' (اليوم)' : dayName;
+                
+                html += `
+                    <div class="time-item">
+                        <span class="time-label">${dayLabel}</span>
+                        <div style="flex: 1; margin: 0 20px;">
+                            <div class="progress-bar" style="margin: 0;">
+                                <div class="progress-fill" style="width: ${percentage}%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                                    ${count > 0 ? count : ''}
+                                </div>
+                            </div>
+                        </div>
+                        <span class="time-value">${count} نشاط</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
             
-            // إضافة ربط بصفحة الكتب
-            setupBooksIntegration();
+            container.innerHTML = html;
+        }
+
+        // البحث في جدول المستخدمين
+        document.getElementById('userSearch').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#usersTableBody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
         });
-        
-        // ---------- دالة ربط صفحة الكتب ----------
-        function setupBooksIntegration() {
-            // محاولة جلب الكتب من ملفات الكتب الأخرى
-            try {
-                // رابط كتب المنهج المصري
-                fetch('books_egypt.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        // تحليل HTML واستخراج بيانات الكتب
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
-                        
-                        // البحث عن عناصر الكتب
-                        const bookElements = doc.querySelectorAll('.book-card, [data-book], .book-item');
-                        
-                        if (bookElements.length > 0) {
-                            // استخراج بيانات الكتب
-                            const books = Array.from(bookElements).map(el => {
-                                const title = el.getAttribute('data-title') || 
-                                            el.querySelector('.book-title, h3, .title')?.textContent || 
-                                            'كتاب بدون عنوان';
-                                
-                                const grade = el.getAttribute('data-grade') || 
-                                            el.querySelector('.book-grade, .grade')?.textContent || 
-                                            'غير محدد';
-                                
-                                const subject = el.getAttribute('data-subject') || 
-                                               el.querySelector('.book-subject, .subject')?.textContent || 
-                                               'غير محدد';
-                                
-                                const term = el.getAttribute('data-term') || 
-                                            el.querySelector('.book-term, .term')?.textContent || 
-                                            'الفصل الأول';
-                                
-                                const year = el.getAttribute('data-year') || 
-                                            el.querySelector('.book-year, .year')?.textContent || 
-                                            '1446';
-                                
-                                return {
-                                    title: title.trim(),
-                                    curriculum: 'مصري',
-                                    grade: grade.trim(),
-                                    subject: subject.trim(),
-                                    term: term.trim(),
-                                    year: year.trim()
-                                };
-                            });
-                            
-                            // حفظ الكتب المصرية
-                            localStorage.setItem('egyptBooks', JSON.stringify(books));
-                        }
-                    })
-                    .catch(error => {
-                        console.log('لم يتم العثور على كتب المنهج المصري:', error);
-                    });
+
+        // تحديث الإحصائيات
+        function refreshStats() {
+            const btn = event.target.closest('.btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<div class="loading"></div> جاري التحديث...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                loadStatistics();
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
                 
-                // رابط كتب المنهج السعودي
-                fetch('books_saudi.html')
-                    .then(response => response.text())
-                    .then(html => {
-                        // تحليل HTML واستخراج بيانات الكتب
-                        const parser = new DOMParser();
-                        const doc = parser.parseFromString(html, 'text/html');
+                showToast('✅ تم تحديث الإحصائيات بنجاح');
+            }, 1500);
+        }
+
+        // تصدير البيانات إلى Excel
+        function exportToExcel() {
+            const btn = event.target.closest('.btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<div class="loading"></div> جاري التصدير...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                try {
+                    const timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+                    const siteStats = JSON.parse(localStorage.getItem('siteStats') || '{}');
+                    
+                    // إنشاء كتاب Excel
+                    const wb = XLSX.utils.book_new();
+                    
+                    // ورقة 1: ملخص الإحصائيات
+                    const summaryData = [
+                        ['📊 ملخص الإحصائيات العامة'],
+                        [],
+                        ['المؤشر', 'القيمة'],
+                        ['إجمالي المستخدمين', Object.keys(timeTracking.sessions || {}).length],
+                        ['إجمالي التحميلات', Object.values(siteStats.downloads || {}).reduce((sum, count) => sum + count, 0)],
+                        ['تاريخ التصدير', new Date().toLocaleString('en-US')],
+                        []
+                    ];
+                    const ws1 = XLSX.utils.aoa_to_sheet(summaryData);
+                    XLSX.utils.book_append_sheet(wb, ws1, 'الملخص');
+                    
+                    // ورقة 2: تفاصيل الجلسات
+                    const sessionsData = [['#', 'اسم المستخدم', 'المسار', 'الصف', 'وقت الدخول', 'مدة الجلسة (دقائق)', 'عدد الصفحات', 'التحميلات', 'الحالة']];
+                    Object.entries(timeTracking.sessions || {}).forEach(([sessionId, session], index) => {
+                        const pages = session.pages || {};
+                        const totalTime = Object.values(pages).reduce((sum, time) => sum + time, 0);
+                        const minutes = (totalTime / 60000).toFixed(2);
+                        const loginTime = new Date(session.loginTime).toLocaleString('en-US');
+                        const isActive = (Date.now() - session.lastActive) < 300000;
                         
-                        // البحث عن عناصر الكتب
-                        const bookElements = doc.querySelectorAll('.book-card, [data-book], .book-item');
-                        
-                        if (bookElements.length > 0) {
-                            // استخراج بيانات الكتب
-                            const books = Array.from(bookElements).map(el => {
-                                const title = el.getAttribute('data-title') || 
-                                            el.querySelector('.book-title, h3, .title')?.textContent || 
-                                            'كتاب بدون عنوان';
-                                
-                                const grade = el.getAttribute('data-grade') || 
-                                            el.querySelector('.book-grade, .grade')?.textContent || 
-                                            'غير محدد';
-                                
-                                const subject = el.getAttribute('data-subject') || 
-                                               el.querySelector('.book-subject, .subject')?.textContent || 
-                                               'غير محدد';
-                                
-                                const term = el.getAttribute('data-term') || 
-                                            el.querySelector('.book-term, .term')?.textContent || 
-                                            'الفصل الأول';
-                                
-                                const year = el.getAttribute('data-year') || 
-                                            el.querySelector('.book-year, .year')?.textContent || 
-                                            '1446';
-                                
-                                return {
-                                    title: title.trim(),
-                                    curriculum: 'سعودي',
-                                    grade: grade.trim(),
-                                    subject: subject.trim(),
-                                    term: term.trim(),
-                                    year: year.trim()
-                                };
-                            });
-                            
-                            // حفظ الكتب السعودية
-                            localStorage.setItem('saudiBooks', JSON.stringify(books));
-                        }
-                    })
-                    .catch(error => {
-                        console.log('لم يتم العثور على كتب المنهج السعودي:', error);
+                        sessionsData.push([
+                            index + 1,
+                            session.userName || 'غير معروف',
+                            session.curriculum || '-',
+                            session.grade || '-',
+                            loginTime,
+                            minutes,
+                            Object.keys(pages).length,
+                            session.downloads || 0,
+                            isActive ? 'نشط' : 'غير نشط'
+                        ]);
                     });
-            } catch (error) {
-                console.error('خطأ في ربط صفحة الكتب:', error);
+                    const ws2 = XLSX.utils.aoa_to_sheet(sessionsData);
+                    XLSX.utils.book_append_sheet(wb, ws2, 'تفاصيل الجلسات');
+                    
+                    // ورقة 3: توزيع الوقت على الصفحات
+                    const pagesData = [['الصفحة', 'الوقت الإجمالي (دقائق)', 'النسبة المئوية']];
+                    const pageTotals = timeTracking.pageTotals || {};
+                    const totalPageTime = Object.values(pageTotals).reduce((sum, time) => sum + time, 0);
+                    
+                    Object.entries(pageTotals)
+                        .sort((a, b) => b[1] - a[1])
+                        .forEach(([page, time]) => {
+                            const minutes = (time / 60000).toFixed(2);
+                            const percentage = ((time / totalPageTime) * 100).toFixed(2) + '%';
+                            pagesData.push([page, minutes, percentage]);
+                        });
+                    const ws3 = XLSX.utils.aoa_to_sheet(pagesData);
+                    XLSX.utils.book_append_sheet(wb, ws3, 'الوقت على الصفحات');
+                    
+                    // ورقة 4: أكثر الكتب تحميلاً
+                    const downloadsData = [['الترتيب', 'اسم الكتاب', 'عدد التحميلات']];
+                    Object.entries(siteStats.downloads || {})
+                        .sort((a, b) => b[1] - a[1])
+                        .forEach(([book, count], index) => {
+                            downloadsData.push([index + 1, book, count]);
+                        });
+                    const ws4 = XLSX.utils.aoa_to_sheet(downloadsData);
+                    XLSX.utils.book_append_sheet(wb, ws4, 'الكتب الأكثر تحميلاً');
+                    
+                    // ورقة 5: النشاط اليومي
+                    const dailyData = [['التاريخ', 'عدد الأنشطة']];
+                    const dailyDownloads = siteStats.todayDownloads || {};
+                    Object.entries(dailyDownloads)
+                        .sort((a, b) => new Date(a[0]) - new Date(b[0]))
+                        .forEach(([date, count]) => {
+                            dailyData.push([new Date(date).toLocaleDateString('en-US'), count]);
+                        });
+                    const ws5 = XLSX.utils.aoa_to_sheet(dailyData);
+                    XLSX.utils.book_append_sheet(wb, ws5, 'النشاط اليومي');
+                    
+                    // تصدير الملف
+                    const fileName = `Abrar_Statistics_${new Date().toISOString().split('T')[0]}.xlsx`;
+                    XLSX.writeFile(wb, fileName);
+                    
+                    showToast('✅ تم تصدير البيانات بنجاح إلى Excel');
+                } catch (error) {
+                    console.error('خطأ في التصدير:', error);
+                    alert('حدث خطأ أثناء التصدير. يرجى المحاولة مرة أخرى.');
+                }
+                
+                btn.innerHTML = originalHTML;
+                btn.disabled = false;
+            }, 1000);
+        }
+
+        // مسح جميع البيانات
+        function clearAllData() {
+            if (confirm('⚠️ هل أنت متأكد من مسح جميع البيانات؟\n\nهذا الإجراء لا يمكن التراجع عنه!')) {
+                if (confirm('⚠️ تأكيد نهائي: سيتم مسح جميع الإحصائيات والبيانات المسجلة')) {
+                    localStorage.removeItem('timeTracking');
+                    localStorage.removeItem('siteStats');
+                    
+                    // إعادة تهيئة
+                    initializeTimeTracking();
+                    loadStatistics();
+                    
+                    showToast('🗑️ تم مسح جميع البيانات بنجاح');
+                }
             }
         }
-        
-        // تسجيل وقت الخروج لقياس مدة البقاء
+
+        // إظهار رسالة نجاح
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'success-toast';
+            toast.innerHTML = `
+                <i class="fas fa-check-circle" style="font-size: 20px;"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // تسجيل الخروج
+        function logout() {
+            if (confirm('هل أنت متأكد من تسجيل الخروج من لوحة الإحصائيات؟')) {
+                // إيقاف تتبع الوقت
+                if (window.trackingIntervalId) {
+                    clearInterval(window.trackingIntervalId);
+                }
+                
+                document.getElementById('statsContainer').style.display = 'none';
+                document.getElementById('loginContainer').style.display = 'flex';
+                document.getElementById('adminPassword').value = '';
+                
+                showToast('👋 تم تسجيل الخروج بنجاح');
+            }
+        }
+
+        // تهيئة النظام عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            // التحقق من وجود بيانات أولية
+            if (!localStorage.getItem('siteStats')) {
+                localStorage.setItem('siteStats', JSON.stringify({
+                    downloads: {},
+                    todayDownloads: {}
+                }));
+            }
+        });
+
+        // حفظ البيانات قبل إغلاق الصفحة
         window.addEventListener('beforeunload', function() {
-            const loginTime = localStorage.getItem('loginTime');
-            if (loginTime && sessionStorage.getItem('isLoggedIn')) {
-                const sessionDuration = Date.now() - parseInt(loginTime);
-                const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
-                
-                // حفظ مدة الجلسة
-                const sessionHistory = JSON.parse(localStorage.getItem('sessionHistory') || '[]');
-                sessionHistory.unshift({
-                    name: userData.name,
-                    grade: userData.grade,
-                    curriculum: userData.curriculum,
-                    sessionId: userData.sessionId,
-                    duration: sessionDuration,
-                    date: new Date().toLocaleDateString('ar-SA'),
-                    loginTime: new Date(parseInt(loginTime)).toLocaleTimeString('ar-SA'),
-                    logoutTime: new Date().toLocaleTimeString('ar-SA'),
-                    timestamp: new Date().toISOString()
-                });
-                
-                // الاحتفاظ فقط بآخر 50 جلسة
-                if (sessionHistory.length > 50) {
-                    sessionHistory.length = 50;
-                }
-                
-                localStorage.setItem('sessionHistory', JSON.stringify(sessionHistory));
-                
-                // تحديث الإحصائيات
-                const stats = JSON.parse(localStorage.getItem("siteStats") || "{}");
-                if (!stats.sessionDurations) stats.sessionDurations = [];
-                stats.sessionDurations.push(sessionDuration);
-                
-                // حساب متوسط مدة الجلسة
-                if (stats.sessionDurations.length > 0) {
-                    const totalDuration = stats.sessionDurations.reduce((a, b) => a + b, 0);
-                    stats.averageSessionDuration = totalDuration / stats.sessionDurations.length;
-                }
-                
-                stats.lastUpdate = new Date().toISOString();
-                localStorage.setItem("siteStats", JSON.stringify(stats));
-                
-                // حذف وقت الدخول
-                localStorage.removeItem('loginTime');
+            if (window.trackingIntervalId) {
+                clearInterval(window.trackingIntervalId);
             }
         });
     </script>

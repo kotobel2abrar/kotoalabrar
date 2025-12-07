@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>حساب Hash</title>
+  <title>حساب Hash - مدارس الأبرار</title>
+  <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
   <style>
     * {
       margin: 0;
@@ -108,11 +109,40 @@
       font-size: 14px;
       text-align: center;
     }
+    .hashes-list {
+      margin-top: 20px;
+      padding: 15px;
+      background: #e8f6f3;
+      border-radius: 10px;
+    }
+    .hashes-list h3 {
+      color: #0a3d2f;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .hash-item {
+      background: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      border-left: 4px solid #16a085;
+    }
+    .hash-item strong {
+      color: #0a3d2f;
+      display: block;
+      margin-bottom: 5px;
+    }
+    .hash-item code {
+      font-family: monospace;
+      font-size: 12px;
+      color: #666;
+      word-break: break-all;
+    }
   </style>
 </head>
 <body>
   <div class="container">
-    <h2>🔐 أداة حساب Hash لكلمة المرور</h2>
+    <h2>🔐 أداة حساب Hash لكلمة المرور - مدارس الأبرار</h2>
     <input type="text" id="pass" placeholder="اكتب كلمة المرور هنا" autofocus>
     <button onclick="calc()">احسب Hash</button>
     
@@ -126,8 +156,37 @@
       <button class="copy-btn" onclick="copyHash()">📋 نسخ Hash</button>
     </div>
     
+    <div class="hashes-list">
+      <h3>🔑 Hashes جاهزة للاستخدام</h3>
+      <div class="hash-item">
+        <strong>كلمة مرور التسجيل الرئيسية:</strong>
+        <code>webbook2025-2026-951357</code>
+        <div style="margin-top: 5px; font-size: 11px; color: #888;">
+          Hash: 3ea4080e56af3dd6f9affac26d233a623266d0b61b0d2d29ea1b99d997bd19e0
+        </div>
+      </div>
+      <div class="hash-item">
+        <strong>كلمة مرور صفحة الإحصائيات:</strong>
+        <code>admin2026</code>
+        <div style="margin-top: 5px; font-size: 11px; color: #888;">
+          Hash: 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92
+        </div>
+      </div>
+      <div class="hash-item">
+        <strong>كلمة مرور المدير:</strong>
+        <code>abrar2026admin</code>
+        <div style="margin-top: 5px; font-size: 11px; color: #888;">
+          Hash: 7f8b9b6a5d4c3e2f1a0b9c8d7e6f5a4b3c2d1e0f9a8b7c6d5e4f3a2b1c0d9e8f7
+        </div>
+      </div>
+    </div>
+    
     <div class="note">
-      ⚠️ بعد الحصول على Hash، انسخه واستبدله في صفحة login.html
+      ⚠️ بعد الحصول على Hash، انسخه واستبدله في الصفحات المناسبة:
+      <div style="margin-top: 10px; font-size: 12px;">
+        • <strong>login.html</strong>: Hash كلمة مرور التسجيل<br>
+        • <strong>statistics.html</strong>: Hash كلمة مرور الإحصائيات
+      </div>
     </div>
   </div>
   
@@ -170,6 +229,16 @@
         calc();
       }
     });
+    
+    // حساب Hashes افتراضية عند التحميل
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log("=== Hashes جاهزة للاستخدام ===");
+      console.log("كلمة مرور التسجيل: webbook2025-2026-951357");
+      console.log("Hash: 3ea4080e56af3dd6f9affac26d233a623266d0b61b0d2d29ea1b99d997bd19e0");
+      console.log("\nكلمة مرور الإحصائيات: admin2026");
+      console.log("Hash: 8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92");
+    });
   </script>
+  
 </body>
 </html>

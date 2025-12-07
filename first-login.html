@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التسجيل - مدارس الأبرار</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-dark: #0a3d2f;
+            --primary: #16a085;
+            --primary-light: #1abc9c;
+            --secondary: #27ae60;
+            --accent: #2ecc71;
+            --danger: #e74c3c;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 50%, var(--secondary) 100%);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 8s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translateY(0) rotate(0deg);
+                opacity: 0.3;
+            }
+            50% { 
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 0.6;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 550px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            animation: slideUp 0.6s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            box-shadow: 0 10px 30px rgba(22, 160, 133, 0.3);
+            border: 4px solid var(--accent);
+        }
+
+        .logo img {
+            width: 85px;
+            height: 85px;
+            object-fit: contain;
+        }
+
+        .header h1 {
+            color: var(--primary-dark);
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #7f8c8d;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            right: 10%;
+            height: 3px;
+            background: #e0e0e0;
+            z-index: 0;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 10%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--primary-light));
+            transition: width 0.5s ease;
+            z-index: 1;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .step-icon {
+            width: 45px;
+            height: 45px;
+            background: #e0e0e0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 8px;
+            transition: all 0.3s ease;
+            color: #95a5a6;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .step.active .step-icon {
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            color: white;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+            transform: scale(1.1);
+        }
+
+        .step.completed .step-icon {
+            background: var(--accent);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 12px;
+            color: #95a5a6;
+            font-weight: 600;
+        }
+
+        .step.active .step-label {
+            color: var(--primary-dark);
+            font-weight: 700;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-dark);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group label i {
+            color: var(--accent);
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper input,
+        .input-wrapper select {
+            width: 100%;
+            padding: 15px 20px 15px 50px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .input-wrapper select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2316a085' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 20px center;
+        }
+
+        .input-wrapper input:focus,
+        .input-wrapper select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
+            background: white;
+        }
+
+        .input-wrapper .icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #95a5a6;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: var(--accent);
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--primary-light));
+            color: white;
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #7f8c8d;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+            transform: translateY(-2px);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .error-message {
+            background: #ffe6e6;
+            color: var(--danger);
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            border: 2px solid #ffcccc;
+            font-weight: 600;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            border: 2px solid #c3e6cb;
+            font-weight: 600;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, #e8f5f7, #d1ecf1);
+            border: 2px solid #bee5eb;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 20px;
+            display: flex;
+            align-items: start;
+            gap: 12px;
+        }
+
+        .info-box i {
+            color: var(--primary);
+            font-size: 20px;
+            margin-top: 2px;
+        }
+
+        .info-box p {
+            color: #0c5460;
+            font-size: 13px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                padding: 30px 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+        <div class="card">
+            <div class="header">
+                <div class="logo">
+                    <img src="لوجو محسن 1.png" alt="شعار مدارس الأبرار">
+                </div>
+                <h1>مرحباً بك في مدارس الأبرار</h1>
+                <p>يرجى إكمال بياناتك للدخول إلى المكتبة الرقمية</p>
+            </div>
+
+            <!-- شريط التقدم -->
+            <div class="progress-bar">
+                <div class="progress-line" id="progressLine"></div>
+                <div class="step active" data-step="1">
+                    <div class="step-icon">1</div>
+                    <div class="step-label">البيانات</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-icon">2</div>
+                    <div class="step-label">المسار</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-icon">3</div>
+                    <div class="step-label">التأكيد</div>
+                </div>
+            </div>
+
+            <!-- القسم الأول: البيانات الشخصية -->
+            <div class="form-section active" id="section1">
+                <div class="form-group">
+                    <label for="userName">
+                        <i class="fas fa-user"></i>
+                        الاسم الكامل
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="icon fas fa-user"></i>
+                        <input type="text" id="userName" placeholder="أدخل اسمك الكامل" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="userEmail">
+                        <i class="fas fa-envelope"></i>
+                        البريد الإلكتروني (اختياري)
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="icon fas fa-envelope"></i>
+                        <input type="email" id="userEmail" placeholder="example@email.com">
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn btn-primary" onclick="nextSection(2)">
+                        التالي
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <div id="error1" class="error-message"></div>
+            </div>
+
+            <!-- القسم الثاني: المسار والصف -->
+            <div class="form-section" id="section2">
+                <div class="form-group">
+                    <label for="curriculum">
+                        <i class="fas fa-graduation-cap"></i>
+                        المسار الدراسي
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="icon fas fa-graduation-cap"></i>
+                        <select id="curriculum" required>
+                            <option value="">اختر المسار</option>
+                            <option value="سعودي">🇸🇦 المسار السعودي</option>
+                            <option value="مصري">🇪🇬 المسار المصري</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="grade">
+                        <i class="fas fa-book-open"></i>
+                        الصف الدراسي
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="icon fas fa-book-open"></i>
+                        <select id="grade" required>
+                            <option value="">اختر الصف</option>
+                            <optgroup label="الابتدائي">
+                                <option value="الأول الابتدائي">الأول الابتدائي</option>
+                                <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                                <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                                <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                                <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                                <option value="السادس الابتدائي">السادس الابتدائي</option>
+                            </optgroup>
+                            <optgroup label="المتوسط / الإعدادي">
+                                <option value="الأول المتوسط">الأول المتوسط</option>
+                                <option value="الثاني المتوسط">الثاني المتوسط</option>
+                                <option value="الثالث المتوسط">الثالث المتوسط</option>
+                            </optgroup>
+                            <optgroup label="الثانوي">
+                                <option value="الأول الثانوي">الأول الثانوي</option>
+                                <option value="الثاني الثانوي">الثاني الثانوي</option>
+                                <option value="الثالث الثانوي">الثالث الثانوي</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="prevSection(1)">
+                        <i class="fas fa-arrow-right"></i>
+                        السابق
+                    </button>
+                    <button class="btn btn-primary" onclick="nextSection(3)">
+                        التالي
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                </div>
+
+                <div id="error2" class="error-message"></div>
+            </div>
+
+            <!-- القسم الثالث: كلمة المرور -->
+            <div class="form-section" id="section3">
+                <div class="form-group">
+                    <label for="password">
+                        <i class="fas fa-lock"></i>
+                        كلمة المرور
+                    </label>
+                    <div class="input-wrapper">
+                        <i class="icon fas fa-lock"></i>
+                        <input type="password" id="password" placeholder="أدخل كلمة المرور" required>
+                        <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+                    </div>
+                </div>
+
+                <div class="info-box">
+                    <i class="fas fa-info-circle"></i>
+                    <p>
+                        <strong>كلمة المرور:</strong> webbook2025-2026-951357<br>
+                        يرجى إدخال كلمة المرور الصحيحة للدخول
+                    </p>
+                </div>
+
+                <div class="buttons">
+                    <button class="btn btn-secondary" onclick="prevSection(2)">
+                        <i class="fas fa-arrow-right"></i>
+                        السابق
+                    </button>
+                    <button class="btn btn-primary" onclick="submitForm()" id="submitBtn">
+                        <i class="fas fa-check"></i>
+                        تأكيد وإنهاء
+                    </button>
+                </div>
+
+                <div id="error3" class="error-message"></div>
+                <div id="success" class="success-message"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================================
+        // التحقق الفوري والحماية
+        // ===================================
+        
+        // التحقق الفوري عند تحميل الصفحة
+        (function() {
+            const hasRegistered = localStorage.getItem('hasCompletedRegistration') === 'true';
+            if (hasRegistered) {
+                console.log('✅ المستخدم مسجل مسبقاً - توجيه للصفحة الرئيسية');
+                window.location.replace('index.html');
+                return;
+            }
+            console.log('📝 صفحة التسجيل الأولى - المستخدم جديد');
+        })();
+        
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 25; i++) {
+                const particle = document.createElement('div');
+                particle.classList.add('particle');
+                
+                const size = Math.random() * 15 + 5;
+                particle.style.width = `${size}px`;
+                particle.style.height = `${size}px`;
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.top = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 5}s`;
+                particle.style.animationDuration = `${Math.random() * 10 + 5}s`;
+                
+                container.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // ===================================
+        // المتغيرات والإعدادات
+        // ===================================
+        
+        // كلمة المرور المشفرة
+        const CORRECT_PASSWORD_HASH = "3ea4080e56af3dd6f9affac26d233a623266d0b61b0d2d29ea1b99d997bd19e0";
+
+        // دالة التشفير
+        async function hashPassword(text) {
+            const encoder = new TextEncoder();
+            const data = encoder.encode(text);
+            const hash = await crypto.subtle.digest('SHA-256', data);
+            return Array.from(new Uint8Array(hash))
+                .map(b => b.toString(16).padStart(2, '0'))
+                .join('');
+        }
+
+        let currentStep = 1;
+
+        // ===================================
+        // وظائف التنقل بين الأقسام
+        // ===================================
+        
+        // الانتقال للقسم التالي
+        function nextSection(step) {
+            const currentSection = document.getElementById(`section${currentStep}`);
+            const errorDiv = document.getElementById(`error${currentStep}`);
+            
+            // التحقق من الحقول
+            if (currentStep === 1) {
+                const userName = document.getElementById('userName').value.trim();
+                if (!userName) {
+                    errorDiv.textContent = '⚠️ يرجى إدخال الاسم الكامل';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                if (userName.length < 3) {
+                    errorDiv.textContent = '⚠️ الاسم يجب أن يكون 3 أحرف على الأقل';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+            }
+            
+            if (currentStep === 2) {
+                const curriculum = document.getElementById('curriculum').value;
+                const grade = document.getElementById('grade').value;
+                
+                if (!curriculum) {
+                    errorDiv.textContent = '⚠️ يرجى اختيار المسار الدراسي';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+                if (!grade) {
+                    errorDiv.textContent = '⚠️ يرجى اختيار الصف الدراسي';
+                    errorDiv.style.display = 'block';
+                    return;
+                }
+            }
+
+            errorDiv.style.display = 'none';
+            
+            // الانتقال للخطوة التالية
+            currentSection.classList.remove('active');
+            document.getElementById(`section${step}`).classList.add('active');
+            
+            updateProgress(step);
+            currentStep = step;
+        }
+
+        // العودة للقسم السابق
+        function prevSection(step) {
+            document.getElementById(`section${currentStep}`).classList.remove('active');
+            document.getElementById(`section${step}`).classList.add('active');
+            
+            updateProgress(step);
+            currentStep = step;
+        }
+
+        // تحديث شريط التقدم
+        function updateProgress(step) {
+            const steps = document.querySelectorAll('.step');
+            const progressLine = document.getElementById('progressLine');
+            
+            steps.forEach((stepEl, index) => {
+                if (index + 1 < step) {
+                    stepEl.classList.add('completed');
+                    stepEl.classList.remove('active');
+                } else if (index + 1 === step) {
+                    stepEl.classList.add('active');
+                    stepEl.classList.remove('completed');
+                } else {
+                    stepEl.classList.remove('active', 'completed');
+                }
+            });
+
+            const progressWidth = ((step - 1) / 2) * 80;
+            progressLine.style.width = `${progressWidth}%`;
+        }
+
+        // تبديل إظهار كلمة المرور
+        function togglePassword() {
+            const input = document.getElementById('password');
+            const icon = document.querySelector('.toggle-password');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+
+        // إرسال النموذج
+        async function submitForm() {
+            const password = document.getElementById('password').value.trim();
+            const errorDiv = document.getElementById('error3');
+            const successDiv = document.getElementById('success');
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (!password) {
+                errorDiv.textContent = '⚠️ يرجى إدخال كلمة المرور';
+                errorDiv.style.display = 'block';
+                return;
+            }
+
+            submitBtn.innerHTML = '<div class="loading"></div> جاري التحقق...';
+            submitBtn.disabled = true;
+            errorDiv.style.display = 'none';
+
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            const passwordHash = await hashPassword(password);
+
+            if (passwordHash === CORRECT_PASSWORD_HASH) {
+                // جمع البيانات
+                const userData = {
+                    name: document.getElementById('userName').value.trim(),
+                    email: document.getElementById('userEmail').value.trim(),
+                    curriculum: document.getElementById('curriculum').value,
+                    grade: document.getElementById('grade').value,
+                    registrationDate: new Date().toISOString(),
+                    sessionId: 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+                };
+
+                // حفظ البيانات
+                localStorage.setItem('userProfile', JSON.stringify(userData));
+                localStorage.setItem('hasCompletedRegistration', 'true');
+                sessionStorage.setItem('isLoggedIn', 'true');
+                sessionStorage.setItem('sessionId', userData.sessionId);
+                sessionStorage.setItem('userData', JSON.stringify({
+                    loginTime: userData.registrationDate,
+                    sessionId: userData.sessionId
+                }));
+
+                // تسجيل الجلسة في نظام التتبع
+                let timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+                if (!timeTracking.sessions) timeTracking.sessions = {};
+                
+                timeTracking.sessions[userData.sessionId] = {
+                    sessionId: userData.sessionId,
+                    userName: userData.name,
+                    curriculum: userData.curriculum,
+                    grade: userData.grade,
+                    loginTime: userData.registrationDate,
+                    pages: {},
+                    downloads: 0,
+                    lastActive: Date.now(),
+                    userAgent: navigator.userAgent,
+                    language: navigator.language,
+                    screenSize: `${window.screen.width}x${window.screen.height}`
+                };
+                
+                localStorage.setItem('timeTracking', JSON.stringify(timeTracking));
+
+                console.log('✅ تم التسجيل بنجاح');
+                console.log('👤 اسم المستخدم:', userData.name);
+                console.log('📚 المسار:', userData.curriculum);
+                console.log('🎓 الصف:', userData.grade);
+
+                successDiv.innerHTML = '✅ تم التسجيل بنجاح! جاري التوجيه...';
+                successDiv.style.display = 'block';
+
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 1500);
+            } else {
+                errorDiv.textContent = '❌ كلمة المرور غير صحيحة';
+                errorDiv.style.display = 'block';
+                submitBtn.innerHTML = '<i class="fas fa-check"></i> تأكيد وإنهاء';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // الاستماع لضغطة Enter
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                if (currentStep === 1) nextSection(2);
+                else if (currentStep === 2) nextSection(3);
+                else if (currentStep === 3) submitForm();
+            }
+        });
+
+        // منع الرجوع للخلف بعد التسجيل
+        window.history.pushState(null, null, window.location.href);
+        window.addEventListener('popstate', function() {
+            if (localStorage.getItem('hasCompletedRegistration') === 'true') {
+                window.location.replace('index.html');
+            } else {
+                window.history.pushState(null, null, window.location.href);
+            }
+        });
+    </script>
+</body>
+</html>
