@@ -1,5 +1,5 @@
 // ملف: theme-menu.js
-// نظام موحد للوضع الليلي وقائمة الإضافات
+// نظام موحد للوضع الليلي وقائمة الإضافات مع تسجيل الخروج
 
 (function() {
   'use strict';
@@ -46,7 +46,7 @@
         background: var(--card-bg, white);
         border-radius: 10px;
         padding: 10px;
-        min-width: 200px;
+        min-width: 220px;
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         opacity: 0;
         transform: translateY(-10px);
@@ -95,6 +95,43 @@
         margin: 8px 0;
         border: none;
         border-top: 1px solid var(--border-color, #e2e8f0);
+      }
+
+      /* زر تسجيل الخروج */
+      .logout-btn {
+        color: #e74c3c !important;
+        font-weight: 700;
+      }
+
+      .logout-btn:hover {
+        background: #fee !important;
+      }
+
+      /* معلومات المستخدم */
+      .user-info {
+        padding: 12px 10px;
+        background: var(--hover-bg, #f0f4f8);
+        border-radius: 8px;
+        margin-bottom: 8px;
+        text-align: right;
+      }
+
+      [dir="ltr"] .user-info {
+        text-align: left;
+      }
+
+      .user-info-name {
+        font-weight: 700;
+        color: var(--text-color, #1a365d);
+        font-size: 15px;
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      .user-info-details {
+        font-size: 12px;
+        color: #64748b;
+        display: block;
       }
 
       /* الوضع الليلي */
@@ -185,6 +222,14 @@
         color: var(--text-color) !important;
       }
 
+      body.dark-mode .user-info {
+        background: rgba(255, 255, 255, 0.08) !important;
+      }
+
+      body.dark-mode .logout-btn:hover {
+        background: rgba(231, 76, 60, 0.2) !important;
+      }
+
       /* أيقونة الوضع الليلي */
       .theme-icon {
         font-size: 18px;
@@ -208,38 +253,71 @@
         }
 
         .menu-box {
-          min-width: 170px;
+          min-width: 200px;
+        }
+
+        .user-info-name {
+          font-size: 14px;
+        }
+
+        .user-info-details {
+          font-size: 11px;
         }
       }
     </style>
   `;
 
   // ============ إضافة HTML للقائمة ============
-  const menuHTML = `
-    <div class="menu-container" id="themeMenuContainer">
-      <button class="menu-btn" id="menuToggleBtn">☰</button>
-      <div class="menu-box" id="menuBox">
-        <button id="langToggleBtn">
-          <span class="theme-icon">🌐</span>
-          <span data-en="العربية" data-ar="English">English</span>
-        </button>
-        <hr>
-        <button id="themeToggleBtn">
-          <span class="theme-icon" id="themeIcon">🌙</span>
-          <span id="themeText" data-en="Dark Mode" data-ar="الوضع الليلي">الوضع الليلي</span>
-        </button>
-        <hr>
-        <a href="about.html">
-          <span class="theme-icon">ℹ️</span>
-          <span data-en="About" data-ar="عن المشروع">عن المشروع</span>
-        </a>
-        <a href="contact.html">
-          <span class="theme-icon">📧</span>
-          <span data-en="Contact" data-ar="التواصل">التواصل</span>
-        </a>
+  function getMenuHTML() {
+    const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+    const userName = userProfile.name || 'مستخدم';
+    const curriculum = userProfile.curriculum || '';
+    const grade = userProfile.grade || '';
+    
+    let userDetails = '';
+    if (curriculum && grade) {
+      userDetails = `${curriculum} - ${grade}`;
+    } else if (curriculum) {
+      userDetails = curriculum;
+    } else if (grade) {
+      userDetails = grade;
+    }
+
+    return `
+      <div class="menu-container" id="themeMenuContainer">
+        <button class="menu-btn" id="menuToggleBtn">☰</button>
+        <div class="menu-box" id="menuBox">
+          <div class="user-info">
+            <span class="user-info-name">👤 ${userName}</span>
+            ${userDetails ? `<span class="user-info-details">${userDetails}</span>` : ''}
+          </div>
+          <button id="langToggleBtn">
+            <span class="theme-icon">🌐</span>
+            <span data-en="العربية" data-ar="English">English</span>
+          </button>
+          <hr>
+          <button id="themeToggleBtn">
+            <span class="theme-icon" id="themeIcon">🌙</span>
+            <span id="themeText" data-en="Dark Mode" data-ar="الوضع الليلي">الوضع الليلي</span>
+          </button>
+          <hr>
+          <a href="about.html">
+            <span class="theme-icon">ℹ️</span>
+            <span data-en="About" data-ar="عن المشروع">عن المشروع</span>
+          </a>
+          <a href="contact.html">
+            <span class="theme-icon">📧</span>
+            <span data-en="Contact" data-ar="التواصل">التواصل</span>
+          </a>
+          <hr>
+          <button id="logoutBtn" class="logout-btn">
+            <span class="theme-icon">🚪</span>
+            <span data-en="Logout" data-ar="تسجيل الخروج">تسجيل الخروج</span>
+          </button>
+        </div>
       </div>
-    </div>
-  `;
+    `;
+  }
 
   // ============ دالة التهيئة ============
   function init() {
@@ -250,7 +328,7 @@
 
     // إضافة HTML القائمة
     if (!document.getElementById('themeMenuContainer')) {
-      document.body.insertAdjacentHTML('afterbegin', menuHTML);
+      document.body.insertAdjacentHTML('afterbegin', getMenuHTML());
     }
 
     // تحميل الإعدادات المحفوظة
@@ -285,7 +363,7 @@
 
     // إغلاق القائمة عند النقر خارجها
     document.addEventListener('click', (e) => {
-      if (!menuContainer.contains(e.target)) {
+      if (menuContainer && !menuContainer.contains(e.target)) {
         menuContainer.classList.remove('active');
       }
     });
@@ -300,6 +378,12 @@
     const langToggleBtn = document.getElementById('langToggleBtn');
     if (langToggleBtn) {
       langToggleBtn.addEventListener('click', toggleLanguage);
+    }
+
+    // زر تسجيل الخروج
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', handleLogout);
     }
 
     // زر اللغة القديم (إن وجد)
@@ -372,6 +456,37 @@
     }
   }
 
+  // ============ تسجيل الخروج ============
+  function handleLogout() {
+    const currentLang = localStorage.getItem('siteLang') || 'ar';
+    const confirmMessage = currentLang === 'ar' 
+      ? 'هل أنت متأكد من تسجيل الخروج؟' 
+      : 'Are you sure you want to logout?';
+    
+    if (confirm(confirmMessage)) {
+      console.log('🚪 تسجيل الخروج...');
+      
+      // حفظ معلومات الجلسة قبل الحذف
+      const sessionId = sessionStorage.getItem('sessionId');
+      if (sessionId) {
+        let timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+        if (timeTracking.sessions && timeTracking.sessions[sessionId]) {
+          timeTracking.sessions[sessionId].logoutTime = new Date().toISOString();
+          timeTracking.sessions[sessionId].sessionDuration = Date.now() - new Date(timeTracking.sessions[sessionId].loginTime).getTime();
+          localStorage.setItem('timeTracking', JSON.stringify(timeTracking));
+        }
+      }
+
+      // حذف بيانات الجلسة فقط
+      sessionStorage.removeItem('isLoggedIn');
+      sessionStorage.removeItem('sessionId');
+      sessionStorage.removeItem('userData');
+      
+      // إعادة التوجيه لصفحة تسجيل الدخول
+      window.location.replace('first-login.html');
+    }
+  }
+
   // ============ تشغيل النظام ============
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
@@ -393,4 +508,10 @@
 3. أو انسخ الكود كاملاً داخل <script> في كل صفحة
 
 4. النظام يعمل تلقائياً ويحفظ الإعدادات
+
+5. زر تسجيل الخروج:
+   - يظهر في قائمة الإضافات
+   - يطلب تأكيد قبل الخروج
+   - يحفظ بيانات الجلسة
+   - يعيد المستخدم لصفحة تسجيل الدخول
 */

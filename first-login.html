@@ -43,6 +43,42 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* زر تسجيل الدخول في الأعلى */
+        .login-nav {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        [dir="rtl"] .login-nav {
+            left: auto;
+            right: 20px;
+        }
+
+        .login-btn {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            color: var(--primary-dark);
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 15px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            background: white;
+        }
+
         .particles {
             position: fixed;
             top: 0;
@@ -75,14 +111,14 @@
             position: relative;
             z-index: 1;
             width: 100%;
-            max-width: 550px;
+            max-width: 520px;
         }
 
         .card {
             background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(20px);
             border-radius: 25px;
-            padding: 40px;
+            padding: 45px 40px;
             box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.3);
             animation: slideUp 0.6s ease;
@@ -101,12 +137,12 @@
 
         .header {
             text-align: center;
-            margin-bottom: 35px;
+            margin-bottom: 40px;
         }
 
         .logo {
-            width: 100px;
-            height: 100px;
+            width: 110px;
+            height: 110px;
             background: white;
             border-radius: 50%;
             display: flex;
@@ -115,53 +151,64 @@
             margin: 0 auto 20px;
             box-shadow: 0 10px 30px rgba(22, 160, 133, 0.3);
             border: 4px solid var(--accent);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .logo img {
-            width: 85px;
-            height: 85px;
+            width: 90px;
+            height: 90px;
             object-fit: contain;
         }
 
         .header h1 {
             color: var(--primary-dark);
-            font-size: 28px;
+            font-size: 30px;
             font-weight: 800;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .header p {
-            color: #7f8c8d;
-            font-size: 15px;
+            color: #5a6c7d;
+            font-size: 16px;
             line-height: 1.6;
+            font-weight: 500;
         }
 
         .progress-bar {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
             position: relative;
+            padding: 0 10px;
         }
 
         .progress-bar::before {
             content: '';
             position: absolute;
             top: 20px;
-            left: 10%;
-            right: 10%;
+            left: 15%;
+            right: 15%;
             height: 3px;
             background: #e0e0e0;
             z-index: 0;
+            border-radius: 10px;
         }
 
         .progress-line {
             position: absolute;
             top: 20px;
-            left: 10%;
+            left: 15%;
             height: 3px;
             background: linear-gradient(90deg, var(--accent), var(--primary-light));
-            transition: width 0.5s ease;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
             z-index: 1;
+            border-radius: 10px;
         }
 
         .step {
@@ -179,34 +226,39 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 8px;
-            transition: all 0.3s ease;
+            margin: 0 auto 10px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             color: #95a5a6;
             font-size: 18px;
             font-weight: 700;
+            border: 3px solid transparent;
         }
 
         .step.active .step-icon {
             background: linear-gradient(135deg, var(--accent), var(--primary-light));
             color: white;
-            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
-            transform: scale(1.1);
+            box-shadow: 0 5px 20px rgba(46, 204, 113, 0.5);
+            transform: scale(1.15);
+            border-color: rgba(255, 255, 255, 0.3);
         }
 
         .step.completed .step-icon {
             background: var(--accent);
             color: white;
+            transform: scale(1.05);
         }
 
         .step-label {
-            font-size: 12px;
-            color: #95a5a6;
+            font-size: 13px;
+            color: #7f8c8d;
             font-weight: 600;
+            transition: all 0.3s ease;
         }
 
         .step.active .step-label {
             color: var(--primary-dark);
-            font-weight: 700;
+            font-weight: 800;
+            transform: scale(1.05);
         }
 
         .form-section {
@@ -215,23 +267,29 @@
 
         .form-section.active {
             display: block;
-            animation: fadeIn 0.5s ease;
+            animation: fadeInSlide 0.5s ease;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateX(20px); }
-            to { opacity: 1; transform: translateX(0); }
+        @keyframes fadeInSlide {
+            from { 
+                opacity: 0; 
+                transform: translateX(20px);
+            }
+            to { 
+                opacity: 1; 
+                transform: translateX(0);
+            }
         }
 
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 28px;
         }
 
         .form-group label {
             display: block;
             color: var(--primary-dark);
             font-weight: 700;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             font-size: 15px;
             display: flex;
             align-items: center;
@@ -240,6 +298,7 @@
 
         .form-group label i {
             color: var(--accent);
+            font-size: 16px;
         }
 
         .input-wrapper {
@@ -249,9 +308,9 @@
         .input-wrapper input,
         .input-wrapper select {
             width: 100%;
-            padding: 15px 20px 15px 50px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
+            padding: 16px 20px 16px 50px;
+            border: 2px solid #e8ecef;
+            border-radius: 14px;
             font-size: 15px;
             transition: all 0.3s ease;
             background: #f8f9fa;
@@ -273,6 +332,7 @@
             border-color: var(--accent);
             box-shadow: 0 0 0 4px rgba(46, 204, 113, 0.1);
             background: white;
+            transform: translateY(-2px);
         }
 
         .input-wrapper .icon {
@@ -282,6 +342,7 @@
             transform: translateY(-50%);
             color: var(--accent);
             font-size: 18px;
+            pointer-events: none;
         }
 
         .toggle-password {
@@ -291,28 +352,30 @@
             transform: translateY(-50%);
             color: #95a5a6;
             cursor: pointer;
-            transition: color 0.3s ease;
+            transition: all 0.3s ease;
+            font-size: 18px;
         }
 
         .toggle-password:hover {
             color: var(--accent);
+            transform: translateY(-50%) scale(1.1);
         }
 
         .buttons {
             display: flex;
             gap: 15px;
-            margin-top: 30px;
+            margin-top: 35px;
         }
 
         .btn {
             flex: 1;
-            padding: 16px;
+            padding: 17px 20px;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -327,17 +390,22 @@
 
         .btn-primary:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.4);
+            box-shadow: 0 8px 25px rgba(46, 204, 113, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(-1px);
         }
 
         .btn-secondary {
-            background: #e0e0e0;
-            color: #7f8c8d;
+            background: #ecf0f1;
+            color: #5a6c7d;
         }
 
         .btn-secondary:hover {
-            background: #d0d0d0;
+            background: #d5dbdd;
             transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
         .btn:disabled {
@@ -347,16 +415,17 @@
         }
 
         .error-message {
-            background: #ffe6e6;
+            background: linear-gradient(135deg, #ffe6e6, #ffcccc);
             color: var(--danger);
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-top: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-top: 18px;
             display: none;
             text-align: center;
-            border: 2px solid #ffcccc;
+            border: 2px solid #ffb3b3;
             font-weight: 600;
             animation: shake 0.5s;
+            box-shadow: 0 4px 12px rgba(231, 76, 60, 0.2);
         }
 
         @keyframes shake {
@@ -368,13 +437,14 @@
         .success-message {
             background: linear-gradient(135deg, #d4edda, #c3e6cb);
             color: #155724;
-            padding: 12px 16px;
-            border-radius: 10px;
-            margin-top: 15px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            margin-top: 18px;
             display: none;
             text-align: center;
-            border: 2px solid #c3e6cb;
+            border: 2px solid #b1dfbb;
             font-weight: 600;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.2);
         }
 
         .loading {
@@ -394,34 +464,64 @@
         .info-box {
             background: linear-gradient(135deg, #e8f5f7, #d1ecf1);
             border: 2px solid #bee5eb;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 20px;
+            border-radius: 14px;
+            padding: 16px;
+            margin-top: 25px;
             display: flex;
             align-items: start;
-            gap: 12px;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(23, 162, 184, 0.1);
         }
 
         .info-box i {
             color: var(--primary);
-            font-size: 20px;
+            font-size: 22px;
             margin-top: 2px;
         }
 
         .info-box p {
             color: #0c5460;
-            font-size: 13px;
-            line-height: 1.6;
+            font-size: 14px;
+            line-height: 1.7;
             font-weight: 600;
         }
 
         @media (max-width: 768px) {
+            .login-nav {
+                top: 15px;
+                left: 15px;
+            }
+
+            [dir="rtl"] .login-nav {
+                left: auto;
+                right: 15px;
+            }
+
+            .login-btn {
+                padding: 10px 18px;
+                font-size: 14px;
+            }
+
             .card {
-                padding: 30px 25px;
+                padding: 35px 25px;
             }
 
             .header h1 {
-                font-size: 24px;
+                font-size: 26px;
+            }
+
+            .header p {
+                font-size: 15px;
+            }
+
+            .logo {
+                width: 100px;
+                height: 100px;
+            }
+
+            .logo img {
+                width: 80px;
+                height: 80px;
             }
 
             .buttons {
@@ -431,10 +531,51 @@
             .btn {
                 width: 100%;
             }
+
+            .progress-bar::before {
+                left: 10%;
+                right: 10%;
+            }
+
+            .progress-line {
+                left: 10%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 30px 20px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .step-label {
+                font-size: 11px;
+            }
+
+            .step-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+            }
         }
     </style>
 </head>
 <body>
+    <!-- زر تسجيل الدخول في الأعلى -->
+    <div class="login-nav">
+        <a href="first-login.html" class="login-btn" id="loginNavBtn">
+            <i class="fas fa-sign-in-alt"></i>
+            لديك حساب؟ سجل دخولك
+        </a>
+    </div>
+
     <div class="particles" id="particles"></div>
 
     <div class="container">
@@ -474,17 +615,6 @@
                     <div class="input-wrapper">
                         <i class="icon fas fa-user"></i>
                         <input type="text" id="userName" placeholder="أدخل اسمك الكامل" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="userEmail">
-                        <i class="fas fa-envelope"></i>
-                        البريد الإلكتروني (اختياري)
-                    </label>
-                    <div class="input-wrapper">
-                        <i class="icon fas fa-envelope"></i>
-                        <input type="email" id="userEmail" placeholder="example@email.com">
                     </div>
                 </div>
 
@@ -604,7 +734,6 @@
         // التحقق الفوري والحماية
         // ===================================
         
-        // التحقق الفوري عند تحميل الصفحة
         (function() {
             const hasRegistered = localStorage.getItem('hasCompletedRegistration') === 'true';
             if (hasRegistered) {
@@ -612,7 +741,13 @@
                 window.location.replace('index.html');
                 return;
             }
-            console.log('📝 صفحة التسجيل الأولى - المستخدم جديد');
+            console.log('🔒 صفحة التسجيل الأولى - المستخدم جديد');
+            
+            // إخفاء زر تسجيل الدخول إذا لم يكن هناك مستخدم مسجل
+            const loginNavBtn = document.getElementById('loginNavBtn');
+            if (loginNavBtn && !hasRegistered) {
+                loginNavBtn.style.display = 'none';
+            }
         })();
         
         function createParticles() {
@@ -639,10 +774,8 @@
         // المتغيرات والإعدادات
         // ===================================
         
-        // كلمة المرور المشفرة
         const CORRECT_PASSWORD_HASH = "3ea4080e56af3dd6f9affac26d233a623266d0b61b0d2d29ea1b99d997bd19e0";
 
-        // دالة التشفير
         async function hashPassword(text) {
             const encoder = new TextEncoder();
             const data = encoder.encode(text);
@@ -658,12 +791,10 @@
         // وظائف التنقل بين الأقسام
         // ===================================
         
-        // الانتقال للقسم التالي
         function nextSection(step) {
             const currentSection = document.getElementById(`section${currentStep}`);
             const errorDiv = document.getElementById(`error${currentStep}`);
             
-            // التحقق من الحقول
             if (currentStep === 1) {
                 const userName = document.getElementById('userName').value.trim();
                 if (!userName) {
@@ -696,7 +827,6 @@
 
             errorDiv.style.display = 'none';
             
-            // الانتقال للخطوة التالية
             currentSection.classList.remove('active');
             document.getElementById(`section${step}`).classList.add('active');
             
@@ -704,7 +834,6 @@
             currentStep = step;
         }
 
-        // العودة للقسم السابق
         function prevSection(step) {
             document.getElementById(`section${currentStep}`).classList.remove('active');
             document.getElementById(`section${step}`).classList.add('active');
@@ -713,7 +842,6 @@
             currentStep = step;
         }
 
-        // تحديث شريط التقدم
         function updateProgress(step) {
             const steps = document.querySelectorAll('.step');
             const progressLine = document.getElementById('progressLine');
@@ -730,11 +858,10 @@
                 }
             });
 
-            const progressWidth = ((step - 1) / 2) * 80;
+            const progressWidth = ((step - 1) / 2) * 70;
             progressLine.style.width = `${progressWidth}%`;
         }
 
-        // تبديل إظهار كلمة المرور
         function togglePassword() {
             const input = document.getElementById('password');
             const icon = document.querySelector('.toggle-password');
@@ -748,7 +875,6 @@
             }
         }
 
-        // إرسال النموذج
         async function submitForm() {
             const password = document.getElementById('password').value.trim();
             const errorDiv = document.getElementById('error3');
@@ -770,17 +896,14 @@
             const passwordHash = await hashPassword(password);
 
             if (passwordHash === CORRECT_PASSWORD_HASH) {
-                // جمع البيانات
                 const userData = {
                     name: document.getElementById('userName').value.trim(),
-                    email: document.getElementById('userEmail').value.trim(),
                     curriculum: document.getElementById('curriculum').value,
                     grade: document.getElementById('grade').value,
                     registrationDate: new Date().toISOString(),
                     sessionId: 'session_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
                 };
 
-                // حفظ البيانات
                 localStorage.setItem('userProfile', JSON.stringify(userData));
                 localStorage.setItem('hasCompletedRegistration', 'true');
                 sessionStorage.setItem('isLoggedIn', 'true');
@@ -790,7 +913,6 @@
                     sessionId: userData.sessionId
                 }));
 
-                // تسجيل الجلسة في نظام التتبع
                 let timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
                 if (!timeTracking.sessions) timeTracking.sessions = {};
                 
@@ -829,7 +951,6 @@
             }
         }
 
-        // الاستماع لضغطة Enter
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 if (currentStep === 1) nextSection(2);
@@ -838,7 +959,6 @@
             }
         });
 
-        // منع الرجوع للخلف بعد التسجيل
         window.history.pushState(null, null, window.location.href);
         window.addEventListener('popstate', function() {
             if (localStorage.getItem('hasCompletedRegistration') === 'true') {
