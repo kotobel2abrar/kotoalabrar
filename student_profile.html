@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حساب الطالب - مدارس الأبرار</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #16a085;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-5: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(240, 147, 251, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* صفحة تسجيل الدخول إذا لم يكن مسجلاً */
+        .login-prompt {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 80vh;
+            position: relative;
+            z-index: 10;
+        }
+
+        .login-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 50px 40px;
+            border-radius: 25px;
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.3),
+                0 0 100px rgba(102, 126, 234, 0.2);
+            width: 100%;
+            max-width: 480px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 0.6s ease;
+            text-align: center;
+            position: relative;
+            z-index: 100;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-card .icon-wrapper {
+            width: 90px;
+            height: 90px;
+            margin: 0 auto 20px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+            }
+        }
+
+        .login-card i {
+            font-size: 45px;
+            color: white;
+        }
+
+        .login-card h1 {
+            color: var(--primary);
+            font-size: 30px;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .login-card p {
+            color: #7f8c8d;
+            font-size: 15px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .login-btn {
+            padding: 16px 30px;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+            text-decoration: none;
+        }
+
+        .login-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        /* صفحة الحساب الرئيسية */
+        .profile-container {
+            display: none;
+        }
+
+        /* رأس الصفحة */
+        .profile-header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .profile-info {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            flex: 1;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 5px solid white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            background: var(--gradient-1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-avatar .avatar-text {
+            font-size: 40px;
+            color: white;
+            font-weight: 800;
+        }
+
+        .profile-details h1 {
+            color: var(--primary);
+            font-size: 32px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .profile-details .badge {
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: var(--gradient-4);
+            color: white;
+        }
+
+        .profile-meta {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .meta-item i {
+            color: var(--secondary);
+            font-size: 16px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--gradient-3);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--gradient-4);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--gradient-5);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--gradient-2);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* قسم إرسال كتاب */
+        .submit-section {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            font-size: 26px;
+            color: var(--secondary);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+            background: white;
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .file-upload {
+            position: relative;
+            border: 2px dashed #e0e0e0;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            position: relative;
+            z-index: 100;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .file-upload:hover {
+            border-color: var(--secondary);
+            background: #f0f8ff;
+        }
+
+        .file-upload.dragover {
+            border-color: #3498db;
+            background: rgba(52, 152, 219, 0.1);
+        }
+
+        .file-upload i {
+            font-size: 48px;
+            color: #95a5a6;
+            margin-bottom: 15px;
+        }
+
+        .file-upload .upload-text {
+            color: #7f8c8d;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+
+        .file-upload .upload-hint {
+            color: #95a5a6;
+            font-size: 13px;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        /* مؤشر التقدم */
+        .progress-bar {
+            height: 6px;
+            background: var(--gradient-3);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+            margin-top: 10px;
+        }
+
+        /* مؤشر القراءة */
+        .read-indicator {
+            width: 100px;
+            height: 6px;
+            background: #ecf0f1;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .read-progress {
+            height: 100%;
+            background: var(--gradient-4);
+            transition: width 0.5s ease;
+        }
+
+        /* الكتب المرسلة */
+        .submitted-books {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .books-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .books-table th {
+            padding: 16px 20px;
+            text-align: right;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .books-table td {
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+
+        .books-table tr {
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .books-table tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.01);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .status-pending {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .status-approved {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+        }
+
+        .status-rejected {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+
+        .status-review {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            position: relative;
+            z-index: 100;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* التنبيهات */
+        .alert {
+            padding: 18px 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 600;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+            color: #0c5460;
+            border: 2px solid #bee5eb;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            border: 2px solid #c3e6cb;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+            color: #856404;
+            border: 2px solid #ffeaa7;
+        }
+
+        .alert i {
+            font-size: 24px;
+        }
+
+        /* رسائل النجاح */
+        .success-toast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            color: white;
+            padding: 18px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.4);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        /* تعديل الحساب */
+        .edit-profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            animation: modalSlideUp 0.4s ease;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h2 {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #95a5a6;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-modal:hover {
+            color: var(--danger);
+        }
+
+        /* أدوات التحكم */
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            background: white;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2395a5a6'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            background-size: 20px;
+        }
+
+        /* استجابة للشاشات الصغيرة */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .profile-header {
+                padding: 20px;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .profile-info {
+                flex-direction: column;
+                text-align: center;
+            position: relative;
+            z-index: 100;
+                width: 100%;
+            }
+
+            .profile-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .books-table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px 10px;
+            }
+
+            .section-title {
+                font-size: 20px;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* تأثيرات السحب والإفلات */
+        .drag-highlight {
+            animation: dragPulse 1s infinite;
+        }
+
+        @keyframes dragPulse {
+            0%, 100% {
+                box-shadow: 0 0 0 0 rgba(52, 152, 219, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 0 10px rgba(52, 152, 219, 0);
+            }
+        }
+
+        /* بطاقة معلومات الطالب */
+        .student-info-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .info-item:hover {
+            background: #e9ecef;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .info-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            background: var(--gradient-3);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .info-content h3 {
+            color: var(--primary);
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .info-content p {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- صفحة تسجيل الدخول إذا لم يكن مسجلاً -->
+        <div id="loginPrompt" class="login-prompt">
+            <div class="login-card">
+                <div class="icon-wrapper">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h1>حساب الطالب</h1>
+                <p>يجب تسجيل الدخول أولاً للوصول إلى صفحة الحساب الشخصي وإرسال الكتب</p>
+                <a href="first-login.html" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>تسجيل الدخول</span>
+                </a>
+                <p style="margin-top: 20px; font-size: 14px; color: #95a5a6;">
+                    ليس لديك حساب؟ <a href="first-login.html" style="color: #3498db; text-decoration: none; font-weight: 700;">إنشاء حساب جديد</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- صفحة الحساب الرئيسية -->
+        <div id="profileContainer" class="profile-container">
+            <!-- رأس الصفحة -->
+            <div class="profile-header">
+                <div class="profile-info">
+                    <div class="profile-avatar" id="profileAvatar">
+                        <!-- سيتم تعبئته بالجافاسكريبت -->
+                    </div>
+                    <div class="profile-details">
+                        <h1 id="userName">اسم الطالب</h1>
+                        <span class="badge" id="userCurriculum">المسار السعودي</span>
+                        <div class="profile-meta">
+                            <div class="meta-item">
+                                <i class="fas fa-graduation-cap"></i>
+                                <span id="userGrade">الصف الأول الثانوي</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-calendar-alt"></i>
+                                <span id="joinDate">تاريخ الانضمام: 2024-01-01</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-clock"></i>
+                                <span id="lastActive">آخر نشاط: قبل قليل</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="fas fa-book"></i>
+                                <span id="totalSubmitted">الكتب المرسلة: 0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn btn-primary" onclick="openEditProfile()">
+                        <i class="fas fa-edit"></i>
+                        <span>تعديل معلومات الحساب</span>
+                    </button>
+                    <button class="btn btn-success" onclick="exportUserData()">
+                        <i class="fas fa-download"></i>
+                        <span>تصدير البيانات</span>
+                    </button>
+                    <button class="btn btn-warning" onclick="refreshData()">
+                        <i class="fas fa-sync-alt"></i>
+                        <span>تحديث</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- معلومات الطالب -->
+            <div class="student-info-card">
+                <div class="section-title">
+                    <i class="fas fa-user-circle"></i>
+                    <span>معلومات الطالب</span>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>الاسم الكامل</h3>
+                            <p id="infoName">-</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>المسار الدراسي</h3>
+                            <p id="infoCurriculum">-</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>الصف الدراسي</h3>
+                            <p id="infoGrade">-</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>تاريخ التسجيل</h3>
+                            <p id="infoRegistrationDate">-</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>البريد الإلكتروني</h3>
+                            <p id="infoEmail">لم يتم إضافته</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-item">
+                        <div class="info-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <div class="info-content">
+                            <h3>آخر نشاط</h3>
+                            <p id="infoLastActivity">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- إرسال كتاب جديد -->
+            <div class="submit-section">
+                <div class="section-title">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>إرسال كتاب جديد</span>
+                </div>
+                
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i>
+                    <div>
+                        <strong>ملاحظة:</strong> يمكنك إرسال كتب مفيدة لإضافتها إلى المكتبة. سيتم مراجعتها من قبل الإدارة.
+                    </div>
+                </div>
+
+                <form id="bookSubmitForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label for="bookTitle">عنوان الكتاب *</label>
+                            <input type="text" id="bookTitle" class="form-control" placeholder="أدخل عنوان الكتاب" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookSubject">المادة الدراسية *</label>
+                            <select id="bookSubject" class="form-control" required>
+                                <option value="">اختر المادة</option>
+                                <option value="رياضيات">رياضيات</option>
+                                <option value="لغة عربية">لغة عربية</option>
+                                <option value="لغة إنجليزية">لغة إنجليزية</option>
+                                <option value="علوم">علوم</option>
+                                <option value="فيزياء">فيزياء</option>
+                                <option value="كيمياء">كيمياء</option>
+                                <option value="أحياء">أحياء</option>
+                                <option value="تاريخ">تاريخ</option>
+                                <option value="جغرافيا">جغرافيا</option>
+                                <option value="قرآن">قرآن</option>
+                                <option value="تربية إسلامية">تربية إسلامية</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookGrade">الصف الدراسي *</label>
+                            <select id="bookGrade" class="form-control" required>
+                                <option value="">اختر الصف</option>
+                                <option value="الأول الابتدائي">الأول الابتدائي</option>
+                                <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                                <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                                <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                                <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                                <option value="السادس الابتدائي">السادس الابتدائي</option>
+                                <option value="الأول المتوسط">الأول المتوسط</option>
+                                <option value="الثاني المتوسط">الثاني المتوسط</option>
+                                <option value="الثالث المتوسط">الثالث المتوسط</option>
+                                <option value="الأول الثانوي">الأول الثانوي</option>
+                                <option value="الثاني الثانوي">الثاني الثانوي</option>
+                                <option value="الثالث الثانوي">الثالث الثانوي</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookTerm">الفصل الدراسي *</label>
+                            <select id="bookTerm" class="form-control" required>
+                                <option value="">اختر الفصل</option>
+                                <option value="الأول">الفصل الأول</option>
+                                <option value="الثاني">الفصل الثاني</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookYear">السنة الدراسية *</label>
+                            <input type="text" id="bookYear" class="form-control" value="2024/2025" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="bookLanguage">اللغة *</label>
+                            <select id="bookLanguage" class="form-control" required>
+                                <option value="عربي">عربي</option>
+                                <option value="إنجليزي">إنجليزي</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="bookDescription">وصف الكتاب</label>
+                        <textarea id="bookDescription" class="form-control" placeholder="أضف وصفًا مختصرًا عن الكتاب و أهميته و طريقة للتواصل كي نخبرك هل تم الموافقه ام لا  (اختياري)"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>رابط الكتاب *</label>
+                        <input type="text" id="bookLink" class="form-control" placeholder="https://drive.google.com/file/d/..." required>
+                        <div class="read-indicator" id="linkValidationIndicator" style="display: none;">
+                            <div class="read-progress" id="linkValidationProgress"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>صورة الغلاف (اختياري)</label>
+                        <div class="file-upload" id="coverUploadArea">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <div class="upload-text">انقر لرفع صورة الغلاف أو اسحب وأفلت</div>
+                            <div class="upload-hint">JPG, PNG بحد أقصى 5MB</div>
+                            <input type="file" id="bookCover" accept="image/*">
+                            <div class="progress-bar" id="uploadProgress" style="width: 0%; display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-success" style="width: 100%; padding: 16px; font-size: 16px;">
+                        <i class="fas fa-paper-plane"></i>
+                        <span>إرسال الكتاب للمراجعة</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- الكتب المرسلة -->
+            <div class="submitted-books">
+                <div class="section-title">
+                    <i class="fas fa-history"></i>
+                    <span>الكتب المرسلة</span>
+                </div>
+                
+                <div class="controls">
+                    <div class="search-box">
+                        <input type="text" id="searchBooks" class="search-input" placeholder="ابحث في كتبك المرسلة..." onkeyup="searchSubmittedBooks(this.value)">
+                    </div>
+                    <select id="sortBooks" class="form-control" style="width: 200px;" onchange="sortSubmittedBooks(this.value)">
+                        <option value="date">ترتيب حسب التاريخ</option>
+                        <option value="title">ترتيب حسب العنوان</option>
+                        <option value="status">ترتيب حسب الحالة</option>
+                    </select>
+                </div>
+                
+                <div id="booksTableContainer">
+                    <table class="books-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>عنوان الكتاب</th>
+                                <th>المادة</th>
+                                <th>الصف</th>
+                                <th>تاريخ الإرسال</th>
+                                <th>الحالة</th>
+                                <th>ملاحظات</th>
+                                <th>إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="submittedBooksTable">
+                            <!-- سيتم تعبئته بالجافاسكريبت -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- نافذة تعديل الملف الشخصي -->
+        <div id="editProfileModal" class="edit-profile-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>تعديل الملف الشخصي</h2>
+                    <button class="close-modal" onclick="closeEditProfile()">&times;</button>
+                </div>
+                
+                <form id="editProfileForm">
+                    <div class="form-group">
+                        <label for="editName">الاسم الكامل</label>
+                        <input type="text" id="editName" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editCurriculum">المسار الدراسي</label>
+                        <select id="editCurriculum" class="form-control" required>
+                            <option value="سعودي">سعودي</option>
+                            <option value="مصري">مصري</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editGrade">الصف الدراسي</label>
+                        <select id="editGrade" class="form-control" required>
+                            <option value="الأول الابتدائي">الأول الابتدائي</option>
+                            <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                            <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                            <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                            <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                            <option value="السادس الابتدائي">السادس الابتدائي</option>
+                            <option value="الأول المتوسط">الأول المتوسط</option>
+                            <option value="الثاني المتوسط">الثاني المتوسط</option>
+                            <option value="الثالث المتوسط">الثالث المتوسط</option>
+                            <option value="الأول الثانوي">الأول الثانوي</option>
+                            <option value="الثاني الثانوي">الثاني الثانوي</option>
+                            <option value="الثالث الثانوي">الثالث الثانوي</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="editEmail">البريد الإلكتروني (اختياري)</label>
+                        <input type="email" id="editEmail" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>صورة الملف الشخصي</label>
+                        <div class="file-upload" style="padding: 20px;" id="avatarUploadArea">
+                            <i class="fas fa-user-circle"></i>
+                            <div class="upload-text">اختر صورة شخصية أو اسحب وأفلت</div>
+                            <div class="upload-hint">يظهر في صفحة الحساب (حد أقصى 5MB)</div>
+                            <input type="file" id="editAvatar" accept="image/*">
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 10px; margin-top: 25px;">
+                        <button type="button" class="btn btn-danger" style="flex: 1;" onclick="closeEditProfile()">
+                            إلغاء
+                        </button>
+                        <button type="submit" class="btn btn-success" style="flex: 1;">
+                            <i class="fas fa-save"></i>
+                            حفظ التغييرات
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // كائن التخزين المؤقت
+        const cache = new Map();
+
+        // تهيئة النظام
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            loadUserData();
+            loadSubmittedBooks();
+            setupEventListeners();
+            setupDragAndDrop();
+            lazyLoadImages();
+            
+            // تحديث تلقائي كل 30 ثانية
+            setInterval(loadUserData, 30000);
+        });
+
+        // التحقق من حالة تسجيل الدخول - التصحيح الرئيسي هنا
+        function checkLoginStatus() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn') === 'true';
+            const hasCompletedRegistration = localStorage.getItem('hasCompletedRegistration') === 'true';
+            
+            // التحقق من أن التسجيل مكتمل والمستخدم مسجل الدخول
+            if ((isLoggedIn || hasCompletedRegistration)) {
+                document.getElementById('loginPrompt').style.display = 'none';
+                document.getElementById('profileContainer').style.display = 'block';
+                console.log('✅ تم تسجيل الدخول - عرض صفحة الحساب');
+            } else {
+                document.getElementById('loginPrompt').style.display = 'flex';
+                document.getElementById('profileContainer').style.display = 'none';
+                console.log('❌ لم يتم تسجيل الدخول - عرض صفحة التسجيل');
+            }
+        }
+
+        // تحميل بيانات المستخدم مع التخزين المؤقت
+        async function loadUserData() {
+            const cacheKey = 'userData_' + getUserId();
+            
+            try {
+                const data = await getCachedData(cacheKey, async () => {
+                    const userData = JSON.parse(localStorage.getItem('userProfile') || '{}');
+                    
+                    // إذا كانت البيانات غير موجودة في userProfile، حاول الحصول من sessionStorage
+                    if (!userData.name) {
+                        const sessionData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+                        return { ...sessionData };
+                    }
+                    
+                    return userData;
+                });
+                
+                // تحديث واجهة المستخدم
+                document.getElementById('userName').textContent = data.name || 'طالب';
+                document.getElementById('userCurriculum').textContent = data.curriculum ? 
+                    (data.curriculum === 'سعودي' ? '🇸🇦 المسار السعودي' : '🇪🇬 المسار المصري') : 'المسار السعودي';
+                document.getElementById('userGrade').textContent = data.grade || 'غير محدد';
+                
+                // تحديث تاريخ الانضمام
+                const joinDate = data.registrationDate ? 
+                    new Date(data.registrationDate).toLocaleDateString('ar-SA') : 
+                    new Date().toLocaleDateString('ar-SA');
+                document.getElementById('joinDate').textContent = `تاريخ الانضمام: ${joinDate}`;
+                
+                // تحديث عدد الكتب المرسلة
+                updateSubmittedBooksCount();
+                
+                // تحديث صورة الملف
+                updateAvatar(data.avatar, data.name);
+                
+                // تحديث آخر نشاط
+                updateLastActivity();
+                
+                // تحديث معلومات الطالب في البطاقة
+                updateStudentInfoCard(data);
+                
+            } catch (error) {
+                console.error('خطأ في تحميل بيانات المستخدم:', error);
+                showToast('❌ حدث خطأ في تحميل البيانات', 'error');
+            }
+        }
+
+        // تحديث معلومات الطالب في بطاقة المعلومات
+        function updateStudentInfoCard(userData) {
+            document.getElementById('infoName').textContent = userData.name || 'غير محدد';
+            document.getElementById('infoCurriculum').textContent = userData.curriculum ? 
+                (userData.curriculum === 'سعودي' ? '🇸🇦 المسار السعودي' : '🇪🇬 المسار المصري') : 'غير محدد';
+            document.getElementById('infoGrade').textContent = userData.grade || 'غير محدد';
+            
+            // تاريخ التسجيل
+            const registrationDate = userData.registrationDate ? 
+                new Date(userData.registrationDate).toLocaleDateString('ar-SA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }) : 'غير محدد';
+            document.getElementById('infoRegistrationDate').textContent = registrationDate;
+            
+            // البريد الإلكتروني
+            document.getElementById('infoEmail').textContent = userData.email || 'لم يتم إضافته';
+            
+            // آخر نشاط
+            updateLastActivityInfo();
+        }
+
+        // تحديث آخر نشاط في بطاقة المعلومات
+        function updateLastActivityInfo() {
+            try {
+                const timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+                const sessions = timeTracking.sessions || {};
+                let lastActivity = null;
+                
+                Object.values(sessions).forEach(session => {
+                    if (session.userId === getUserId() && session.lastActive) {
+                        const activityTime = new Date(session.lastActive);
+                        if (!lastActivity || activityTime > lastActivity) {
+                            lastActivity = activityTime;
+                        }
+                    }
+                });
+                
+                const lastActivityElement = document.getElementById('infoLastActivity');
+                if (lastActivity) {
+                    const now = new Date();
+                    const diffMs = now - lastActivity;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMins / 60);
+                    const diffDays = Math.floor(diffHours / 24);
+                    
+                    if (diffMins < 1) {
+                        lastActivityElement.textContent = 'قبل قليل';
+                    } else if (diffMins < 60) {
+                        lastActivityElement.textContent = `قبل ${diffMins} دقيقة`;
+                    } else if (diffHours < 24) {
+                        lastActivityElement.textContent = `قبل ${diffHours} ساعة`;
+                    } else {
+                        lastActivityElement.textContent = `قبل ${diffDays} يوم`;
+                    }
+                } else {
+                    lastActivityElement.textContent = 'غير متوفر';
+                }
+                
+            } catch (error) {
+                console.error('خطأ في تحديث آخر نشاط:', error);
+            }
+        }
+
+        // الحصول على بيانات مع التخزين المؤقت
+        async function getCachedData(key, fetchFunction) {
+            if (cache.has(key)) {
+                return cache.get(key);
+            }
+            
+            const data = await fetchFunction();
+            cache.set(key, data);
+            
+            // تنظيف التخزين المؤقت بعد 5 دقائق
+            setTimeout(() => {
+                cache.delete(key);
+            }, 5 * 60 * 1000);
+            
+            return data;
+        }
+
+        // تحديث صورة الملف الشخصي
+        function updateAvatar(avatarUrl, userName) {
+            const avatarElement = document.getElementById('profileAvatar');
+            
+            if (avatarUrl && avatarUrl.startsWith('data:image')) {
+                const img = document.createElement('img');
+                img.src = avatarUrl;
+                img.alt = 'صورة الملف الشخصي';
+                img.loading = 'lazy';
+                avatarElement.innerHTML = '';
+                avatarElement.appendChild(img);
+            } else {
+                const initials = userName ? userName.charAt(0).toUpperCase() : 'ط';
+                avatarElement.innerHTML = `<div class="avatar-text">${initials}</div>`;
+            }
+        }
+
+        // تحديث عدد الكتب المرسلة
+        function updateSubmittedBooksCount() {
+            try {
+                const submittedBooks = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+                const userBooks = submittedBooks.filter(book => book.userId === getUserId());
+                document.getElementById('totalSubmitted').textContent = `الكتب المرسلة: ${userBooks.length}`;
+                
+            } catch (error) {
+                console.error('خطأ في تحديث عدد الكتب:', error);
+            }
+        }
+
+        // تحديث آخر نشاط
+        function updateLastActivity() {
+            try {
+                const timeTracking = JSON.parse(localStorage.getItem('timeTracking') || '{}');
+                const sessions = timeTracking.sessions || {};
+                let lastActivity = null;
+                
+                Object.values(sessions).forEach(session => {
+                    if (session.userId === getUserId() && session.lastActive) {
+                        const activityTime = new Date(session.lastActive);
+                        if (!lastActivity || activityTime > lastActivity) {
+                            lastActivity = activityTime;
+                        }
+                    }
+                });
+                
+                const lastActivityElement = document.getElementById('lastActive');
+                if (lastActivity) {
+                    const now = new Date();
+                    const diffMs = now - lastActivity;
+                    const diffMins = Math.floor(diffMs / 60000);
+                    const diffHours = Math.floor(diffMins / 60);
+                    const diffDays = Math.floor(diffHours / 24);
+                    
+                    if (diffMins < 1) {
+                        lastActivityElement.textContent = 'آخر نشاط: قبل قليل';
+                    } else if (diffMins < 60) {
+                        lastActivityElement.textContent = `آخر نشاط: قبل ${diffMins} دقيقة`;
+                    } else if (diffHours < 24) {
+                        lastActivityElement.textContent = `آخر نشاط: قبل ${diffHours} ساعة`;
+                    } else {
+                        lastActivityElement.textContent = `آخر نشاط: قبل ${diffDays} يوم`;
+                    }
+                } else {
+                    lastActivityElement.textContent = 'آخر نشاط: غير متوفر';
+                }
+                
+            } catch (error) {
+                console.error('خطأ في تحديث آخر نشاط:', error);
+            }
+        }
+
+        // الحصول على معرف المستخدم
+        function getUserId() {
+            const userData = JSON.parse(localStorage.getItem('userProfile') || '{}');
+            return userData.sessionId || sessionStorage.getItem('sessionId') || 'unknown_' + Date.now();
+        }
+
+        // تحميل الكتب المرسلة
+        function loadSubmittedBooks() {
+            try {
+                const submittedBooks = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+                const userBooks = submittedBooks.filter(book => book.userId === getUserId());
+                const tableBody = document.getElementById('submittedBooksTable');
+                
+                if (userBooks.length === 0) {
+                    tableBody.innerHTML = `
+                        <tr>
+                            <td colspan="8" class="empty-state">
+                                <i class="fas fa-book-open"></i>
+                                <p>لم تقم بإرسال أي كتب بعد</p>
+                            </td>
+                        </tr>
+                    `;
+                    return;
+                }
+                
+                // ترتيب الكتب من الأحدث إلى الأقدم (افتراضي)
+                userBooks.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+                
+                displayBooksTable(userBooks);
+                
+            } catch (error) {
+                console.error('خطأ في تحميل الكتب المرسلة:', error);
+                showToast('❌ حدث خطأ في تحميل الكتب', 'error');
+            }
+        }
+
+        // عرض جدول الكتب
+        function displayBooksTable(books) {
+            const tableBody = document.getElementById('submittedBooksTable');
+            let html = '';
+            
+            books.forEach((book, index) => {
+                const statusClass = `status-${book.status || 'pending'}`;
+                const statusText = {
+                    'pending': 'قيد الانتظار',
+                    'review': 'قيد المراجعة',
+                    'approved': 'مقبول',
+                    'rejected': 'مرفوض'
+                }[book.status] || 'قيد الانتظار';
+                
+                const date = new Date(book.submittedAt).toLocaleDateString('ar-SA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+                
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td><strong>${book.title}</strong></td>
+                        <td>${book.subject}</td>
+                        <td>${book.grade}</td>
+                        <td>${date}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>${book.adminNotes || '-'}</td>
+                        <td>
+                            <button class="btn btn-primary" style="padding: 5px 10px; font-size: 12px;" onclick="backupBookLink('${book.id}')">
+                                <i class="fas fa-copy"></i>
+                            </button>
+                            ${book.status === 'approved' ? `
+                                <button class="btn btn-success" style="padding: 5px 10px; font-size: 12px;" onclick="shareBook('${book.id}')">
+                                    <i class="fas fa-share-alt"></i>
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableBody.innerHTML = html;
+        }
+
+        // البحث في الكتب المرسلة
+        function searchSubmittedBooks(query) {
+            const submittedBooks = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+            const userBooks = submittedBooks.filter(book => book.userId === getUserId());
+            
+            if (!query.trim()) {
+                displayBooksTable(userBooks);
+                return;
+            }
+            
+            const searchResults = userBooks.filter(book => 
+                book.title.includes(query) || 
+                book.subject.includes(query) ||
+                book.description?.includes(query) ||
+                book.adminNotes?.includes(query)
+            );
+            
+            displayBooksTable(searchResults);
+        }
+
+        // ترتيب الكتب المرسلة
+        function sortSubmittedBooks(criteria) {
+            const submittedBooks = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+            let userBooks = submittedBooks.filter(book => book.userId === getUserId());
+            
+            userBooks.sort((a, b) => {
+                if (criteria === 'date') {
+                    return new Date(b.submittedAt) - new Date(a.submittedAt);
+                } else if (criteria === 'title') {
+                    return a.title.localeCompare(b.title);
+                } else if (criteria === 'status') {
+                    return a.status.localeCompare(b.status);
+                }
+                return 0;
+            });
+            
+            displayBooksTable(userBooks);
+        }
+
+        // إعداد المستمعين للأحداث
+        function setupEventListeners() {
+            // نموذج إرسال الكتاب
+            document.getElementById('bookSubmitForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                submitBook();
+            });
+            
+            // نموذج تعديل الملف
+            document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                saveProfileChanges();
+            });
+            
+            // رفع صورة الكتاب
+            document.getElementById('bookCover').addEventListener('change', function(e) {
+                handleFileUpload(e.target.files[0], 'bookCover');
+            });
+            
+            // رفع صورة الملف الشخصي
+            document.getElementById('editAvatar').addEventListener('change', function(e) {
+                handleFileUpload(e.target.files[0], 'editAvatar');
+            });
+            
+            // التحقق من رابط Google Drive
+            document.getElementById('bookLink').addEventListener('input', function(e) {
+                validateGoogleDriveLink(e.target.value);
+            });
+        }
+
+        // إعداد السحب والإفلات
+        function setupDragAndDrop() {
+            const uploadAreas = ['coverUploadArea', 'avatarUploadArea'];
+            
+            uploadAreas.forEach(areaId => {
+                const area = document.getElementById(areaId);
+                if (!area) return;
+                
+                area.addEventListener('dragover', function(e) {
+                    e.preventDefault();
+                    this.classList.add('dragover');
+                });
+                
+                area.addEventListener('dragleave', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                });
+                
+                area.addEventListener('drop', function(e) {
+                    e.preventDefault();
+                    this.classList.remove('dragover');
+                    
+                    const files = e.dataTransfer.files;
+                    if (files.length > 0) {
+                        const input = this.querySelector('input[type="file"]');
+                        if (input) {
+                            const dataTransfer = new DataTransfer();
+                            dataTransfer.items.add(files[0]);
+                            input.files = dataTransfer.files;
+                            
+                            // تشغيل حدث change
+                            const event = new Event('change', { bubbles: true });
+                            input.dispatchEvent(event);
+                        }
+                    }
+                });
+            });
+        }
+
+        // تأجيل تحميل الصور
+        function lazyLoadImages() {
+            const images = document.querySelectorAll('img[data-src]');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        observer.unobserve(img);
+                    }
+                });
+            });
+            
+            images.forEach(img => imageObserver.observe(img));
+        }
+
+        // التحقق من صحة رابط Google Drive
+        function validateGoogleDriveLink(url) {
+            const indicator = document.getElementById('linkValidationIndicator');
+            const progress = document.getElementById('linkValidationProgress');
+            
+            if (!url.trim()) {
+                indicator.style.display = 'none';
+                return false;
+            }
+            
+            indicator.style.display = 'block';
+            
+            // نمط رابط Google Drive
+            const pattern = /^(https:\/\/)?(drive\.google\.com\/(file\/d\/|open\?id=))[\w-]+/;
+            
+            if (pattern.test(url)) {
+                progress.style.width = '100%';
+                progress.style.background = 'var(--gradient-4)';
+                return true;
+            } else {
+                progress.style.width = '30%';
+                progress.style.background = 'var(--gradient-2)';
+                return false;
+            }
+        }
+
+        // معالجة رفع الملفات
+        function handleFileUpload(file, inputId) {
+            if (!file) return;
+            
+            // التحقق من الحجم
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('❌ حجم الملف كبير جدًا! الحد الأقصى 5MB', 'error');
+                document.getElementById(inputId).value = '';
+                return;
+            }
+            
+            // التحقق من نوع الملف للصور
+            if (inputId.includes('Cover') || inputId.includes('Avatar')) {
+                if (!file.type.startsWith('image/')) {
+                    showToast('❌ الرجاء اختيار صورة فقط!', 'error');
+                    document.getElementById(inputId).value = '';
+                    return;
+                }
+            }
+            
+            // عرض مؤشر التقدم
+            const progressBar = document.getElementById('uploadProgress');
+            if (progressBar) {
+                progressBar.style.display = 'block';
+                progressBar.style.width = '0%';
+                
+                // محاكاة التقدم
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 10;
+                    progressBar.style.width = progress + '%';
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        setTimeout(() => {
+                            progressBar.style.display = 'none';
+                            showToast('✅ تم رفع الملف بنجاح');
+                        }, 300);
+                    }
+                }, 50);
+            }
+            
+            return true;
+        }
+
+        // إرسال كتاب جديد
+        function submitBook() {
+            const form = document.getElementById('bookSubmitForm');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // التحقق من رابط Google Drive
+            const bookLink = document.getElementById('bookLink').value;
+            if (!validateGoogleDriveLink(bookLink)) {
+                showToast('❌ رابط Google Drive غير صالح', 'error');
+                return;
+            }
+            
+            // عرض حالة التحميل
+            submitBtn.innerHTML = '<div class="loading"></div> جاري الإرسال...';
+            submitBtn.disabled = true;
+            
+            // جمع بيانات الكتاب
+            const bookData = {
+                id: 'book_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+                title: document.getElementById('bookTitle').value,
+                subject: document.getElementById('bookSubject').value,
+                grade: document.getElementById('bookGrade').value,
+                term: document.getElementById('bookTerm').value,
+                year: document.getElementById('bookYear').value,
+                language: document.getElementById('bookLanguage').value,
+                description: document.getElementById('bookDescription').value,
+                drive_link: bookLink,
+                userId: getUserId(),
+                userName: document.getElementById('userName').textContent,
+                userCurriculum: document.getElementById('userCurriculum').textContent.includes('سعودي') ? 'سعودي' : 'مصري',
+                status: 'pending',
+                submittedAt: new Date().toISOString(),
+                adminNotes: '',
+                views: 0,
+                downloads: 0
+            };
+            
+            // التعامل مع صورة الغلاف
+            const coverFile = document.getElementById('bookCover').files[0];
+            if (coverFile) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    bookData.cover_image = e.target.result;
+                    saveBookSubmission(bookData, submitBtn, originalText);
+                };
+                reader.readAsDataURL(coverFile);
+            } else {
+                bookData.cover_image = `https://via.placeholder.com/280x350/667eea/ffffff?text=${encodeURIComponent(bookData.subject.substring(0, 15))}`;
+                saveBookSubmission(bookData, submitBtn, originalText);
+            }
+        }
+
+        // حفظ إرسال الكتاب
+        function saveBookSubmission(bookData, submitBtn, originalText) {
+            setTimeout(() => {
+                try {
+                    // الحصول على الكتب الحالية
+                    const submittedBooks = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+                    
+                    // إضافة الكتاب الجديد
+                    submittedBooks.push(bookData);
+                    localStorage.setItem('submittedBooks', JSON.stringify(submittedBooks));
+                    
+                    // تحديث البيانات في صفحة الإحصائيات
+                    updateAdminStatistics(bookData);
+                    
+                    // إعادة تعيين النموذج
+                    document.getElementById('bookSubmitForm').reset();
+                    
+                    // استعادة الزر
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    
+                    // تحديث القائمة
+                    loadSubmittedBooks();
+                    updateSubmittedBooksCount();
+                    
+                    // مسح التخزين المؤقت
+                    cache.clear();
+                    
+                    // عرض رسالة نجاح
+                    showToast('✅ تم إرسال الكتاب بنجاح! سيتم مراجعته من قبل الإدارة.');
+                    
+                } catch (error) {
+                    console.error('خطأ في حفظ الكتاب:', error);
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    showToast('❌ حدث خطأ في إرسال الكتاب', 'error');
+                }
+            }, 1500);
+        }
+
+        // تحديث إحصائيات المشرف
+        function updateAdminStatistics(bookData) {
+            try {
+                // إضافة إلى نظام الإحصائيات العام
+                const stats = JSON.parse(localStorage.getItem('siteStats') || '{}');
+                
+                if (!stats.bookSubmissions) {
+                    stats.bookSubmissions = [];
+                }
+                
+                stats.bookSubmissions.push({
+                    bookId: bookData.id,
+                    title: bookData.title,
+                    userId: bookData.userId,
+                    userName: bookData.userName,
+                    status: bookData.status,
+                    submittedAt: bookData.submittedAt
+                });
+                
+                localStorage.setItem('siteStats', JSON.stringify(stats));
+                
+                // إشعار للإدارة
+                const adminNotifications = JSON.parse(localStorage.getItem('adminNotifications') || '[]');
+                adminNotifications.push({
+                    id: 'notification_' + Date.now(),
+                    type: 'new_book',
+                    title: 'كتاب جديد مرسل',
+                    message: `${bookData.userName} أرسل كتاب "${bookData.title}"`,
+                    bookId: bookData.id,
+                    userId: bookData.userId,
+                    timestamp: new Date().toISOString(),
+                    read: false
+                });
+                
+                localStorage.setItem('adminNotifications', JSON.stringify(adminNotifications));
+                
+            } catch (error) {
+                console.error('خطأ في تحديث إحصائيات المشرف:', error);
+            }
+        }
+
+        // فتح نافذة تعديل الملف
+        function openEditProfile() {
+            try {
+                const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+                const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+                const mergedData = { ...userData, ...userProfile };
+                
+                // تعبئة الحقول
+                document.getElementById('editName').value = mergedData.name || '';
+                document.getElementById('editCurriculum').value = mergedData.curriculum || 'سعودي';
+                document.getElementById('editGrade').value = mergedData.grade || 'الأول الثانوي';
+                document.getElementById('editEmail').value = mergedData.email || '';
+                
+                // عرض النافذة
+                document.getElementById('editProfileModal').style.display = 'flex';
+                
+            } catch (error) {
+                console.error('خطأ في فتح نافذة التعديل:', error);
+                showToast('❌ حدث خطأ في فتح نافذة التعديل', 'error');
+            }
+        }
+
+        // إغلاق نافذة تعديل الملف
+        function closeEditProfile() {
+            document.getElementById('editProfileModal').style.display = 'none';
+        }
+
+        // حفظ تغييرات الملف الشخصي
+        function saveProfileChanges() {
+            try {
+                const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+                const userData = JSON.parse(sessionStorage.getItem('userData') || '{}');
+                
+                // التحقق من صحة البريد الإلكتروني
+                const email = document.getElementById('editEmail').value;
+                if (email && !isValidEmail(email)) {
+                    showToast('❌ البريد الإلكتروني غير صالح', 'error');
+                    return;
+                }
+                
+                // تحديث البيانات
+                userProfile.name = document.getElementById('editName').value;
+                userProfile.curriculum = document.getElementById('editCurriculum').value;
+                userProfile.grade = document.getElementById('editGrade').value;
+                userProfile.email = email || '';
+                
+                // التعامل مع صورة الملف الشخصي
+                const avatarFile = document.getElementById('editAvatar').files[0];
+                if (avatarFile) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        userProfile.avatar = e.target.result;
+                        completeProfileSave(userProfile, userData);
+                    };
+                    reader.readAsDataURL(avatarFile);
+                } else {
+                    completeProfileSave(userProfile, userData);
+                }
+                
+            } catch (error) {
+                console.error('خطأ في حفظ التغييرات:', error);
+                showToast('❌ حدث خطأ في حفظ التغييرات', 'error');
+            }
+        }
+
+        // التحقق من صحة البريد الإلكتروني
+        function isValidEmail(email) {
+            const pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return pattern.test(email);
+        }
+
+        // إكمال حفظ الملف الشخصي
+        function completeProfileSave(userProfile, userData) {
+            try {
+                // حفظ في localStorage
+                localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                
+                // تحديث sessionStorage
+                userData.name = userProfile.name;
+                sessionStorage.setItem('userData', JSON.stringify(userData));
+                
+                // إغلاق النافذة
+                closeEditProfile();
+                
+                // مسح التخزين المؤقت
+                cache.clear();
+                
+                // تحديث الواجهة
+                loadUserData();
+                
+                // عرض رسالة نجاح
+                showToast('✅ تم حفظ التغييرات بنجاح!');
+                
+            } catch (error) {
+                console.error('خطأ في إكمال حفظ الملف:', error);
+                showToast('❌ حدث خطأ في حفظ التغييرات', 'error');
+            }
+        }
+
+        // تصدير البيانات
+        function exportUserData() {
+            try {
+                const userProfile = JSON.parse(localStorage.getItem('userProfile') || '{}');
+                const submittedBooks = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+                const userBooks = submittedBooks.filter(book => book.userId === getUserId());
+                
+                const userData = {
+                    profile: userProfile,
+                    books: userBooks,
+                    exportDate: new Date().toISOString(),
+                    version: '1.0'
+                };
+                
+                const dataStr = JSON.stringify(userData, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileDefaultName = `student_data_${getUserId()}_${new Date().toISOString().slice(0,10)}.json`;
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileDefaultName);
+                linkElement.click();
+                
+                showToast('✅ تم تصدير البيانات بنجاح');
+                
+            } catch (error) {
+                console.error('خطأ في تصدير البيانات:', error);
+                showToast('❌ حدث خطأ في تصدير البيانات', 'error');
+            }
+        }
+
+        // نسخ الرابط احتياطي
+        function backupBookLink(bookId) {
+            try {
+                const books = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+                const book = books.find(b => b.id === bookId);
+                
+                if (book && book.drive_link) {
+                    navigator.clipboard.writeText(book.drive_link)
+                        .then(() => showToast('✅ تم نسخ الرابط'))
+                        .catch(() => showToast('❌ فشل نسخ الرابط', 'error'));
+                }
+            } catch (error) {
+                console.error('خطأ في نسخ الرابط:', error);
+                showToast('❌ حدث خطأ في نسخ الرابط', 'error');
+            }
+        }
+
+        // مشاركة الكتاب
+        function shareBook(bookId) {
+            try {
+                const books = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+                const book = books.find(b => b.id === bookId);
+                
+                if (book && book.status === 'approved') {
+                    const shareText = `كتاب ${book.title} - ${book.subject} للصف ${book.grade}`;
+                    const shareUrl = window.location.origin + window.location.pathname + '?book=' + bookId;
+                    
+                    if (navigator.share) {
+                        navigator.share({
+                            title: book.title,
+                            text: shareText,
+                            url: shareUrl
+                        });
+                    } else {
+                        navigator.clipboard.writeText(shareUrl)
+                            .then(() => showToast('✅ تم نسخ رابط المشاركة'))
+                            .catch(() => showToast('❌ فشل نسخ الرابط', 'error'));
+                    }
+                }
+            } catch (error) {
+                console.error('خطأ في مشاركة الكتاب:', error);
+            }
+        }
+
+        // تحديث البيانات
+        function refreshData() {
+            const btn = event.target.closest('.btn');
+            const originalHTML = btn.innerHTML;
+            btn.innerHTML = '<div class="loading"></div> جاري التحديث...';
+            
+            setTimeout(() => {
+                try {
+                    // مسح التخزين المؤقت
+                    cache.clear();
+                    
+                    // تحميل البيانات
+                    loadUserData();
+                    loadSubmittedBooks();
+                    
+                    btn.innerHTML = originalHTML;
+                    showToast('✅ تم تحديث البيانات بنجاح');
+                    
+                } catch (error) {
+                    console.error('خطأ في تحديث البيانات:', error);
+                    btn.innerHTML = originalHTML;
+                    showToast('❌ حدث خطأ في تحديث البيانات', 'error');
+                }
+            }, 1000);
+        }
+
+        // عرض رسالة نجاح أو خطأ
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'success-toast';
+            toast.style.background = type === 'error' ? 
+                'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)' : 
+                'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)';
+            
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}" style="font-size: 20px;"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

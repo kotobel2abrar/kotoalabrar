@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة كتب الطلاب - مدارس الأبرار</title>
+    <link rel="icon" href="مدارس الأبرار.webp" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --success: #27ae60;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --info: #16a085;
+            --light: #ecf0f1;
+            --dark: #34495e;
+            --gradient-admin: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-pending: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-approved: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            --gradient-review: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-rejected: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(240, 147, 251, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* رأس الصفحة */
+        .admin-header {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 25px 35px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .admin-title {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .admin-title .icon {
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-admin);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .admin-title .icon i {
+            font-size: 32px;
+            color: white;
+        }
+
+        .admin-title h1 {
+            color: var(--primary);
+            font-size: 28px;
+            font-weight: 800;
+        }
+
+        .admin-title p {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background: var(--gradient-approved);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--gradient-review);
+            color: white;
+        }
+
+        .btn-danger {
+            background: var(--gradient-rejected);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--gradient-pending);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        /* بطاقات الإحصائيات */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+        }
+
+        .stat-card.pending::before { background: var(--gradient-pending); }
+        .stat-card.approved::before { background: var(--gradient-approved); }
+        .stat-card.review::before { background: var(--gradient-review); }
+        .stat-card.rejected::before { background: var(--gradient-rejected); }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .stat-title {
+            color: #7f8c8d;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card.pending .stat-icon { background: var(--gradient-pending); }
+        .stat-card.approved .stat-icon { background: var(--gradient-approved); }
+        .stat-card.review .stat-icon { background: var(--gradient-review); }
+        .stat-card.rejected .stat-icon { background: var(--gradient-rejected); }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 5px;
+            line-height: 1;
+        }
+
+        .stat-label {
+            color: #95a5a6;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        /* أدوات التحكم */
+        .controls {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary);
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+            background: white;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-input {
+            padding-right: 50px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2395a5a6'%3E%3Cpath d='M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left 15px center;
+            background-size: 20px;
+        }
+
+        /* جدول الكتب */
+        .books-section {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .section-title {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-title i {
+            font-size: 26px;
+            color: var(--secondary);
+        }
+
+        .books-table-container {
+            overflow-x: auto;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .books-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+
+        .books-table th {
+            padding: 18px 20px;
+            text-align: right;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            background: var(--gradient-admin);
+        }
+
+        .books-table td {
+            padding: 18px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #2c3e50;
+            font-size: 14px;
+            vertical-align: middle;
+        }
+
+        .books-table tr {
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .books-table tr:hover {
+            background: #f8f9fa;
+            transform: scale(1.005);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .status-pending {
+            background: var(--gradient-pending);
+            color: white;
+        }
+
+        .status-approved {
+            background: var(--gradient-approved);
+            color: white;
+        }
+
+        .status-rejected {
+            background: var(--gradient-rejected);
+            color: white;
+        }
+
+        .status-review {
+            background: var(--gradient-review);
+            color: white;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-admin);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .user-details {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .user-meta {
+            font-size: 12px;
+            color: #7f8c8d;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            min-width: 80px;
+            justify-content: center;
+        }
+
+        .btn-view {
+            background: #e3f2fd;
+            color: #1976d2;
+        }
+
+        .btn-approve {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .btn-reject {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .btn-download {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* نافذة معاينة الكتاب */
+        .preview-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .preview-content {
+            background: white;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+            animation: modalSlideUp 0.4s ease;
+        }
+
+        @keyframes modalSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .preview-header {
+            padding: 25px;
+            border-bottom: 2px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .preview-header h2 {
+            color: var(--primary);
+            font-size: 24px;
+            font-weight: 800;
+        }
+
+        .close-preview {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #95a5a6;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-preview:hover {
+            color: var(--danger);
+        }
+
+        .preview-body {
+            padding: 25px;
+        }
+
+        .book-preview-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .book-cover {
+            width: 100%;
+            aspect-ratio: 3/4;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .book-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .detail-label {
+            font-weight: 700;
+            color: var(--primary);
+            min-width: 120px;
+        }
+
+        .detail-value {
+            color: #2c3e50;
+            flex: 1;
+        }
+
+        .notes-section {
+            margin-top: 20px;
+        }
+
+        .notes-section h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .notes-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 14px;
+            min-height: 100px;
+            resize: vertical;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        .notes-input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.1);
+        }
+
+        .preview-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #f0f0f0;
+        }
+
+        /* رسائل التنبيه */
+        .success-toast {
+            position: fixed;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gradient-approved);
+            color: white;
+            padding: 18px 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(67, 233, 123, 0.4);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #95a5a6;
+        }
+
+        .empty-state i {
+            font-size: 64px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state p {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* استجابة للشاشات الصغيرة */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .admin-header {
+                padding: 20px;
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .admin-title {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .admin-actions {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .book-preview-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .preview-actions {
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+        }
+
+        .loading {
+            display: inline-block;
+            width: 22px;
+            height: 22px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- رأس الصفحة الإدارية -->
+        <div class="admin-header">
+            <div class="admin-title">
+                <div class="icon">
+                    <i class="fas fa-book-medical"></i>
+                </div>
+                <div>
+                    <h1>إدارة كتب الطلاب المرفوعة</h1>
+                    <p>مراجعة وإدارة الكتب التي يرفعها الطلاب للمكتبة الرقمية</p>
+                </div>
+            </div>
+            <div class="admin-actions">
+                <button class="btn btn-primary" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>تحديث البيانات</span>
+                </button>
+                <button class="btn btn-secondary" onclick="exportBooksData()">
+                    <i class="fas fa-file-export"></i>
+                    <span>تصدير البيانات</span>
+                </button>
+                <button class="btn btn-danger" onclick="clearAllData()">
+                    <i class="fas fa-trash-alt"></i>
+                    <span>مسح الجميع</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- إحصائيات سريعة -->
+        <div class="stats-grid">
+            <div class="stat-card pending" onclick="filterByStatus('pending')">
+                <div class="stat-header">
+                    <span class="stat-title">قيد الانتظار</span>
+                    <div class="stat-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="pendingCount">0</div>
+                <div class="stat-label">كتاب يحتاج مراجعة</div>
+            </div>
+
+            <div class="stat-card approved" onclick="filterByStatus('approved')">
+                <div class="stat-header">
+                    <span class="stat-title">مقبولة</span>
+                    <div class="stat-icon">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="approvedCount">0</div>
+                <div class="stat-label">كتاب تمت الموافقة</div>
+            </div>
+
+            <div class="stat-card review" onclick="filterByStatus('review')">
+                <div class="stat-header">
+                    <span class="stat-title">قيد المراجعة</span>
+                    <div class="stat-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="reviewCount">0</div>
+                <div class="stat-label">كتاب قيد المراجعة</div>
+            </div>
+
+            <div class="stat-card rejected" onclick="filterByStatus('rejected')">
+                <div class="stat-header">
+                    <span class="stat-title">مرفوضة</span>
+                    <div class="stat-icon">
+                        <i class="fas fa-times-circle"></i>
+                    </div>
+                </div>
+                <div class="stat-value" id="rejectedCount">0</div>
+                <div class="stat-label">كتاب تم رفضه</div>
+            </div>
+        </div>
+
+        <!-- أدوات التصفية والبحث -->
+        <div class="controls">
+            <div class="filters-grid">
+                <div class="form-group">
+                    <label for="filterStatus">حالة الكتاب</label>
+                    <select id="filterStatus" class="form-control" onchange="filterBooks()">
+                        <option value="all">جميع الحالات</option>
+                        <option value="pending">قيد الانتظار</option>
+                        <option value="review">قيد المراجعة</option>
+                        <option value="approved">مقبولة</option>
+                        <option value="rejected">مرفوضة</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="filterSubject">المادة الدراسية</label>
+                    <select id="filterSubject" class="form-control" onchange="filterBooks()">
+                        <option value="all">جميع المواد</option>
+                        <option value="رياضيات">رياضيات</option>
+                        <option value="لغة عربية">لغة عربية</option>
+                        <option value="لغة إنجليزية">لغة إنجليزية</option>
+                        <option value="علوم">علوم</option>
+                        <option value="فيزياء">فيزياء</option>
+                        <option value="كيمياء">كيمياء</option>
+                        <option value="أحياء">أحياء</option>
+                        <option value="تاريخ">تاريخ</option>
+                        <option value="جغرافيا">جغرافيا</option>
+                        <option value="قرآن">قرآن</option>
+                        <option value="تربية إسلامية">تربية إسلامية</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="filterGrade">الصف الدراسي</label>
+                    <select id="filterGrade" class="form-control" onchange="filterBooks()">
+                        <option value="all">جميع الصفوف</option>
+                        <option value="الأول الابتدائي">الأول الابتدائي</option>
+                        <option value="الثاني الابتدائي">الثاني الابتدائي</option>
+                        <option value="الثالث الابتدائي">الثالث الابتدائي</option>
+                        <option value="الرابع الابتدائي">الرابع الابتدائي</option>
+                        <option value="الخامس الابتدائي">الخامس الابتدائي</option>
+                        <option value="السادس الابتدائي">السادس الابتدائي</option>
+                        <option value="الأول المتوسط">الأول المتوسط</option>
+                        <option value="الثاني المتوسط">الثاني المتوسط</option>
+                        <option value="الثالث المتوسط">الثالث المتوسط</option>
+                        <option value="الأول الثانوي">الأول الثانوي</option>
+                        <option value="الثاني الثانوي">الثاني الثانوي</option>
+                        <option value="الثالث الثانوي">الثالث الثانوي</option>
+                    </select>
+                </div>
+                
+                <div class="form-group search-box">
+                    <label for="searchInput">بحث في الكتب</label>
+                    <input type="text" id="searchInput" class="form-control search-input" 
+                           placeholder="ابحث عن طريق العنوان أو اسم الطالب..." 
+                           onkeyup="searchBooks(this.value)">
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <button class="btn btn-warning" onclick="resetFilters()">
+                    <i class="fas fa-redo"></i>
+                    <span>إعادة التعيين</span>
+                </button>
+                <button class="btn btn-primary" onclick="markAllForReview()">
+                    <i class="fas fa-search"></i>
+                    <span>وضع الجميع للمراجعة</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- جدول الكتب -->
+        <div class="books-section">
+            <div class="section-title">
+                <i class="fas fa-list-alt"></i>
+                <span>قائمة الكتب المرفوعة</span>
+                <span style="font-size: 14px; color: #7f8c8d; margin-right: auto;" id="booksCount">(0 كتاب)</span>
+            </div>
+            
+            <div class="books-table-container">
+                <table class="books-table">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>معلومات الكتاب</th>
+                            <th>الطالب</th>
+                            <th>التفاصيل الدراسية</th>
+                            <th>الحالة</th>
+                            <th>تاريخ الرفع</th>
+                            <th>إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="booksTableBody">
+                        <!-- سيتم تعبئته بالجافاسكريبت -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-book-open"></i>
+                <p>لا توجد كتب مرفوعة حتى الآن</p>
+                <p style="font-size: 14px; margin-top: 10px;">سيظهر هنا الكتب التي يرفعها الطلاب من صفحة حساباتهم</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة معاينة وتعديل الكتاب -->
+    <div id="previewModal" class="preview-modal">
+        <div class="preview-content">
+            <div class="preview-header">
+                <h2>معاينة وتعديل الكتاب</h2>
+                <button class="close-preview" onclick="closePreview()">&times;</button>
+            </div>
+            
+            <div class="preview-body">
+                <div class="book-preview-grid">
+                    <div class="book-cover" id="previewCover">
+                        <!-- سيتم تعبئته بالجافاسكريبت -->
+                    </div>
+                    
+                    <div class="book-details">
+                        <div class="detail-row">
+                            <span class="detail-label">عنوان الكتاب:</span>
+                            <span class="detail-value" id="previewTitle">-</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">المادة الدراسية:</span>
+                            <span class="detail-value" id="previewSubject">-</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">الصف الدراسي:</span>
+                            <span class="detail-value" id="previewGrade">-</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">الفصل الدراسي:</span>
+                            <span class="detail-value" id="previewTerm">-</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">السنة الدراسية:</span>
+                            <span class="detail-value" id="previewYear">-</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">اللغة:</span>
+                            <span class="detail-value" id="previewLanguage">-</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">تاريخ الرفع:</span>
+                            <span class="detail-value" id="previewDate">-</span>
+                        </div>
+                        
+                        <div class="detail-row">
+                            <span class="detail-label">رابط الكتاب:</span>
+                            <span class="detail-value">
+                                <a href="#" id="previewLink" target="_blank" style="color: #3498db; text-decoration: none;">
+                                    <i class="fas fa-external-link-alt"></i> فتح الرابط
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <span class="detail-label">وصف الكتاب:</span>
+                    <span class="detail-value" id="previewDescription">لا يوجد وصف</span>
+                </div>
+                
+                <div class="detail-row">
+                    <div class="user-info">
+                        <div class="user-avatar" id="previewUserAvatar"></div>
+                        <div class="user-details">
+                            <span class="user-name" id="previewUserName">-</span>
+                            <span class="user-meta">
+                                <span id="previewUserCurriculum">-</span> | 
+                                <span id="previewUserGrade">-</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="notes-section">
+                    <h3>ملاحظات المشرف</h3>
+                    <textarea class="notes-input" id="adminNotes" 
+                              placeholder="أضف ملاحظات للمراجعة أو أسباب الرفض..."></textarea>
+                </div>
+                
+                <div class="preview-actions">
+                    <button class="btn btn-primary" style="flex: 1;" onclick="approveBook()">
+                        <i class="fas fa-check-circle"></i>
+                        <span>قبول الكتاب</span>
+                    </button>
+                    <button class="btn btn-danger" style="flex: 1;" onclick="rejectBook()">
+                        <i class="fas fa-times-circle"></i>
+                        <span>رفض الكتاب</span>
+                    </button>
+                    <button class="btn btn-secondary" style="flex: 1;" onclick="markForReview()">
+                        <i class="fas fa-search"></i>
+                        <span>وضع للمراجعة</span>
+                    </button>
+                    <button class="btn" style="flex: 1; background: #e0e0e0; color: #7f8c8d;" onclick="closePreview()">
+                        <i class="fas fa-times"></i>
+                        <span>إلغاء</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تهيئة النظام
+        document.addEventListener('DOMContentLoaded', function() {
+            loadBooks();
+            updateStats();
+            
+            // تحديث تلقائي كل 10 ثواني
+            setInterval(loadBooks, 10000);
+        });
+
+        // متغيرات النظام
+        let allBooks = [];
+        let currentBookId = null;
+
+        // تحميل الكتب من localStorage
+        function loadBooks() {
+            try {
+                allBooks = JSON.parse(localStorage.getItem('submittedBooks') || '[]');
+                console.log(`📚 تم تحميل ${allBooks.length} كتاب من قاعدة البيانات`);
+                
+                // تحديث الإحصائيات
+                updateStats();
+                
+                // عرض الكتب بعد التصفية
+                filterBooks();
+                
+            } catch (error) {
+                console.error('❌ خطأ في تحميل الكتب:', error);
+                showToast('❌ حدث خطأ في تحميل الكتب', 'error');
+            }
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            try {
+                const pending = allBooks.filter(book => book.status === 'pending').length;
+                const approved = allBooks.filter(book => book.status === 'approved').length;
+                const review = allBooks.filter(book => book.status === 'review').length;
+                const rejected = allBooks.filter(book => book.status === 'rejected').length;
+                
+                document.getElementById('pendingCount').textContent = pending;
+                document.getElementById('approvedCount').textContent = approved;
+                document.getElementById('reviewCount').textContent = review;
+                document.getElementById('rejectedCount').textContent = rejected;
+                
+            } catch (error) {
+                console.error('❌ خطأ في تحديث الإحصائيات:', error);
+            }
+        }
+
+        // تصفية الكتب
+        function filterBooks() {
+            try {
+                const statusFilter = document.getElementById('filterStatus').value;
+                const subjectFilter = document.getElementById('filterSubject').value;
+                const gradeFilter = document.getElementById('filterGrade').value;
+                const searchQuery = document.getElementById('searchInput').value.toLowerCase();
+                
+                let filteredBooks = allBooks;
+                
+                // التصفية حسب الحالة
+                if (statusFilter !== 'all') {
+                    filteredBooks = filteredBooks.filter(book => book.status === statusFilter);
+                }
+                
+                // التصفية حسب المادة
+                if (subjectFilter !== 'all') {
+                    filteredBooks = filteredBooks.filter(book => book.subject === subjectFilter);
+                }
+                
+                // التصفية حسب الصف
+                if (gradeFilter !== 'all') {
+                    filteredBooks = filteredBooks.filter(book => book.grade === gradeFilter);
+                }
+                
+                // البحث
+                if (searchQuery) {
+                    filteredBooks = filteredBooks.filter(book => 
+                        book.title.toLowerCase().includes(searchQuery) ||
+                        (book.userName && book.userName.toLowerCase().includes(searchQuery)) ||
+                        (book.description && book.description.toLowerCase().includes(searchQuery))
+                    );
+                }
+                
+                // عرض النتائج
+                displayBooksTable(filteredBooks);
+                
+                // تحديث عدد الكتب
+                document.getElementById('booksCount').textContent = `(${filteredBooks.length} كتاب)`;
+                
+            } catch (error) {
+                console.error('❌ خطأ في تصفية الكتب:', error);
+            }
+        }
+
+        // البحث في الكتب
+        function searchBooks(query) {
+            filterBooks(); // استدعاء نفس دالة التصفية
+        }
+
+        // تصفية حسب الحالة
+        function filterByStatus(status) {
+            document.getElementById('filterStatus').value = status;
+            filterBooks();
+        }
+
+        // إعادة تعيين الفلاتر
+        function resetFilters() {
+            document.getElementById('filterStatus').value = 'all';
+            document.getElementById('filterSubject').value = 'all';
+            document.getElementById('filterGrade').value = 'all';
+            document.getElementById('searchInput').value = '';
+            filterBooks();
+            showToast('✅ تم إعادة تعيين الفلاتر');
+        }
+
+        // عرض جدول الكتب
+        function displayBooksTable(books) {
+            const tableBody = document.getElementById('booksTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (books.length === 0) {
+                tableBody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            
+            let html = '';
+            
+            // ترتيب الكتب من الأحدث إلى الأقدم
+            books.sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+            
+            books.forEach((book, index) => {
+                const statusClass = `status-${book.status || 'pending'}`;
+                const statusText = {
+                    'pending': 'قيد الانتظار',
+                    'review': 'قيد المراجعة',
+                    'approved': 'مقبول',
+                    'rejected': 'مرفوض'
+                }[book.status] || 'قيد الانتظار';
+                
+                const date = new Date(book.submittedAt).toLocaleDateString('ar-SA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                // الحصول على الأحرف الأولى من اسم الطالب
+                const userInitials = book.userName ? book.userName.charAt(0).toUpperCase() : 'ط';
+                
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td>
+                            <strong>${book.title}</strong><br>
+                            <small style="color: #7f8c8d;">${book.subject}</small>
+                        </td>
+                        <td>
+                            <div class="user-info">
+                                <div class="user-avatar">${userInitials}</div>
+                                <div class="user-details">
+                                    <span class="user-name">${book.userName || 'غير معروف'}</span>
+                                    <span class="user-meta">${book.userCurriculum || ''} | ${book.userGrade || ''}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div>الصف: ${book.grade}</div>
+                            <div>الفصل: ${book.term}</div>
+                            <div>العام: ${book.year}</div>
+                        </td>
+                        <td>
+                            <span class="status-badge ${statusClass}" onclick="changeStatus('${book.id}')">
+                                ${statusText}
+                            </span>
+                        </td>
+                        <td>${date}</td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn btn-view" onclick="previewBook('${book.id}')">
+                                    <i class="fas fa-eye"></i>
+                                    معاينة
+                                </button>
+                                <button class="action-btn btn-approve" onclick="quickApprove('${book.id}')">
+                                    <i class="fas fa-check"></i>
+                                    قبول
+                                </button>
+                                <button class="action-btn btn-reject" onclick="quickReject('${book.id}')">
+                                    <i class="fas fa-times"></i>
+                                    رفض
+                                </button>
+                                <button class="action-btn btn-download" onclick="downloadBook('${book.id}')">
+                                    <i class="fas fa-download"></i>
+                                    تحميل
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            tableBody.innerHTML = html;
+        }
+
+        // معاينة كتاب
+        function previewBook(bookId) {
+            try {
+                const book = allBooks.find(b => b.id === bookId);
+                if (!book) {
+                    showToast('❌ الكتاب غير موجود', 'error');
+                    return;
+                }
+                
+                currentBookId = bookId;
+                
+                // تعبئة بيانات الكتاب
+                document.getElementById('previewTitle').textContent = book.title;
+                document.getElementById('previewSubject').textContent = book.subject;
+                document.getElementById('previewGrade').textContent = book.grade;
+                document.getElementById('previewTerm').textContent = book.term;
+                document.getElementById('previewYear').textContent = book.year;
+                document.getElementById('previewLanguage').textContent = book.language;
+                document.getElementById('previewDescription').textContent = book.description || 'لا يوجد وصف';
+                document.getElementById('previewLink').href = book.drive_link;
+                
+                // تاريخ الرفع
+                const date = new Date(book.submittedAt).toLocaleDateString('ar-SA', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                document.getElementById('previewDate').textContent = date;
+                
+                // معلومات الطالب
+                document.getElementById('previewUserName').textContent = book.userName || 'غير معروف';
+                document.getElementById('previewUserCurriculum').textContent = book.userCurriculum || 'غير محدد';
+                document.getElementById('previewUserGrade').textContent = book.userGrade || 'غير محدد';
+                
+                // الأحرف الأولى للطالب
+                const userInitials = book.userName ? book.userName.charAt(0).toUpperCase() : 'ط';
+                document.getElementById('previewUserAvatar').textContent = userInitials;
+                
+                // صورة الغلاف
+                const coverElement = document.getElementById('previewCover');
+                if (book.cover_image && book.cover_image.startsWith('http')) {
+                    coverElement.innerHTML = `<img src="${book.cover_image}" alt="غلاف الكتاب">`;
+                } else if (book.cover_image && book.cover_image.startsWith('data:image')) {
+                    coverElement.innerHTML = `<img src="${book.cover_image}" alt="غلاف الكتاب">`;
+                } else {
+                    coverElement.innerHTML = `
+                        <div style="width: 100%; height: 100%; background: var(--gradient-admin); 
+                             display: flex; align-items: center; justify-content: center; color: white;">
+                            <i class="fas fa-book" style="font-size: 48px;"></i>
+                        </div>
+                    `;
+                }
+                
+                // ملاحظات المشرف
+                document.getElementById('adminNotes').value = book.adminNotes || '';
+                
+                // عرض النافذة
+                document.getElementById('previewModal').style.display = 'flex';
+                
+            } catch (error) {
+                console.error('❌ خطأ في معاينة الكتاب:', error);
+                showToast('❌ حدث خطأ في معاينة الكتاب', 'error');
+            }
+        }
+
+        // إغلاق نافذة المعاينة
+        function closePreview() {
+            document.getElementById('previewModal').style.display = 'none';
+            currentBookId = null;
+        }
+
+        // تغيير حالة الكتاب
+        function changeStatus(bookId, newStatus, notes = '') {
+            try {
+                const bookIndex = allBooks.findIndex(b => b.id === bookId);
+                if (bookIndex === -1) {
+                    showToast('❌ الكتاب غير موجود', 'error');
+                    return;
+                }
+                
+                allBooks[bookIndex].status = newStatus;
+                allBooks[bookIndex].adminNotes = notes;
+                allBooks[bookIndex].reviewedAt = new Date().toISOString();
+                
+                // حفظ التغييرات
+                localStorage.setItem('submittedBooks', JSON.stringify(allBooks));
+                
+                // تحديث الإحصائيات والعرض
+                updateStats();
+                filterBooks();
+                
+                // إغلاق نافذة المعاينة إذا كانت مفتوحة
+                if (currentBookId === bookId) {
+                    closePreview();
+                }
+                
+                // إرسال إشعار للمستخدم (محلي)
+                sendNotificationToUser(allBooks[bookIndex].userId, newStatus, allBooks[bookIndex].title);
+                
+                showToast(`✅ تم ${getStatusArabic(newStatus)} الكتاب`);
+                
+            } catch (error) {
+                console.error('❌ خطأ في تغيير حالة الكتاب:', error);
+                showToast('❌ حدث خطأ في تغيير الحالة', 'error');
+            }
+        }
+
+        // الحصول على النص العربي للحالة
+        function getStatusArabic(status) {
+            const statusMap = {
+                'pending': 'تحديث حالة',
+                'review': 'وضع للمراجعة',
+                'approved': 'قبول',
+                'rejected': 'رفض'
+            };
+            return statusMap[status] || 'تحديث حالة';
+        }
+
+        // قبول الكتاب من المعاينة
+        function approveBook() {
+            if (!currentBookId) return;
+            const notes = document.getElementById('adminNotes').value;
+            changeStatus(currentBookId, 'approved', notes);
+        }
+
+        // رفض الكتاب من المعاينة
+        function rejectBook() {
+            if (!currentBookId) return;
+            const notes = document.getElementById('adminNotes').value;
+            changeStatus(currentBookId, 'rejected', notes);
+        }
+
+        // وضع الكتاب للمراجعة من المعاينة
+        function markForReview() {
+            if (!currentBookId) return;
+            const notes = document.getElementById('adminNotes').value;
+            changeStatus(currentBookId, 'review', notes);
+        }
+
+        // قبول سريع
+        function quickApprove(bookId) {
+            if (confirm('هل أنت متأكد من قبول هذا الكتاب؟')) {
+                changeStatus(bookId, 'approved', 'تم القبول بواسطة المشرف');
+            }
+        }
+
+        // رفض سريع
+        function quickReject(bookId) {
+            if (confirm('هل أنت متأكد من رفض هذا الكتاب؟')) {
+                changeStatus(bookId, 'rejected', 'تم الرفض بواسطة المشرف');
+            }
+        }
+
+        // وضع جميع الكتب للمراجعة
+        function markAllForReview() {
+            if (allBooks.length === 0) {
+                showToast('❌ لا توجد كتب للمراجعة', 'error');
+                return;
+            }
+            
+            if (confirm(`هل تريد وضع جميع الكتب (${allBooks.length} كتاب) للمراجعة؟`)) {
+                allBooks.forEach(book => {
+                    if (book.status === 'pending') {
+                        book.status = 'review';
+                        book.adminNotes = 'وضع للمراجعة الجماعية';
+                        book.reviewedAt = new Date().toISOString();
+                    }
+                });
+                
+                localStorage.setItem('submittedBooks', JSON.stringify(allBooks));
+                updateStats();
+                filterBooks();
+                showToast(`✅ تم وضع ${allBooks.length} كتاب للمراجعة`);
+            }
+        }
+
+        // تحميل الكتاب
+        function downloadBook(bookId) {
+            try {
+                const book = allBooks.find(b => b.id === bookId);
+                if (!book || !book.drive_link) {
+                    showToast('❌ رابط التحميل غير متوفر', 'error');
+                    return;
+                }
+                
+                // فتح الرابط في نافذة جديدة
+                window.open(book.drive_link, '_blank');
+                
+                // زيادة عداد التحميلات
+                const stats = JSON.parse(localStorage.getItem('siteStats') || '{}');
+                if (!stats.downloads) stats.downloads = {};
+                stats.downloads[bookId] = (stats.downloads[bookId] || 0) + 1;
+                localStorage.setItem('siteStats', JSON.stringify(stats));
+                
+                showToast('✅ جاري فتح رابط التحميل...');
+                
+            } catch (error) {
+                console.error('❌ خطأ في تحميل الكتاب:', error);
+                showToast('❌ حدث خطأ في التحميل', 'error');
+            }
+        }
+
+        // إرسال إشعار للمستخدم
+        function sendNotificationToUser(userId, status, bookTitle) {
+            try {
+                // حفظ الإشعارات للمستخدم
+                const userNotifications = JSON.parse(localStorage.getItem('userNotifications') || '{}');
+                if (!userNotifications[userId]) {
+                    userNotifications[userId] = [];
+                }
+                
+                const statusText = {
+                    'approved': 'مقبول',
+                    'rejected': 'مرفوض',
+                    'review': 'قيد المراجعة'
+                }[status] || 'تم التحديث';
+                
+                userNotifications[userId].push({
+                    id: 'notification_' + Date.now(),
+                    type: 'book_status',
+                    title: `تحديث حالة الكتاب: ${bookTitle}`,
+                    message: `تم ${statusText} كتابك "${bookTitle}"`,
+                    status: status,
+                    timestamp: new Date().toISOString(),
+                    read: false
+                });
+                
+                // حفظ فقط آخر 50 إشعار
+                userNotifications[userId] = userNotifications[userId].slice(-50);
+                
+                localStorage.setItem('userNotifications', JSON.stringify(userNotifications));
+                
+            } catch (error) {
+                console.error('❌ خطأ في إرسال الإشعار:', error);
+            }
+        }
+
+        // تصدير بيانات الكتب
+        function exportBooksData() {
+            try {
+                const exportData = {
+                    books: allBooks,
+                    exportDate: new Date().toISOString(),
+                    totalBooks: allBooks.length,
+                    stats: {
+                        pending: allBooks.filter(b => b.status === 'pending').length,
+                        approved: allBooks.filter(b => b.status === 'approved').length,
+                        review: allBooks.filter(b => b.status === 'review').length,
+                        rejected: allBooks.filter(b => b.status === 'rejected').length
+                    }
+                };
+                
+                const dataStr = JSON.stringify(exportData, null, 2);
+                const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+                
+                const exportFileName = `admin_books_${new Date().toISOString().slice(0,10)}.json`;
+                const linkElement = document.createElement('a');
+                linkElement.setAttribute('href', dataUri);
+                linkElement.setAttribute('download', exportFileName);
+                linkElement.click();
+                
+                showToast('✅ تم تصدير بيانات الكتب بنجاح');
+                
+            } catch (error) {
+                console.error('❌ خطأ في تصدير البيانات:', error);
+                showToast('❌ حدث خطأ في التصدير', 'error');
+            }
+        }
+
+        // مسح جميع البيانات
+        function clearAllData() {
+            if (allBooks.length === 0) {
+                showToast('❌ لا توجد بيانات للمسح', 'error');
+                return;
+            }
+            
+            if (confirm(`⚠️ تحذير: سيتم مسح جميع الكتب (${allBooks.length} كتاب) بشكل نهائي. هل أنت متأكد؟`)) {
+                localStorage.removeItem('submittedBooks');
+                allBooks = [];
+                updateStats();
+                filterBooks();
+                showToast('✅ تم مسح جميع البيانات بنجاح');
+            }
+        }
+
+        // تحديث البيانات
+        function refreshData() {
+            const btn = event?.target?.closest('.btn');
+            if (btn) {
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<div class="loading"></div> جاري التحديث...';
+                
+                setTimeout(() => {
+                    loadBooks();
+                    btn.innerHTML = originalHTML;
+                    showToast('✅ تم تحديث البيانات بنجاح');
+                }, 1000);
+            } else {
+                loadBooks();
+                showToast('✅ تم تحديث البيانات بنجاح');
+            }
+        }
+
+        // عرض رسالة نجاح أو خطأ
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = 'success-toast';
+            toast.style.background = type === 'error' ? 
+                'var(--gradient-rejected)' : 
+                'var(--gradient-approved)';
+            
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'error' ? 'exclamation-circle' : 'check-circle'}" style="font-size: 20px;"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // الاتصال بصفحة الطالب
+        function connectToStudentPage() {
+            console.log('🔗 صفحة الإدارة متصلة بصفحة الطالب بنجاح');
+            console.log('📖 يمكن للطلاب رفع الكتب من: student_profile.html');
+            console.log('👁️ الكتب تظهر هنا تلقائيًا بعد الرفع');
+        }
+
+        // تشغيل الاتصال
+        connectToStudentPage();
+    </script>
+</body>
+</html>

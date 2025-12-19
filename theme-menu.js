@@ -1,5 +1,5 @@
 // ملف: theme-menu.js
-// نظام موحد للوضع الليلي وقائمة الإضافات مع تسجيل الخروج
+// نظام موحد للوضع الليلي وقائمة الإضافات مع رابط صفحة الحساب
 
 (function() {
   'use strict';
@@ -97,6 +97,17 @@
         border-top: 1px solid var(--border-color, #e2e8f0);
       }
 
+      /* زر حسابي */
+      .profile-btn {
+        background: linear-gradient(135deg, #667eea, #764ba2) !important;
+        color: white !important;
+        font-weight: 700;
+      }
+
+      .profile-btn:hover {
+        background: linear-gradient(135deg, #5568d3, #6a3f8f) !important;
+      }
+
       /* زر تسجيل الخروج */
       .logout-btn {
         color: #e74c3c !important;
@@ -114,10 +125,41 @@
         border-radius: 8px;
         margin-bottom: 8px;
         text-align: right;
+        display: flex;
+        align-items: center;
+        gap: 12px;
       }
 
       [dir="ltr"] .user-info {
         text-align: left;
+      }
+
+      .user-avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid #667eea;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: 18px;
+        flex-shrink: 0;
+      }
+
+      .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .user-info-text {
+        flex: 1;
+        min-width: 0;
       }
 
       .user-info-name {
@@ -126,12 +168,18 @@
         font-size: 15px;
         display: block;
         margin-bottom: 4px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       .user-info-details {
         font-size: 12px;
         color: #64748b;
         display: block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
 
       /* الوضع الليلي */
@@ -273,6 +321,7 @@
     const userName = userProfile.name || 'مستخدم';
     const curriculum = userProfile.curriculum || '';
     const grade = userProfile.grade || '';
+    const avatar = userProfile.avatar || '';
     
     let userDetails = '';
     if (curriculum && grade) {
@@ -283,19 +332,30 @@
       userDetails = grade;
     }
 
+    const avatarHTML = avatar 
+      ? `<div class="user-avatar"><img src="${avatar}" alt="صورة الملف الشخصي"></div>`
+      : `<div class="user-avatar">${userName.charAt(0).toUpperCase()}</div>`;
+
     return `
       <div class="menu-container" id="themeMenuContainer">
         <button class="menu-btn" id="menuToggleBtn">☰</button>
         <div class="menu-box" id="menuBox">
           <div class="user-info">
-            <span class="user-info-name">👤 ${userName}</span>
-            ${userDetails ? `<span class="user-info-details">${userDetails}</span>` : ''}
+            ${avatarHTML}
+            <div class="user-info-text">
+              <span class="user-info-name">${userName}</span>
+              ${userDetails ? `<span class="user-info-details">${userDetails}</span>` : ''}
+            </div>
           </div>
+          <a href="student_profile.html" class="profile-btn">
+            <span class="theme-icon">👤</span>
+            <span data-en="My Account" data-ar="حسابي">حسابي</span>
+          </a>
+          <hr>
           <button id="langToggleBtn">
             <span class="theme-icon">🌐</span>
             <span data-en="العربية" data-ar="English">English</span>
           </button>
-          <hr>
           <button id="themeToggleBtn">
             <span class="theme-icon" id="themeIcon">🌙</span>
             <span id="themeText" data-en="Dark Mode" data-ar="الوضع الليلي">الوضع الليلي</span>
@@ -509,7 +569,12 @@
 
 4. النظام يعمل تلقائياً ويحفظ الإعدادات
 
-5. زر تسجيل الخروج:
+5. صفحة الحساب:
+   - يظهر رابطها في القائمة
+   - تحتوي على جميع إعدادات الطالب
+   - رفع الكتب متاح من داخلها
+   
+6. زر تسجيل الخروج:
    - يظهر في قائمة الإضافات
    - يطلب تأكيد قبل الخروج
    - يحفظ بيانات الجلسة

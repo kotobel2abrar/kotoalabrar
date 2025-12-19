@@ -7,24 +7,16 @@
     'use strict';
 
     // الصفحات المستثناة من التحقق
-    const EXCLUDED_PAGES = ['first-login.html', 'statistics.html'];
+    const EXCLUDED_PAGES = ['first-login.html', 'student_profile.html'];
     
     // الحصول على الصفحة الحالية
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
     // ===================================
-    // التحقق الفوري من التسجيل
+    // إذا كانت الصفحة من الصفحات المستثناة، لا نفعل أي شيء
     // ===================================
-    
-    // إذا كانت الصفحة الحالية هي first-login.html، لا نفعل شيء
-    if (currentPage === 'first-login.html') {
-        console.log('📝 صفحة التسجيل الأولى');
-        return;
-    }
-
-    // إذا كانت الصفحة هي statistics.html، نتحقق فقط من كلمة المرور
-    if (currentPage === 'statistics.html') {
-        console.log('📊 صفحة الإحصائيات');
+    if (EXCLUDED_PAGES.includes(currentPage)) {
+        console.log('📝 صفحة مستثناة من التحقق:', currentPage);
         return;
     }
 
@@ -80,7 +72,10 @@
         // تحديث بيانات الجلسة
         const sessionData = {
             loginTime: new Date().toISOString(),
-            sessionId: sessionId
+            sessionId: sessionId,
+            name: userProfile.name,
+            curriculum: userProfile.curriculum,
+            grade: userProfile.grade
         };
 
         sessionStorage.setItem('isLoggedIn', 'true');
@@ -226,8 +221,10 @@
                 
                 logoutBtn.addEventListener('click', function(e) {
                     e.preventDefault();
-                    if (confirm('هل أنت متأكد من تسجيل الخروج؟\n\nسيتم إنهاء الجلسة الحالية فقط، ولن تحتاج للتسجيل مرة أخرى.')) {
+                    if (confirm('هل أنت متأكد من تسجيل الخروج؟\n\nسيتم إنهاء الجلسة الحالية.')) {
+                        // مسح الجلسة الحالية فقط
                         sessionStorage.clear();
+                        
                         console.log('👋 تم تسجيل الخروج');
                         
                         // عرض رسالة
@@ -250,7 +247,8 @@
                         document.body.appendChild(message);
                         
                         setTimeout(() => {
-                            window.location.reload();
+                            // إعادة التوجيه لصفحة التسجيل
+                            window.location.href = 'first-login.html';
                         }, 1000);
                     }
                 });
@@ -315,7 +313,7 @@
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
                 sessionStorage.clear();
                 console.log('👋 تم تسجيل الخروج');
-                window.location.reload();
+                window.location.href = 'first-login.html';
             }
         },
         resetRegistration: () => {

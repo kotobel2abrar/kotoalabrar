@@ -3,8 +3,7 @@
 
 const AUTH_CONFIG = {
   // قم بتغيير هذا الباسورد إلى باسورد قوي
-  adminPassword: "AbrarSchools@2025!SecurePass",
-  
+
   // مدة الجلسة بالدقائق
   sessionDuration: 120,
   
