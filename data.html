@@ -1,38 +1,52 @@
 <!DOCTYPE html>
 <html lang="ar">
-<head>
-  <meta charset="UTF-8">
-  <title>كتب الموقع</title>
-  <style>
-    body { font-family: Arial, sans-serif; direction: rtl; padding: 20px; }
-    .book { border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 5px; }
-    .book img { max-width: 100px; display: block; margin-bottom: 5px; }
-  </style>
-</head>
-<body>
-  <h1>كتب الموقع</h1>
-  <div id="books-container"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <title>كتب الموقع</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        direction: rtl;
+        padding: 20px;
+      }
+      .book {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+      }
+      .book img {
+        max-width: 100px;
+        display: block;
+        margin-bottom: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>كتب الموقع</h1>
+    <div id="books-container"></div>
 
-  <script>
-    const apiURL = "https://api.jsonbin.io/v3/b/69356ae043b1c97be9dd7ca4/latest";
+    <script>
+      const apiURL =
+        "https://api.jsonbin.io/v3/b/69356ae043b1c97be9dd7ca4/latest";
 
-    fetch(apiURL)
-      .then(res => res.json())
-      .then(data => {
-        const container = document.getElementById("books-container");
-        data.record.books.forEach(book => {
-          const div = document.createElement("div");
-          div.className = "book";
-          div.innerHTML = `
+      fetch(apiURL)
+        .then((res) => res.json())
+        .then((data) => {
+          const container = document.getElementById("books-container");
+          data.record.books.forEach((book) => {
+            const div = document.createElement("div");
+            div.className = "book";
+            div.innerHTML = `
             <h3>${book.title}</h3>
             <p>المؤلف: ${book.author}</p>
             <img src="${book.image}" alt="صورة الكتاب">
             <p><a href="${book.link}" target="_blank">تحميل الكتاب</a></p>
           `;
-          container.appendChild(div);
-        });
-      })
-      .catch(err => console.error("حدث خطأ في جلب البيانات:", err));
-  </script>
-</body>
+            container.appendChild(div);
+          });
+        })
+        .catch((err) => console.error("حدث خطأ في جلب البيانات:", err));
+    </script>
+  </body>
 </html>

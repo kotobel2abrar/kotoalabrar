@@ -7,16 +7,24 @@
     'use strict';
 
     // الصفحات المستثناة من التحقق
-    const EXCLUDED_PAGES = ['first-login.html', 'student_profile.html'];
+    const EXCLUDED_PAGES = ['first-login.html', 'statistics.html'];
     
     // الحصول على الصفحة الحالية
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
 
     // ===================================
-    // إذا كانت الصفحة من الصفحات المستثناة، لا نفعل أي شيء
+    // التحقق الفوري من التسجيل
     // ===================================
-    if (EXCLUDED_PAGES.includes(currentPage)) {
-        console.log('📝 صفحة مستثناة من التحقق:', currentPage);
+    
+    // إذا كانت الصفحة الحالية هي first-login.html، لا نفعل شيء
+    if (currentPage === 'first-login.html') {
+        console.log('📝 صفحة التسجيل الأولى');
+        return;
+    }
+
+    // إذا كانت الصفحة هي statistics.html، نتحقق فقط من كلمة المرور
+    if (currentPage === 'statistics.html') {
+        console.log('📊 صفحة الإحصائيات');
         return;
     }
 
@@ -72,10 +80,7 @@
         // تحديث بيانات الجلسة
         const sessionData = {
             loginTime: new Date().toISOString(),
-            sessionId: sessionId,
-            name: userProfile.name,
-            curriculum: userProfile.curriculum,
-            grade: userProfile.grade
+            sessionId: sessionId
         };
 
         sessionStorage.setItem('isLoggedIn', 'true');
@@ -247,8 +252,8 @@
                         document.body.appendChild(message);
                         
                         setTimeout(() => {
-                            // إعادة التوجيه لصفحة التسجيل
-                            window.location.href = 'first-login.html';
+                            // إعادة تحميل الصفحة لإنشاء جلسة جديدة
+                            window.location.reload();
                         }, 1000);
                     }
                 });
@@ -313,7 +318,7 @@
             if (confirm('هل أنت متأكد من تسجيل الخروج؟')) {
                 sessionStorage.clear();
                 console.log('👋 تم تسجيل الخروج');
-                window.location.href = 'first-login.html';
+                window.location.reload();
             }
         },
         resetRegistration: () => {
